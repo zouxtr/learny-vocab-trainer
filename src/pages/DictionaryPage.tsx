@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Loader2, Pencil, Plus, RefreshCw, Search, Trash2, Upload, X } from "lucide-react";
+import { ArrowLeft, Download, Loader2, Pencil, Plus, RefreshCw, Search, Trash2, Upload, X } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
@@ -11,19 +11,22 @@ import { ImportDialog } from "@/components/dictionary/ImportDialog";
 import { formatLanguagePair } from "@/lib/languages";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { guessColumnMap, normalizeRows, type FieldTarget } from "@/services/importer";
-import { parseSheetsLink, fetchSheetRows } from "@/services/googleSheets";
+import { parseSheetsLink, fetchSheetRows, fetchTsvUrl } from "@/services/googleSheets";
 import { refreshFromSheet, type WordWithStats } from "@/services/dictionaryRepository";
+import { buildExportCsv, downloadCsv, downloadXlsx, makeExportFilename } from "@/services/exporter";
+import { getLanguage } from "@/lib/languages";
+import { useT } from "@/lib/i18n";
 import type { Word } from "@/db/schema";
 import { cn } from "@/lib/utils";
 
 type WordSort = "position" | "dateAdded" | "sourceAlpha" | "targetAlpha" | "mostMissed";
 
-const WORD_SORTS: { value: WordSort; label: string; hint?: string }[] = [
-  { value: "position", label: "In order" },
-  { value: "dateAdded", label: "Newest first" },
-  { value: "sourceAlpha", label: "Word (A–Z)" },
-  { value: "targetAlpha", label: "Translation (A–Z)" },
-  { value: "mostMissed", label: "Most missed" },
+const WORD_SORTS: { value: WordSort; labelKey: string; hint?: string }[] = [
+  { value: "position", labelKey: "In order" },
+  { value: "dateAdded", labelKey: "Newest first" },
+  { value: "sourceAlpha", labelKey: "Word (A–Z)" },
+  { value: "targetAlpha", labelKey: "Translation (A–Z)" },
+  { value: "mostMissed", labelKey: "Most missed" },
 ];
 
 /** Stable ordering of the words shown in the dictionary list. */
@@ -67,11 +70,27 @@ export function DictionaryPage() {
   const [editingDict, setEditingDict] = useState(false);
   const [editingWord, setEditingWord] = useState<Word | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const t = useT();
 
   const [refreshing, setRefreshing] = useState(false);
   const [refreshResult, setRefreshResult] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<WordSort>("position");
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const exportMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(e.target as Node)) {
+        setExportOpen(false);
+      }
+    };
+    if (exportOpen) {
+      document.addEventListener("mousedown", onClick);
+    }
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [exportOpen]);
 
   const dictionary = dictionaries.find((d) => d.id === id);
 
@@ -92,13 +111,39 @@ export function DictionaryPage() {
     }
   }, [searchParams, setSearchParams]);
 
+  const sourceName = dictionary ? getLanguage(dictionary.sourceLanguage)?.name ?? "Word" : "Word";
+  const targetName = dictionary ? getLanguage(dictionary.targetLanguage)?.name ?? "Translation" : "Translation";
+
+  const handleExportCsv = () => {
+    if (!dictionary) return;
+    setExporting(true);
+    try {
+      const csv = buildExportCsv(words, { sourceName, targetName });
+      downloadCsv(makeExportFilename(dictionary.name, "csv"), csv);
+    } finally {
+      setExporting(false);
+      setExportOpen(false);
+    }
+  };
+
+  const handleExportXlsx = async () => {
+    if (!dictionary) return;
+    setExporting(true);
+    try {
+      await downloadXlsx(words, { sourceName, targetName }, makeExportFilename(dictionary.name, "xlsx"));
+    } finally {
+      setExporting(false);
+      setExportOpen(false);
+    }
+  };
+
   if (!dictionary) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
-        <p className="text-sm text-muted-foreground">Dictionary not found.</p>
+        <p className="text-sm text-muted-foreground">{t("Dictionary not found.")}</p>
         <Button asChild variant="outline">
           <Link to="/">
-            <ArrowLeft className="h-4 w-4" /> Back to home
+            <ArrowLeft className="h-4 w-4" /> {t("Back to home")}
           </Link>
         </Button>
       </main>
@@ -117,18 +162,14 @@ export function DictionaryPage() {
 
   const hasSheetSource = Boolean(dictionary.sheetUrl);
 
-  /** Re-fetch the stored public sheet and apply the saved column mapping. */
+  /** Re-fetch the stored public source (Google Sheets or raw TSV) and apply the saved column mapping. */
   const handleRefreshSheet = async () => {
     if (!dictionary.sheetUrl) return;
     setRefreshing(true);
     setRefreshResult(null);
     try {
       const link = parseSheetsLink(dictionary.sheetUrl);
-      if (!link) {
-        setRefreshResult("The stored link no longer looks like a Google Sheets link.");
-        return;
-      }
-      const rows = await fetchSheetRows(link);
+      const rows = link ? await fetchSheetRows(link) : await fetchTsvUrl(dictionary.sheetUrl);
       const columns = dictionary.sheetColumns ?? [];
       const map = (columns.length > 0
         ? columns
@@ -140,10 +181,16 @@ export function DictionaryPage() {
 
       const removals =
         sync.absent > 0
-          ? ` (${sync.absent} ${sync.absent === 1 ? "word" : "words"} in the dictionary but not in the sheet were kept)`
+          ? ` (${t("{n} word{s} in the dictionary but not in the sheet were kept").replace("{s}", sync.absent === 1 ? "" : "s")})`
           : "";
       setRefreshResult(
-        `Sheet synced: ${sync.added} added, ${sync.updated} updated, ${sync.removed} removed, ${sync.skipped} skipped.${removals}`,
+        t("Sheet synced: {a} added, {u} updated, {r} removed, {s} skipped.{removals}", {
+          a: sync.added,
+          u: sync.updated,
+          r: sync.removed,
+          s: sync.skipped,
+          removals,
+        }),
       );
     } catch (e) {
       setRefreshResult(e instanceof Error ? e.message : "Failed to refresh the sheet.");
@@ -169,26 +216,26 @@ export function DictionaryPage() {
             <h2 className="text-2xl font-semibold tracking-tight">{dictionary.name}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {formatLanguagePair(dictionary.sourceLanguage, dictionary.targetLanguage)} ·{" "}
-              {words.length} {words.length === 1 ? "word" : "words"}
+              {words.length} {words.length === 1 ? t("word") : t("words")}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {hasSheetSource && (
               <Button variant="outline" size="sm" onClick={() => void handleRefreshSheet()} disabled={refreshing}>
                 {refreshing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
-                {refreshing ? "Refreshing…" : "Refresh"}
+                {refreshing ? t("Refreshing…") : t("Refresh")}
               </Button>
             )}
             <Button variant="outline" size="sm" onClick={() => setEditingDict(true)}>
-              <Pencil className="h-3.5 w-3.5" /> Edit
+              <Pencil className="h-3.5 w-3.5" /> {t("Edit")}
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={handleDeleteDict}
-              aria-label="Delete dictionary"
+              aria-label={t("Delete dictionary")}
             >
-              <Trash2 className="h-3.5 w-3.5" /> {confirmingDelete ? "Confirm?" : "Delete"}
+              <Trash2 className="h-3.5 w-3.5" /> {confirmingDelete ? t("Confirm?") : t("Delete")}
             </Button>
           </div>
         </div>
@@ -207,13 +254,43 @@ export function DictionaryPage() {
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-sm font-medium text-muted-foreground">Words</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{t("Words")}</h3>
         <div className="flex items-center gap-2">
+          <div className="relative" onClick={() => setExportOpen(!exportOpen)}>
+            <Button variant="outline" onClick={() => setExportOpen(!exportOpen)}>
+              <Download className="h-4 w-4" /> {t("Export")}
+            </Button>
+            {exportOpen && (
+              <div
+                ref={exportMenuRef}
+                className="absolute right-0 top-full z-50 mt-1 w-40 rounded-md border border-border bg-card shadow-lg"
+              >
+                <button
+                  type="button"
+                  onClick={handleExportCsv}
+                  disabled={exporting}
+                  className="flex w-full items-center gap-2 px-3 py-2 text-sm text-left hover:bg-accent"
+                >
+                  <span className="font-mono text-xs text-muted-foreground">.csv</span>
+                  CSV
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportXlsx}
+                  disabled={exporting}
+                  className="flex w-full items-center gap-2 px-3 py-2 text-sm text-left hover:bg-accent"
+                >
+                  <span className="font-mono text-xs text-muted-foreground">.xlsx</span>
+                  Excel
+                </button>
+              </div>
+            )}
+          </div>
           <Button variant="outline" onClick={() => setImportOpen(true)}>
-            <Upload className="h-4 w-4" /> Import
+            <Upload className="h-4 w-4" /> {t("Import")}
           </Button>
           <Button onClick={() => setCreatingWord(true)}>
-            <Plus className="h-4 w-4" /> Add word
+            <Plus className="h-4 w-4" /> {t("Add word")}
           </Button>
         </div>
       </div>
@@ -224,7 +301,7 @@ export function DictionaryPage() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search words or translations…"
+            placeholder={t("Search words or translations…")}
             className="pl-8"
           />
         </div>
@@ -232,8 +309,8 @@ export function DictionaryPage() {
           <MenuSelect<WordSort>
             value={sort}
             onChange={setSort}
-            options={WORD_SORTS}
-            placeholder="Sort"
+            options={WORD_SORTS.map((o) => ({ ...o, label: t(o.labelKey) }))}
+            placeholder={t("Sort by")}
           />
         </div>
       </div>
@@ -241,10 +318,10 @@ export function DictionaryPage() {
       {words.length === 0 ? (
         <section className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
           <p className="text-sm text-muted-foreground">
-            No words yet. Add your first word to start building this dictionary.
+            {t("No words yet. Add your first word to start building this dictionary.")}
           </p>
           <Button onClick={() => setCreatingWord(true)}>
-            <Plus className="h-4 w-4" /> Add your first word
+            <Plus className="h-4 w-4" /> {t("Add your first word")}
           </Button>
         </section>
       ) : (
@@ -299,6 +376,7 @@ interface WordListProps {
 
 function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
   const parentRef = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   const filtered = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
@@ -324,7 +402,7 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
     return (
       <section className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
         <p className="text-sm text-muted-foreground">
-          No words match your search.
+          {t("No words match your search.")}
         </p>
       </section>
     );
@@ -335,9 +413,9 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
       <table className="w-full border-separate border-spacing-0 text-sm">
         <thead className="sticky top-0 z-10 bg-muted/50 text-left text-xs text-muted-foreground">
           <tr>
-            <th className="border-b border-border px-4 py-2 font-medium">Word</th>
-            <th className="border-b border-border px-4 py-2 font-medium">Translation</th>
-            <th className="hidden border-b border-border px-4 py-2 font-medium sm:table-cell">Grammar</th>
+            <th className="border-b border-border px-4 py-2 font-medium">{t("Word")}</th>
+            <th className="border-b border-border px-4 py-2 font-medium">{t("Translation")}</th>
+            <th className="hidden border-b border-border px-4 py-2 font-medium sm:table-cell">{t("Grammar")}</th>
             <th className="border-b border-border px-4 py-2" />
           </tr>
         </thead>
@@ -369,6 +447,7 @@ interface WordRowProps {
 
 function WordRow({ word, onEdit, onDelete, style }: WordRowProps) {
   const [confirming, setConfirming] = useState(false);
+  const t = useT();
 
   const handleDelete = () => {
     if (confirming) onDelete(word);
@@ -394,7 +473,7 @@ function WordRow({ word, onEdit, onDelete, style }: WordRowProps) {
             variant="ghost"
             size="icon"
             className="h-7 w-7"
-            aria-label="Edit word"
+            aria-label={t("Edit word")}
             onClick={() => onEdit(word)}
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -403,7 +482,7 @@ function WordRow({ word, onEdit, onDelete, style }: WordRowProps) {
             variant="ghost"
             size="icon"
             className="h-7 w-7 text-destructive hover:text-destructive"
-            aria-label="Delete word"
+            aria-label={t("Delete word")}
             onClick={handleDelete}
           >
             <Trash2 className="h-3.5 w-3.5" />

@@ -178,7 +178,8 @@ export function buildTemplateCsv(
   return lines.join("\n");
 }
 
-function escapeCsvCell(v: string): string {
+/** Escape a cell for CSV output. */
+export function escapeCsvCell(v: string): string {
   if (/[",\n]/.test(v)) return `"${v.replace(/"/g, '""')}"`;
   return v;
 }

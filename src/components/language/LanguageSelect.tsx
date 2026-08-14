@@ -1,6 +1,7 @@
 import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
 import { LANGUAGES } from "@/lib/languages";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface LanguageSelectProps {
@@ -13,6 +14,7 @@ interface LanguageSelectProps {
 /** Accessible language dropdown backed by the ISO 639-1 code list. */
 export function LanguageSelect({ value, onValueChange, id, className }: LanguageSelectProps) {
   const selected = LANGUAGES.find((l) => l.code === value);
+  const t = useT();
 
   return (
     <Select.Root value={value} onValueChange={onValueChange}>
@@ -23,7 +25,7 @@ export function LanguageSelect({ value, onValueChange, id, className }: Language
           className,
         )}
       >
-        <Select.Value placeholder="Select language">
+        <Select.Value placeholder={t("Select language")}>
           {selected ? `${selected.name} (${selected.nativeName})` : value}
         </Select.Value>
         <Select.Icon>

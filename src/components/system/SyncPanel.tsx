@@ -2,6 +2,7 @@ import { AlertCircle, Check, CloudUpload, Loader2, Plug, Unplug, RefreshCw } fro
 import { providerRegistry } from "@/services/sync/providerRegistry";
 import type { ProviderId, SyncResult } from "@/services/sync/types";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface SyncStatus {
@@ -23,18 +24,21 @@ interface SyncPanelProps {
  */
 export function SyncPanel({ status: sync, onSyncNow, onDisconnect, onConnect }: SyncPanelProps) {
   const provider = providerRegistry.get("dropbox");
+  const t = useT();
 
   return (
     <div className="rounded-lg border border-border bg-background/50 p-3">
       <div className="flex items-center gap-2">
         <CloudUpload className="h-4 w-4 text-muted-foreground" />
         <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Cloud sync
+          {t("Cloud sync")}
         </span>
       </div>
 
       <p className="mt-2 text-xs text-muted-foreground">
-        {sync.connected ? `Connected to ${provider.displayName}.` : "Offline — no cloud backup."}
+        {sync.connected
+          ? t("Connected to {name}.", { name: provider.displayName })
+          : t("Offline — no cloud backup.")}
       </p>
 
       {sync.lastResult && (
@@ -58,14 +62,14 @@ export function SyncPanel({ status: sync, onSyncNow, onDisconnect, onConnect }: 
               disabled={sync.syncing}
             >
               <RefreshCw className={cn("h-3.5 w-3.5", sync.syncing && "animate-spin")} />
-              Sync now
+              {t("Sync now")}
             </Button>
             <Button
               size="sm"
               variant="ghost"
               onClick={() => onDisconnect("dropbox")}
-              aria-label={`Disconnect ${provider.displayName}`}
-              title={`Disconnect ${provider.displayName}`}
+              aria-label={t("Disconnect {name}", { name: provider.displayName })}
+              title={t("Disconnect {name}", { name: provider.displayName })}
             >
               <Unplug className="h-3.5 w-3.5" />
             </Button>
@@ -77,7 +81,7 @@ export function SyncPanel({ status: sync, onSyncNow, onDisconnect, onConnect }: 
             ) : (
               <Plug className="h-3.5 w-3.5" />
             )}
-            Connect {provider.displayName}
+            {t("Connect {name}", { name: provider.displayName })}
           </Button>
         )}
       </div>

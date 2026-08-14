@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export interface MenuOption<T extends string> {
@@ -24,6 +25,7 @@ export function MenuSelect<T extends string>({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   // Close when clicking outside the popup.
   useEffect(() => {
@@ -55,7 +57,7 @@ export function MenuSelect<T extends string>({
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <span className="truncate">{current?.label ?? placeholder ?? "Select…"}</span>
+        <span className="truncate">{current?.label ?? placeholder ?? t("Select…")}</span>
         <ChevronDown className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")} />
       </button>
 

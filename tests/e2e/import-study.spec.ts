@@ -33,15 +33,17 @@ test("bulk import a CSV then run a study session", async ({ page }) => {
   // Open a study session on the freshly imported dictionary.
   await page.getByRole("link", { name: "Study" }).click();
   await page.getByRole("button", { name: /Spanish for travel/ }).click();
-  await expect(page.getByText("2 cards are due for review.")).toBeVisible();
+  await expect(page.getByRole("spinbutton")).toHaveValue("2");
+  // Disable shuffling so the flashcard order is deterministic (casa → perro).
+  await page.getByText("Randomize card order").click();
   await page.getByRole("button", { name: "Start studying" }).click();
 
   // Flashcard 1.
   await page.locator('[role="button"]', { hasText: "casa" }).click();
-  await page.getByRole("button", { name: "Good" }).click();
+  await page.getByRole("button", { name: "Correct" }).click();
   // Flashcard 2.
   await page.locator('[role="button"]', { hasText: "perro" }).click();
-  await page.getByRole("button", { name: "Good" }).click();
+  await page.getByRole("button", { name: "Correct" }).click();
 
   await expect(page.getByText("Session complete")).toBeVisible();
   await expect(page.getByText("2 words reviewed this session.")).toBeVisible();

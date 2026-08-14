@@ -5,6 +5,7 @@ import { DictionaryFormDialog } from "@/components/dictionary/DictionaryFormDial
 import { Input } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type Filter = "all" | "favorites";
@@ -12,6 +13,7 @@ type Filter = "all" | "favorites";
 export function DictionaryListPage() {
   const dictionaries = useDictionaryStore((s) => s.dictionaries);
   const refresh = useDictionaryStore((s) => s.refresh);
+  const t = useT();
 
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -38,13 +40,13 @@ export function DictionaryListPage() {
     <main className="scrollbar-thin flex flex-1 flex-col gap-6 overflow-y-auto p-4 sm:p-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Dictionaries</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{t("Dictionaries")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Search, favorite and organize your vocabulary lists.
+            {t("Search, favorite and organize your vocabulary lists.")}
           </p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4" /> New dictionary
+          <Plus className="h-4 w-4" /> {t("New dictionary")}
         </Button>
       </header>
 
@@ -53,7 +55,7 @@ export function DictionaryListPage() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="pl-9"
-            placeholder="Search by name or language…"
+            placeholder={t("Search by name or language…")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -71,7 +73,7 @@ export function DictionaryListPage() {
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {f === "all" ? "All" : "★ Favorites"}
+              {f === "all" ? t("All") : t("★ Favorites")}
             </button>
           ))}
         </div>
@@ -81,8 +83,8 @@ export function DictionaryListPage() {
         <section className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
           <p className="text-sm text-muted-foreground">
             {dictionaries.length === 0
-              ? "No dictionaries yet. Create one to get started."
-              : "No dictionaries match your search."}
+              ? t("No dictionaries yet. Create one to get started.")
+              : t("No dictionaries match your search.")}
           </p>
         </section>
       ) : (

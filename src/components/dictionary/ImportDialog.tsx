@@ -13,9 +13,10 @@ import {
   type FieldTarget,
   type SheetRow,
 } from "@/services/importer";
-import { parseSheetsLink, fetchSheetRows } from "@/services/googleSheets";
+import { parseSheetsLink, fetchSheetRows, fetchTsvUrl } from "@/services/googleSheets";
 import { importWords } from "@/services/dictionaryRepository";
 import { getLanguage } from "@/lib/languages";
+import { useT } from "@/lib/i18n";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +34,7 @@ interface ImportResult {
   skipped: number;
 }
 
-type ImportSource = "file" | "sheet";
+type ImportSource = "file" | "sheet" | "tsv";
 
 function colName(i: number): string {
   return String.fromCharCode(65 + (i % 26)) + (i >= 26 ? String.fromCharCode(65 + Math.floor(i / 26) - 1) : "");
@@ -50,6 +51,7 @@ export function ImportDialog({
   const refresh = useDictionaryStore((s) => s.refresh);
   const loadWords = useDictionaryStore((s) => s.loadWords);
   const update = useDictionaryStore((s) => s.update);
+  const t = useT();
 
   const [source, setSource] = useState<ImportSource>("file");
   const [rows, setRows] = useState<SheetRow[]>([]);
@@ -128,6 +130,26 @@ export function ImportDialog({
     }
   };
 
+  const handleTsvFetch = async () => {
+    setError(null);
+    setResult(null);
+    if (!sheetLink.trim()) {
+      setError("Paste a link to a TSV file first.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const fetched = await fetchTsvUrl(sheetLink);
+      setRows(fetched);
+      setMapping(guessColumnMap(fetched[0] ?? [], fetched.slice(1)));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to fetch the TSV file.");
+      setRows([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleHasHeaderChange = (next: boolean) => {
     setHasHeader(next);
     if (rows.length > 0) {
@@ -157,7 +179,7 @@ export function ImportDialog({
     loadWords(dictionaryId);
   };
 
-  const doImportFinal = source === "sheet" ? doSheetImport : doImport;
+  const doImportFinal = source === "file" ? doImport : doSheetImport;
 
   const templateContent = () => buildTemplateCsv(sourceName, targetName);
   const templateName = `${dictionaryName.toLowerCase().replace(/\s+/g, "-")}-template.csv`;
@@ -171,11 +193,10 @@ export function ImportDialog({
             <div>
               <Dialog.Title className="flex items-center gap-2 text-lg font-semibold tracking-tight">
                 <FileSpreadsheet className="h-5 w-5 text-primary" />
-                Import words
+                {t("Import words")}
               </Dialog.Title>
               <p className="mt-1 text-sm text-muted-foreground">
-                Bulk-add words to <span className="font-medium">{dictionaryName}</span>{" "}
-                ({formatPair(sourceName, targetName)}).
+                {t("Bulk-add words to {name} ({pair}).", { name: dictionaryName, pair: formatPair(sourceName, targetName) })}
               </p>
             </div>
             <Dialog.Close asChild>
@@ -185,51 +206,64 @@ export function ImportDialog({
             </Dialog.Close>
           </div>
 
-          <div className="flex gap-1 rounded-md border border-border bg-muted/40 p-1">
+          <div className="flex flex-wrap gap-1 rounded-md border border-border bg-muted/40 p-1">
             <SourceTab
               active={source === "file"}
               onClick={() => setSource("file")}
               icon={<Upload className="h-3.5 w-3.5" />}
-              label="Upload file"
+              label={t("Upload file")}
             />
             <SourceTab
               active={source === "sheet"}
               onClick={() => setSource("sheet")}
               icon={<Link2 className="h-3.5 w-3.5" />}
-              label="Google Sheets link"
+              label={t("Google Sheets")}
+            />
+            <SourceTab
+              active={source === "tsv"}
+              onClick={() => setSource("tsv")}
+              icon={<Link2 className="h-3.5 w-3.5" />}
+              label={t("TSV link")}
             />
           </div>
 
           <div className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
             {/* Format explanation, language-aware */}
             <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-              <p className="font-medium text-foreground">How to format your data</p>
+              <p className="font-medium text-foreground">{t("How to format your data")}</p>
               <ul className="mt-2 list-disc space-y-1 pl-4">
                 <li>
-                  <span className="font-medium">{sourceName}</span> column — the word you want to learn.
+                  <span className="font-medium">{sourceName}</span> {t("is the column for the word you want to learn.")}
                 </li>
                 <li>
-                  <span className="font-medium">{targetName}</span> column — its translation.
+                  <span className="font-medium">{targetName}</span> {t("is the column for its translation.")}
                 </li>
-                <li>Optional columns: Grammar, Example, Group.</li>
-                <li>Rows missing a word or translation are skipped automatically.</li>
+                <li>{t("Optional columns: Grammar, Example, Group.")}</li>
+                <li>{t("Rows missing a word or translation are skipped automatically.")}</li>
               </ul>
               <Button variant="ghost" size="sm" className="mt-2 h-7 px-2 text-xs" onClick={() => downloadCsv(templateName, templateContent())}>
-                <Download className="h-3.5 w-3.5" /> Download template
+                <Download className="h-3.5 w-3.5" /> {t("Download template")}
               </Button>
             </div>
 
-            {source === "sheet" && (
+            {source !== "file" && (
               <div className="flex flex-col gap-2">
                 <Field
-                  label="Public Google Sheets link"
+                  label={source === "sheet" ? t("Public Google Sheets link") : t("Public TSV file link")}
                   htmlFor="sheet-link"
                   hint={
-                    <>
-                      In your sheet: <span className="font-medium">Share → Anyone with the link →
-                      Viewer</span>, copy the share link, and paste it here. Nothing is sent to our
-                      servers — the browser fetches the published tab directly.
-                    </>
+                    source === "sheet" ? (
+                      <>
+                        {t("In your sheet:")} <span className="font-medium">{t("Share → Anyone with the link → Viewer")}</span>,{" "}
+                        {t("copy the share link and paste it here. Nothing is sent to our servers — the browser fetches the published tab directly.")}
+                      </>
+                    ) : (
+                      <>
+                        {t("Paste a direct link to a tab-separated text file (for example a")}{" "}
+                        <span className="font-medium">{t("Raw")}</span>{" "}
+                        {t("GitHub link or any public URL serving TSV). The browser fetches it directly — nothing is sent to our servers.")}
+                      </>
+                    )
                   }
                 >
                   <div className="flex gap-2">
@@ -237,11 +271,19 @@ export function ImportDialog({
                       id="sheet-link"
                       value={sheetLink}
                       onChange={(e) => setSheetLink(e.target.value)}
-                      placeholder="https://docs.google.com/spreadsheets/d/…/edit"
+                      placeholder={
+                        source === "sheet"
+                          ? "https://docs.google.com/spreadsheets/d/…/edit"
+                          : "https://example.com/words.tsv"
+                      }
                     />
-                    <Button variant="outline" onClick={() => void handleSheetFetch()} disabled={loading || !sheetLink.trim()}>
+                    <Button
+                      variant="outline"
+                      onClick={() => void (source === "sheet" ? handleSheetFetch() : handleTsvFetch())}
+                      disabled={loading || !sheetLink.trim()}
+                    >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-                      Fetch
+                      {t("Fetch")}
                     </Button>
                   </div>
                 </Field>
@@ -249,7 +291,7 @@ export function ImportDialog({
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 {rows.length > 0 && !result && (
                   <p className="text-xs text-muted-foreground">
-                    {dataRows.length} data {dataRows.length === 1 ? "row" : "rows"} fetched.
+                    {dataRows.length} {dataRows.length === 1 ? t("data row") : t("data rows")} {t("fetched.")}
                   </p>
                 )}
               </div>
@@ -259,9 +301,9 @@ export function ImportDialog({
               <div className="flex flex-col gap-2">
                 <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-muted/40 px-6 py-8 text-center transition-colors hover:border-primary/50 hover:bg-muted/60">
                   <Upload className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">Choose a .csv or .xlsx file</span>
+                  <span className="text-sm font-medium">{t("Choose a .csv or .xlsx file")}</span>
                   <span className="text-xs text-muted-foreground">
-                    The first row is usually a header; you can adjust the mapping below.
+                    {t("The first row is usually a header; you can adjust the mapping below.")}
                   </span>
                   <input
                     type="file"
@@ -271,7 +313,7 @@ export function ImportDialog({
                   />
                 </label>
                 {fileName && <p className="text-xs text-muted-foreground">{fileName}</p>}
-                {loading && <p className="text-xs text-muted-foreground">Parsing…</p>}
+                {loading && <p className="text-xs text-muted-foreground">{t("Parsing…")}</p>}
                 {error && <p className="text-sm text-destructive">{error}</p>}
               </div>
             )}
@@ -287,13 +329,13 @@ export function ImportDialog({
                     className="h-4 w-4"
                   />
                   <label htmlFor="has-header" className="text-sm text-muted-foreground">
-                    First row contains column headers
+                    {t("First row contains column headers")}
                   </label>
                 </div>
 
                 {assignedCount === 0 && (
                   <p className="text-sm text-destructive">
-                    Assign the Word and Translation columns before importing.
+                    {t("Assign the Word and Translation columns before importing.")}
                   </p>
                 )}
 
@@ -321,7 +363,7 @@ export function ImportDialog({
                       {dataRows.length === 0 && (
                         <tr>
                           <td colSpan={headers.length} className="px-2 py-3 text-center text-xs text-muted-foreground">
-                            No data rows.
+                            {t("No data rows.")}
                           </td>
                         </tr>
                       )}
@@ -329,9 +371,9 @@ export function ImportDialog({
                   </table>
                 </div>
 
-                <Field label="Column mapping">
+                <Field label={t("Column mapping")}>
                   <p className="text-xs text-muted-foreground">
-                    Map each column below to a field. Unused columns can be left as “Skip”.
+                    {t("Map each column below to a field. Unused columns can be left as “Skip”.")}
                   </p>
                   <div className="flex flex-col gap-1.5">
                     {headers.map((h, i) => (
@@ -346,15 +388,31 @@ export function ImportDialog({
                           }}
                           className="h-8 flex-1 rounded-md border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         >
-                          {FIELD_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value}>
-                              {o.value === "source"
-                                ? `${o.label} (${sourceName})`
+                          {FIELD_OPTIONS.map((o) => {
+                            const label =
+                              o.value === "source"
+                                ? t("Word")
                                 : o.value === "target"
-                                  ? `${o.label} (${targetName})`
-                                  : o.label}
-                            </option>
-                          ))}
+                                  ? t("Translation")
+                                  : o.value === "grammar"
+                                    ? t("Grammar")
+                                    : o.value === "example"
+                                      ? t("Example")
+                                      : o.value === "group"
+                                        ? t("Group")
+                                        : t("Skip column");
+                            const display =
+                              o.value === "source"
+                                ? `${label} (${sourceName})`
+                                : o.value === "target"
+                                  ? `${label} (${targetName})`
+                                  : label;
+                            return (
+                              <option key={o.value} value={o.value}>
+                                {display}
+                              </option>
+                            );
+                          })}
                         </select>
                       </div>
                     ))}
@@ -365,20 +423,21 @@ export function ImportDialog({
 
             {result && (
               <div className="rounded-lg border border-border p-3 text-sm">
-                Imported <strong>{result.imported}</strong> word{result.imported === 1 ? "" : "s"}, skipped{" "}
-                <strong>{result.skipped}</strong> duplicate{result.skipped === 1 ? "" : "s"} or invalid row
-                {result.skipped === 1 ? "" : "s"}.
+                {t("Imported {n} words, skipped {m} duplicates or invalid rows.", {
+                  n: result.imported,
+                  m: result.skipped,
+                })}
               </div>
             )}
           </div>
 
           <div className="flex items-center justify-end gap-2">
             <Dialog.Close asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline">{t("Close")}</Button>
             </Dialog.Close>
             {rows.length > 0 && !result && (
               <Button onClick={doImportFinal} disabled={assignedCount === 0 || dataRows.length === 0}>
-                Import words
+                {t("Import words")}
               </Button>
             )}
           </div>

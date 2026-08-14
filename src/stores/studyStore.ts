@@ -145,7 +145,7 @@ function wrapUp(state: StudyState): Partial<StudyState> {
       durationSeconds: Math.max(1, Math.round((Date.now() - state.startedAt) / 1000)),
     });
   }
-  return { phase: "summary", queue: [], history: [], revealed: false, feedback: null, flipped: false };
+  return { ...state, phase: "summary", queue: [], history: [], revealed: false, feedback: null, flipped: false };
 }
 
 export const useStudyStore = create<StudyState>()((set, get) => ({

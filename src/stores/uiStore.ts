@@ -5,9 +5,11 @@ export type Theme = "light" | "dark" | "system";
 
 interface UiState {
   theme: Theme;
+  locale: string;
   sidebarCollapsed: boolean;
   onboardingSeen: boolean;
   setTheme: (theme: Theme) => void;
+  setLocale: (locale: string) => void;
   toggleSidebar: () => void;
   dismissOnboarding: () => void;
 }
@@ -53,9 +55,11 @@ export const useUiStore = create<UiState>()(
   persist(
     (set) => ({
       theme: "system",
+      locale: "en",
       sidebarCollapsed: false,
       onboardingSeen: false,
       setTheme: (theme) => set({ theme }),
+      setLocale: (locale) => set({ locale }),
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
       dismissOnboarding: () => set({ onboardingSeen: true }),
     }),

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
@@ -55,11 +56,12 @@ interface FieldProps {
 }
 
 function Field({ label, hint, htmlFor, optional, children }: FieldProps) {
+  const t = useT();
   return (
     <div className="flex flex-col gap-1.5">
       <Label htmlFor={htmlFor}>
         {label}
-        {optional && <span className="ml-1 text-xs font-normal text-muted-foreground">(optional)</span>}
+        {optional && <span className="ml-1 text-xs font-normal text-muted-foreground">{t("(optional)")}</span>}
       </Label>
       {children}
       {hint && <p className="text-xs text-muted-foreground">{hint}</p>}

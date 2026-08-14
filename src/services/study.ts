@@ -234,12 +234,14 @@ export function questionFor(word: StudyWord, mode: StudyMode, direction: Directi
   const front = isTargetToSource ? word.target : word.source;
   const back = isTargetToSource ? word.source : word.target;
 
-  // Show the grammar note next to whichever side is the source word.
-  const displayFront = frontField === "source" ? formatWord(word.source, word.grammar) : front;
+  const isGrammar = mode === "grammar";
+
+  // Show the grammar note next to whichever side is the source word, except in
+  // grammar mode where the grammar note itself is the answer being tested.
+  const displayFront = isGrammar ? front : frontField === "source" ? formatWord(word.source, word.grammar) : front;
   const displayBack = backField === "source" ? formatWord(word.source, word.grammar) : back;
 
   // A grammar question expects the grammar note itself; otherwise the word.
-  const isGrammar = mode === "grammar";
   const answerField = isGrammar ? null : backField;
   const answerDisplay = isGrammar ? word.grammar : back;
   const answerBase =

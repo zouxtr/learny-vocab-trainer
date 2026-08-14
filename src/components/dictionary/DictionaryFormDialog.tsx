@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { BookOpen, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { LanguageSelect } from "@/components/language/LanguageSelect";
+import { useT } from "@/lib/i18n";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import type { Dictionary } from "@/db/schema";
 
@@ -32,20 +33,24 @@ export function DictionaryFormDialog({
 }: DictionaryFormDialogProps) {
   const create = useDictionaryStore((s) => s.create);
   const update = useDictionaryStore((s) => s.update);
+  const t = useT();
 
   const [name, setName] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("en");
   const [targetLanguage, setTargetLanguage] = useState("de");
   const [color, setColor] = useState<string | null>(PALETTE[0]);
 
-  // Reset form whenever the dialog is opened (fresh or for a specific dictionary).
+  // Populate the form from the dictionary being edited whenever the dialog
+  // opens, including programmatic opens (the parent sets `open` directly).
+  useEffect(() => {
+    if (!open) return;
+    setName(dictionary?.name ?? "");
+    setSourceLanguage(dictionary?.sourceLanguage ?? "en");
+    setTargetLanguage(dictionary?.targetLanguage ?? "de");
+    setColor(dictionary?.color ?? PALETTE[0]);
+  }, [open, dictionary]);
+
   const handleOpenChange = (next: boolean) => {
-    if (next) {
-      setName(dictionary?.name ?? "");
-      setSourceLanguage(dictionary?.sourceLanguage ?? "en");
-      setTargetLanguage(dictionary?.targetLanguage ?? "de");
-      setColor(dictionary?.color ?? PALETTE[0]);
-    }
     onOpenChange(next);
   };
 
@@ -70,7 +75,7 @@ export function DictionaryFormDialog({
           <div className="flex items-start justify-between">
             <Dialog.Title className="flex items-center gap-2 text-lg font-semibold tracking-tight">
               <BookOpen className="h-5 w-5 text-primary" />
-              {dictionary ? "Edit dictionary" : "Create a dictionary"}
+              {dictionary ? t("Edit dictionary") : t("Create a dictionary")}
             </Dialog.Title>
             <Dialog.Close asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -80,10 +85,10 @@ export function DictionaryFormDialog({
           </div>
 
           <div className="mt-5 flex flex-col gap-4">
-            <Field label="Name" htmlFor="dict-name" hint="A label like “Spanish for travel”.">
+            <Field label={t("Name")} htmlFor="dict-name" hint={t("A label like “Spanish for travel”.")}>
               <Input
                 id="dict-name"
-                placeholder="My vocabulary"
+                placeholder={t("My vocabulary")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 autoFocus
@@ -91,14 +96,14 @@ export function DictionaryFormDialog({
             </Field>
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Field label="Word language" htmlFor="dict-source">
+              <Field label={t("Word language")} htmlFor="dict-source">
                 <LanguageSelect
                   id="dict-source"
                   value={sourceLanguage}
                   onValueChange={setSourceLanguage}
                 />
               </Field>
-              <Field label="Translation language" htmlFor="dict-target">
+              <Field label={t("Translation language")} htmlFor="dict-target">
                 <LanguageSelect
                   id="dict-target"
                   value={targetLanguage}
@@ -107,10 +112,10 @@ export function DictionaryFormDialog({
               </Field>
             </div>
             {sourceLanguage === targetLanguage && (
-              <p className="text-xs text-destructive">The two languages must differ.</p>
+              <p className="text-xs text-destructive">{t("The two languages must differ.")}</p>
             )}
 
-            <Field label="Color" optional>
+            <Field label={t("Color")} optional>
               <div className="flex flex-wrap gap-2">
                 {PALETTE.map((c) => (
                   <button
@@ -133,7 +138,7 @@ export function DictionaryFormDialog({
               <Button variant="outline">Cancel</Button>
             </Dialog.Close>
             <Button onClick={handleSubmit} disabled={!canSubmit}>
-              {dictionary ? "Save changes" : "Create dictionary"}
+              {dictionary ? t("Save changes") : t("Create dictionary")}
             </Button>
           </div>
         </Dialog.Content>

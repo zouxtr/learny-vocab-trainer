@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import initSqlJs from "sql.js";
 import { drizzle, type SQLJsDatabase } from "drizzle-orm/sql-js";
 import path from "node:path";
@@ -14,7 +14,7 @@ import {
   getDictionary,
   refreshFromSheet,
 } from "../src/services/dictionaryRepository";
-import { buildExportUrl, parseSheetsLink } from "../src/services/googleSheets";
+import { buildExportUrl, parseSheetsLink, fetchTsvUrl } from "../src/services/googleSheets";
 import { parseTsvText } from "../src/services/importer";
 
 async function makeDb(): Promise<SQLJsDatabase<typeof schema>> {
@@ -68,6 +68,45 @@ describe("parseTsvText", () => {
       ["a", "b"],
       ["c", "d"],
     ]);
+  });
+});
+
+describe("fetchTsvUrl", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", vi.fn());
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("fetches and parses a generic public TSV file", async () => {
+    const mockFetch = vi.mocked(fetch);
+    mockFetch.mockResolvedValue(
+      new Response("Word\tTranslation\tGrammar\nder Hund\tdog\tdas Hund", { status: 200 }),
+    );
+    const rows = await fetchTsvUrl("https://example.com/words.tsv");
+    expect(rows).toEqual([
+      ["Word", "Translation", "Grammar"],
+      ["der Hund", "dog", "das Hund"],
+    ]);
+    expect(mockFetch).toHaveBeenCalledWith(new URL("https://example.com/words.tsv"));
+  });
+
+  it("rejects URLs that return HTML instead of TSV", async () => {
+    const mockFetch = vi.mocked(fetch);
+    mockFetch.mockResolvedValue(new Response("<!doctype html><html><body>denied</body></html>", { status: 200 }));
+    await expect(fetchTsvUrl("https://example.com/notraw")).rejects.toThrow(/raw TSV/);
+  });
+
+  it("rejects non-http(s) protocols", async () => {
+    await expect(fetchTsvUrl("file:///tmp/words.tsv")).rejects.toThrow(/http/);
+    await expect(fetchTsvUrl("not-a-url")).rejects.toThrow(/valid URL/);
+  });
+
+  it("propagates HTTP errors with a readable message", async () => {
+    const mockFetch = vi.mocked(fetch);
+    mockFetch.mockResolvedValue(new Response("nope", { status: 404 }));
+    await expect(fetchTsvUrl("https://example.com/missing.tsv")).rejects.toThrow(/HTTP 404/);
   });
 });
 

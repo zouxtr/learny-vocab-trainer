@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { translate } from "@/lib/i18n";
 
 export function ThemeToggle({
   theme,
@@ -10,9 +11,9 @@ export function ThemeToggle({
   className?: string;
 }) {
   const labels: Record<"light" | "dark" | "system", string> = {
-    light: "Light mode",
-    dark: "Dark mode",
-    system: "System theme",
+    light: translate("Light mode"),
+    dark: translate("Dark mode"),
+    system: translate("System theme"),
   };
   return (
     <button

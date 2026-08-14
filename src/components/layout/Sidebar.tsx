@@ -4,21 +4,22 @@ import { BookOpen, HelpCircle, LayoutGrid, Languages, Sparkles } from "lucide-re
 import { cn } from "@/lib/utils";
 import { useUiStore } from "@/stores/uiStore";
 import { useSyncStore } from "@/stores/syncStore";
+import { useT } from "@/lib/i18n";
 import { SyncPanel } from "@/components/system/SyncPanel";
 import { HelpDialog } from "@/components/onboarding/HelpDialog";
 
 interface NavItem {
   to: string;
-  label: string;
+  labelKey: string;
   icon: typeof BookOpen;
-  hint?: string;
+  hintKey?: string;
   end?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: "/", label: "Home", icon: LayoutGrid, end: true },
-  { to: "/dictionaries", label: "Dictionaries", icon: BookOpen },
-  { to: "/study", label: "Study", icon: Sparkles, hint: "Cmd + S" },
+  { to: "/", labelKey: "Home", icon: LayoutGrid, end: true },
+  { to: "/dictionaries", labelKey: "Dictionaries", icon: BookOpen },
+  { to: "/study", labelKey: "Study", icon: Sparkles, hintKey: "Cmd + S" },
 ];
 
 export function Sidebar() {
@@ -30,6 +31,7 @@ export function Sidebar() {
   const connect = useSyncStore((s) => s.connect);
   const disconnect = useSyncStore((s) => s.disconnect);
   const syncNow = useSyncStore((s) => s.syncNow);
+  const t = useT();
 
   const [helpOpen, setHelpOpen] = useState(false);
 
@@ -70,9 +72,9 @@ export function Sidebar() {
             <item.icon className="h-4 w-4 shrink-0" />
             {!collapsed && (
               <>
-                <span className="truncate">{item.label}</span>
-                {item.hint && (
-                  <span className="ml-auto text-[10px] text-muted-foreground/60">{item.hint}</span>
+                <span className="truncate">{t(item.labelKey)}</span>
+                {item.hintKey && (
+                  <span className="ml-auto text-[10px] text-muted-foreground/60">{t(item.hintKey)}</span>
                 )}
               </>
             )}
@@ -88,7 +90,7 @@ export function Sidebar() {
           )}
         >
           <HelpCircle className="h-4 w-4 shrink-0" />
-          {!collapsed && <span className="truncate">How it works</span>}
+          {!collapsed && <span className="truncate">{t("How it works")}</span>}
         </button>
       </nav>
 
@@ -108,7 +110,7 @@ export function Sidebar() {
         onClick={toggleSidebar}
         className="rounded-md px-2 py-2 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
       >
-        {collapsed ? "Expand" : "Collapse"}
+        {collapsed ? t("Expand") : t("Collapse")}
       </button>
 
       <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />

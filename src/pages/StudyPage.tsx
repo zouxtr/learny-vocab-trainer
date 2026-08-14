@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Field } from "@/components/ui/field";
 import { MenuSelect } from "@/components/ui/MenuSelect";
 import { formatLanguagePair, getLanguage } from "@/lib/languages";
+import { useT } from "@/lib/i18n";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { useStudyStore } from "@/stores/studyStore";
 import type { DictionaryWithCount } from "@/stores/dictionaryStore";
@@ -33,6 +34,7 @@ export function StudyPage() {
   const refresh = useDictionaryStore((s) => s.refresh);
   const phase = useStudyStore((s) => s.phase);
   const reset = useStudyStore((s) => s.reset);
+  const t = useT();
 
   useEffect(() => {
     void refresh();
@@ -49,16 +51,16 @@ export function StudyPage() {
   return (
     <main className="scrollbar-thin flex flex-1 flex-col gap-6 overflow-y-auto p-4 sm:p-6">
       <header>
-        <h2 className="text-2xl font-semibold tracking-tight">Study</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">{t("Study")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Pick a dictionary, configure a session, and review its words with spaced repetition.
+          {t("Pick a dictionary, configure a session, and review its words with spaced repetition.")}
         </p>
       </header>
 
       {dictionaries.length === 0 ? (
         <section className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
           <p className="text-sm text-muted-foreground">
-            No dictionaries yet. Create one and add words before studying.
+            {t("No dictionaries yet. Create one and add words before studying.")}
           </p>
         </section>
       ) : (
@@ -74,6 +76,7 @@ export function StudyPage() {
 
 function DictionaryStudyCard({ dictionary }: { dictionary: DictionaryWithCount }) {
   const pick = useStudyStore((s) => s.pick);
+  const t = useT();
 
   return (
     <button
@@ -100,40 +103,41 @@ function DictionaryStudyCard({ dictionary }: { dictionary: DictionaryWithCount }
         {formatLanguagePair(dictionary.sourceLanguage, dictionary.targetLanguage)}
       </p>
       <p className="text-xs text-muted-foreground">
-        {dictionary.wordCount} {dictionary.wordCount === 1 ? "word" : "words"}
+        {dictionary.wordCount} {dictionary.wordCount === 1 ? t("word") : t("words")}
       </p>
     </button>
   );
 }
 
-const MODES: { value: StudyMode; label: string; hint?: string }[] = [
-  { value: "flashcard", label: "Flashcards" },
-  { value: "multipleChoice", label: "Multiple choice" },
-  { value: "grammar", label: "Grammar" },
-  { value: "typing", label: "Typing" },
+const MODES: { value: StudyMode; key: string; hint?: string }[] = [
+  { value: "flashcard", key: "Flashcards" },
+  { value: "multipleChoice", key: "Multiple choice" },
+  { value: "grammar", key: "Grammar" },
+  { value: "typing", key: "Typing" },
 ];
 
-const DIRECTIONS: { value: Direction; label: string; hint?: string }[] = [
-  { value: "sourceToTarget", label: "Source → Target" },
-  { value: "targetToSource", label: "Target → Source" },
+const DIRECTIONS: { value: Direction; key: string; hint?: string }[] = [
+  { value: "sourceToTarget", key: "Source → Target" },
+  { value: "targetToSource", key: "Target → Source" },
 ];
 
-const SELECTIONS: { value: SelectionMode; label: string; hint: string }[] = [
-  { value: "all", label: "All words", hint: "Every word in the dictionary" },
-  { value: "random", label: "Random", hint: "Pick a fixed-size random sample" },
-  { value: "manual", label: "Choose", hint: "Manually tick words to include" },
+const SELECTIONS: { value: SelectionMode; key: string; hint: string }[] = [
+  { value: "all", key: "All words", hint: "Every word in the dictionary" },
+  { value: "random", key: "Random", hint: "Pick a fixed-size random sample" },
+  { value: "manual", key: "Choose", hint: "Manually tick words to include" },
 ];
 
-const SORTS: { value: StudySort; label: string; hint?: string }[] = [
-  { value: "position", label: "In order" },
-  { value: "dateAdded", label: "Newest first" },
-  { value: "mostMissed", label: "Most missed" },
+const SORTS: { value: StudySort; key: string; hint?: string }[] = [
+  { value: "position", key: "In order" },
+  { value: "dateAdded", key: "Newest first" },
+  { value: "mostMissed", key: "Most missed" },
 ];
 
 /** Second step: configure the session before it starts. */
 function SetupScreen() {
   const dictionary = useStudyStore((s) => s.dictionary);
   const available = useStudyStore((s) => s.available);
+  const t = useT();
 
   const mode = useStudyStore((s) => s.mode);
   const direction = useStudyStore((s) => s.direction);
@@ -169,40 +173,40 @@ function SetupScreen() {
           </p>
         </div>
 
-        <Field label="Mode">
+        <Field label={t("Mode")}>
           <MenuSelect
             value={mode}
             onChange={setMode}
-            options={MODES}
+            options={MODES.map((o) => ({ value: o.value, label: t(o.key), hint: o.hint ? t(o.hint) : undefined }))}
           />
         </Field>
 
-        <Field label="Direction">
+        <Field label={t("Direction")}>
           <MenuSelect
             value={direction}
             onChange={setDirection}
-            options={DIRECTIONS}
+            options={DIRECTIONS.map((o) => ({ value: o.value, label: t(o.key) }))}
           />
         </Field>
 
-        <Field label="Words to include">
+        <Field label={t("Words to include")}>
           <MenuSelect
             value={selection}
             onChange={setSelection}
-            options={SELECTIONS}
+            options={SELECTIONS.map((o) => ({ value: o.value, label: t(o.key), hint: t(o.hint) }))}
           />
           {manualEnabled && (
             <div className="mt-2 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">
-                  {manualIds.length} of {available.length} selected
+                  {t("{n} of {m} selected", { n: manualIds.length, m: available.length })}
                 </span>
                 <button
                   type="button"
                   onClick={() => setAllManual(manualIds.length !== available.length)}
                   className="text-xs font-medium text-primary hover:underline"
                 >
-                  {manualIds.length === available.length ? "Clear all" : "Select all"}
+                  {manualIds.length === available.length ? t("Clear all") : t("Select all")}
                 </button>
               </div>
               <ul className="scrollbar-thin max-h-48 space-y-1 overflow-y-auto rounded-lg border border-border p-2">
@@ -233,16 +237,16 @@ function SetupScreen() {
         </Field>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Field label="Sort by">
+          <Field label={t("Sort by")}>
             <MenuSelect
               value={sort}
               onChange={setSort}
-              options={SORTS}
+              options={SORTS.map((o) => ({ value: o.value, label: t(o.key) }))}
             />
           </Field>
 
           <div className="flex flex-col gap-4">
-            <Field label="Count" hint={`Between 1 and ${max}`}>
+            <Field label={t("Count")} hint={t("Between 1 and {max}", { max })}>
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
@@ -256,7 +260,7 @@ function SetupScreen() {
               </div>
             </Field>
 
-            <Field label="Shuffle order">
+            <Field label={t("Shuffle order")}>
               <label className="flex cursor-pointer items-center gap-2">
                 <input
                   type="checkbox"
@@ -264,7 +268,7 @@ function SetupScreen() {
                   onChange={(e) => setShuffle(e.target.checked)}
                   className="accent-primary"
                 />
-                <span className="text-sm">Randomize card order</span>
+                <span className="text-sm">{t("Randomize card order")}</span>
               </label>
             </Field>
           </div>
@@ -277,10 +281,10 @@ function SetupScreen() {
             className="flex-1"
           >
             <Play className="h-4 w-4" />
-            {mode === "flashcard" ? "Start studying" : "Start session"}
+            {mode === "flashcard" ? t("Start studying") : t("Start session")}
           </Button>
           <Button variant="ghost" onClick={back}>
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4" /> {t("Back")}
           </Button>
         </div>
       </section>
@@ -311,6 +315,7 @@ function ReviewScreen() {
   const abort = useStudyStore((s) => s.abort);
   const planned = useStudyStore((s) => s.planned);
   const history = useStudyStore((s) => s.history);
+  const t = useT();
 
   const [draft, setDraft] = useState<string>("");
 
@@ -343,13 +348,13 @@ function ReviewScreen() {
           <span className="truncate font-medium">{dictionary.name}</span>
         </button>
         <span>
-          Card {progress} / {planned}
+          {t("Card {n} / {total}", { n: progress, total: planned })}
         </span>
       </div>
 
       {(isQuiz) && (
         <p className="text-xs uppercase tracking-wider text-muted-foreground">
-          {mode === "multipleChoice" ? "Multiple choice" : mode === "grammar" ? "Grammar" : "Typing"}
+          {mode === "multipleChoice" ? t("Multiple choice") : mode === "grammar" ? t("Grammar") : t("Typing")}
         </p>
       )}
 
@@ -369,7 +374,7 @@ function ReviewScreen() {
         <p className="text-3xl font-semibold tracking-tight">{flipped ? q.displayBack : q.displayFront}</p>
         {isQuiz && (
           <p className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Eye className="h-3.5 w-3.5" /> Type your answer, then check
+            <Eye className="h-3.5 w-3.5" /> {t("Type your answer, then check")}
           </p>
         )}
       </div>
@@ -383,7 +388,7 @@ function ReviewScreen() {
         >
           {feedback.correct ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
           <span>
-            {feedback.correct ? "Correct" : `Not quite — answer: ${feedback.answerText}`}
+            {feedback.correct ? t("Correct") : t("Not quite — answer: {answer}", { answer: feedback.answerText })}
           </span>
         </div>
       )}
@@ -393,35 +398,35 @@ function ReviewScreen() {
           {flipped ? (
             <div className="flex w-full max-w-md flex-col gap-2">
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                How well did you know it?
+                {t("How well did you know it?")}
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 <Button variant="outline" onClick={previous} disabled={!canGoBack} className="bg-secondary text-secondary-foreground hover:bg-secondary/80">
-                  Previous
+                  {t("Previous")}
                 </Button>
                 {FLASH_BUTTONS.map((b) => (
                   <Button key={b.label} onClick={() => grade(b.grade)} className={b.className} variant="outline">
-                    {b.label}
+                    {t(b.label)}
                   </Button>
                 ))}
                 <Button variant="outline" onClick={next} className="bg-secondary text-secondary-foreground hover:bg-secondary/80">
-                  Next
+                  {t("Next")}
                 </Button>
               </div>
             </div>
           ) : (
             <div className="flex w-full max-w-md flex-col gap-2">
               <p className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
-                <Eye className="h-3.5 w-3.5" /> Click the card to reveal
+                <Eye className="h-3.5 w-3.5" /> {t("Click the card to reveal")}
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 <Button variant="outline" onClick={previous} disabled={!canGoBack} className="bg-secondary text-secondary-foreground hover:bg-secondary/80">
-                  Previous
+                  {t("Previous")}
                 </Button>
                 <span />
                 <span />
                 <Button variant="outline" onClick={next} className="bg-secondary text-secondary-foreground hover:bg-secondary/80">
-                  Next
+                  {t("Next")}
                 </Button>
               </div>
             </div>
@@ -446,17 +451,17 @@ function ReviewScreen() {
                 autoFocus
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder={mode === "grammar" ? "Type the grammar notes…" : "Type the translation…"}
+                placeholder={mode === "grammar" ? t("Type the grammar notes…") : t("Type the translation…")}
                 disabled={revealed}
               />
               <Button type="submit" disabled={draft.trim().length === 0 || revealed}>
-                Check answer
+                {t("Check answer")}
               </Button>
             </form>
           )}
           {revealed && (
             <Button onClick={advance} className="w-full">
-              Next
+              {t("Next")}
             </Button>
           )}
         </div>
@@ -510,6 +515,7 @@ function SummaryScreen() {
   const dictionary = useStudyStore((s) => s.dictionary);
   const answeredUnique = useStudyStore((s) => s.answeredUnique);
   const reset = useStudyStore((s) => s.reset);
+  const t = useT();
 
   const correct = counts.good + counts.easy;
   const wrong = counts.again + counts.hard;
@@ -521,24 +527,24 @@ function SummaryScreen() {
         {dictionary && (
           <p className="text-xs uppercase tracking-wider text-muted-foreground">{dictionary.name}</p>
         )}
-        <h2 className="mt-1 text-xl font-semibold tracking-tight">Session complete</h2>
+        <h2 className="mt-1 text-xl font-semibold tracking-tight">{t("Session complete")}</h2>
 
         <div className="mt-6 flex items-center justify-around gap-4">
-          <Stat icon={CheckCircle2} label="Correct" value={correct} accent="text-emerald-500" />
-          <Stat icon={XCircle} label="Wrong" value={wrong} accent="text-destructive" />
+          <Stat icon={CheckCircle2} label={t("Correct")} value={correct} accent="text-emerald-500" />
+          <Stat icon={XCircle} label={t("Wrong")} value={wrong} accent="text-destructive" />
           <div className="text-center">
             <p className="text-2xl font-semibold">{accuracy}%</p>
-            <p className="text-xs text-muted-foreground">Accuracy</p>
+            <p className="text-xs text-muted-foreground">{t("Accuracy")}</p>
           </div>
         </div>
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          {answeredUnique} {answeredUnique === 1 ? "word" : "words"} reviewed this session.
+          {t("{n} words reviewed this session.", { n: answeredUnique })}
         </p>
 
         <div className="mt-6 flex justify-center">
           <Button onClick={reset}>
-            <RotateCcw className="h-4 w-4" /> Start another session
+            <RotateCcw className="h-4 w-4" /> {t("Start another session")}
           </Button>
         </div>
       </section>

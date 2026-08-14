@@ -174,6 +174,14 @@ describe("study question helpers", () => {
     expect(q.answerField).toBeNull();
   });
 
+  it("hides the grammar note on the question side in grammar mode", () => {
+    const s2t = questionFor(word, "grammar", "sourceToTarget");
+    expect(s2t.displayFront).toBe("laufen");
+
+    const t2s = questionFor(word, "grammar", "targetToSource");
+    expect(t2s.displayFront).toBe("to run");
+  });
+
   it("formats multiple-choice distractors with the same grammar rule", () => {
     const q = questionFor(word, "flashcard", "sourceToTarget");
     const distractors = buildDistractors(rows, q, "flashcard");

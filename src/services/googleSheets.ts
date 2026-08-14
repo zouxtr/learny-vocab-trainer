@@ -74,3 +74,37 @@ export async function fetchSheetRows(link: ParsedSheetLink): Promise<SheetRow[]>
   }
   return rows;
 }
+
+/**
+ * Fetch a generic public URL that serves tab-separated text (e.g. a raw
+ * file from GitHub, a paste service, or a .tsv export). Same row contract as
+ * the Google Sheets path, so the rest of the import flow is identical.
+ */
+export async function fetchTsvUrl(rawUrl: string): Promise<SheetRow[]> {
+  let url: URL;
+  try {
+    url = new URL(rawUrl.trim());
+  } catch {
+    throw new Error("That doesn’t look like a valid URL.");
+  }
+  if (!/^https?:$/.test(url.protocol)) {
+    throw new Error("Only http(s) links are supported.");
+  }
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Could not reach the link (HTTP ${res.status}). Make sure it’s publicly accessible.`);
+  }
+  const text = await res.text();
+
+  // A sign-in or error page isn't tab-separated data.
+  if (/<(?:!doctype|html)/i.test(text.slice(0, 500))) {
+    throw new Error("That page doesn’t look like raw TSV data — it returned HTML. Use a direct file / raw link.");
+  }
+
+  const rows = await parseTsvText(text);
+  if (rows.length === 0) {
+    throw new Error("The link returned no rows. Check that it points to a file with data.");
+  }
+  return rows;
+}

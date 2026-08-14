@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { checkDbHealth, type DbHealth } from "@/services/database";
+import { useT } from "@/lib/i18n";
 
 type Status = "checking" | "ok" | "error";
 
@@ -7,6 +8,7 @@ export function DatabaseHealth() {
   const [status, setStatus] = useState<Status>("checking");
   const [data, setData] = useState<DbHealth | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -37,15 +39,15 @@ export function DatabaseHealth() {
             status === "ok" ? "bg-emerald-500" : "bg-amber-500"
           }`}
         />
-        <p className="text-sm font-medium">System status</p>
+        <p className="text-sm font-medium">{t("System status")}</p>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        {status === "checking" && (error ? `Failed to check database: ${error}` : "Checking database connection…")}
-        {status === "ok" && `SQLite ready (v${data?.database_version}).`}
+        {status === "checking" && (error ? t("Failed to check database: {error}", { error }) : t("Checking database connection…"))}
+        {status === "ok" && t("SQLite ready (v{version}).", { version: data?.database_version ?? "" })}
       </p>
       {status === "ok" && data && (
         <p className="mt-1 text-[11px] text-muted-foreground/70">
-          {data.tables.length} tables · {formatBytes(data.size_bytes)}
+          {t("{n} tables · {size}", { n: data.tables.length, size: formatBytes(data.size_bytes) })}
         </p>
       )}
     </div>
