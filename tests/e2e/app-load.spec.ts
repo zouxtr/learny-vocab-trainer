@@ -8,6 +8,10 @@ test("app loads without js errors and database initializes", async ({ page }) =>
   page.on("pageerror", (err) => errors.push(String(err)));
 
   await page.goto("/");
+  await page.waitForSelector("text=My dictionaries", { timeout: 15000 });
+
+  // Database health and cloud sync live on the Settings page.
+  await page.getByRole("link", { name: "Settings" }).first().click();
   await page.waitForSelector("text=SQLite ready", { timeout: 15000 });
 
   const detail = await page.locator("text=tables").textContent();

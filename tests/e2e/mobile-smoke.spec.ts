@@ -9,7 +9,7 @@ test("mobile layout: bottom nav shows, sidebar hidden, content usable", async ({
   page.on("pageerror", (err) => errors.push(String(err)));
 
   await page.goto("/");
-  await page.waitForSelector("text=SQLite ready", { timeout: 15000 });
+  await page.waitForSelector("text=My dictionaries", { timeout: 15000 });
 
   // Bottom nav is present on mobile and sidebar is hidden.
   await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
@@ -30,14 +30,12 @@ test("mobile layout: bottom nav shows, sidebar hidden, content usable", async ({
   await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Study" }).click();
   await expect(page.locator("h2", { hasText: "Study" })).toBeVisible();
 
-  // Cloud sync is reachable from the top bar on mobile.
-  await page.getByRole("button", { name: "Cloud sync" }).first().click();
-  const dialog = page.getByRole("dialog");
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("heading", { name: "Cloud sync" })).toBeVisible();
-  await expect(dialog.getByText("Offline — no cloud backup.")).toBeVisible();
-  await dialog.getByRole("button", { name: "Close" }).click();
-  await expect(dialog).not.toBeVisible();
+  // Cloud sync and system status live on the Settings page, not the dashboard.
+  await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Settings" }).click();
+  await expect(page.locator("h2", { hasText: "Settings" })).toBeVisible();
+  await expect(page.getByText("Cloud sync")).toBeVisible();
+  await expect(page.getByText("Offline — no cloud backup.")).toBeVisible();
+  await expect(page.getByText("System status")).toBeVisible();
 
   const fatalErrors = errors.filter(
     (e) => e.includes("wasm") || e.includes("magic number") || e.includes("unsupported MIME"),

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { DatabaseHealth } from "@/components/system/DatabaseHealth";
 import { DictionaryCard } from "@/components/dictionary/DictionaryCard";
 import { DictionaryFormDialog } from "@/components/dictionary/DictionaryFormDialog";
 import { OnboardingPanel } from "@/components/onboarding/OnboardingPanel";
+import { HelpDialog } from "@/components/onboarding/HelpDialog";
 import { Button } from "@/components/ui/button";
 import { useUiStore } from "@/stores/uiStore";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
@@ -19,6 +19,7 @@ export function HomePage() {
   const t = useT();
 
   const [creating, setCreating] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,14 +52,7 @@ export function HomePage() {
       {showOnboarding && <OnboardingPanel onStart={() => setCreating(true)} />}
 
       {loaded && recent.length === 0 && !showOnboarding && (
-        <section className="mx-auto flex max-w-2xl flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
-          <p className="text-sm text-muted-foreground">
-            {t("You don’t have any dictionaries yet. Create one to start adding words.")}
-          </p>
-          <Button onClick={() => setCreating(true)}>
-            <Plus className="h-4 w-4" /> {t("Create your first dictionary")}
-          </Button>
-        </section>
+        <EmptyState onCreate={() => setCreating(true)} onHelp={() => setHelpOpen(true)} />
       )}
 
       {favorites.length > 0 && (
@@ -83,11 +77,49 @@ export function HomePage() {
         </section>
       )}
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <DatabaseHealth />
-      </section>
-
       <DictionaryFormDialog open={creating} onOpenChange={setCreating} onCreated={handleCreated} />
+
+      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </main>
+  );
+}
+
+/** First-dictionary call to action. Rendered as a faux dictionary entry so the
+ * empty Home still feels like a language product, not a generic dashboard. */
+function EmptyState({ onCreate, onHelp }: { onCreate: () => void; onHelp: () => void }) {
+  const t = useT();
+
+  return (
+    <section className="mx-auto flex w-full max-w-md flex-col items-center rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
+      <div className="w-full rounded-xl border border-border/70 bg-muted/40 p-5 text-left">
+        <p className="font-heading text-3xl font-semibold tracking-tight">your vocabulary</p>
+        <div className="mt-3 flex items-baseline gap-2 text-sm">
+          <span className="font-heading font-medium text-primary">example ·</span>
+          <span className="text-muted-foreground">Beispiel</span>
+        </div>
+        <div className="mt-2 flex items-baseline gap-2 text-sm">
+          <span className="font-heading font-medium text-primary">house ·</span>
+          <span className="text-muted-foreground">das Haus</span>
+        </div>
+        <div className="mt-2 flex items-baseline gap-2 text-sm">
+          <span className="font-heading font-medium text-primary">learn ·</span>
+          <span className="text-muted-foreground">lernen</span>
+        </div>
+      </div>
+
+      <h3 className="mt-6 text-xl font-semibold tracking-tight">{t("Your vocabulary starts here.")}</h3>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {t("Create your first dictionary — a word list between two languages — and add words as you go.")}
+      </p>
+
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <Button onClick={onCreate}>
+          <Plus className="h-4 w-4" /> {t("Create your first dictionary")}
+        </Button>
+        <Button variant="ghost" onClick={onHelp}>
+          {t("How it works")}
+        </Button>
+      </div>
+    </section>
   );
 }

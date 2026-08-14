@@ -239,5 +239,10 @@ registerDictionary("bg", {
   "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Целият интерфейс е преведен на 15 езика. Сменяйте езика на интерфейса по всяко време от горната лента — записва се за всяко устройство.",
   "Track progress": "Проследяване на напредъка",
   "Your data never leaves your device unless you connect cloud sync.": "Вашите данни никога не напускат устройството ви, освен ако не свържете облачна синхронизация.",
-  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "По подразбиране данните ви остават в браузъра. По желание можете да свържете собствения си Dropbox, за да архивирате базата данни в облака — приложението комуникира директно с Dropbox, без собствен сървър или акаунт."
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "По подразбиране данните ви остават в браузъра. По желание можете да свържете собствения си Dropbox, за да архивирате базата данни в облака — приложението комуникира директно с Dropbox, без собствен сървър или акаунт.",
+  "Settings": "Настройки",
+  "Manage cloud backup and inspect your local storage.": "Управлявайте облачното архивиране и прегледайте локалното си хранилище.",
+  "Storage & sync": "Хранилище и синхронизация",
+  "Your vocabulary starts here.": "Вашият речник започва тук.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "Създайте първия си речник — списък с думи между два езика — и добавяйте думи, докато напредвате."
 });

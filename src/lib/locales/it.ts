@@ -237,4 +237,9 @@ registerDictionary("it", {
   "Track progress": "Tieni traccia dei progressi",
   "Your data never leaves your device unless you connect cloud sync.": "I tuoi dati non lasciano mai il tuo dispositivo a meno che tu non colleghi la sincronizzazione cloud.",
   "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "I tuoi dati rimangono nel tuo browser per impostazione predefinita. Opzionalmente, collega il tuo Dropbox per eseguire il backup del database nel cloud — l'app comunica direttamente con Dropbox, senza un server o un account propri.",
+  "Settings": "Impostazioni",
+  "Manage cloud backup and inspect your local storage.": "Gestisci il backup nel cloud e controlla l'archivio locale.",
+  "Storage & sync": "Archiviazione e sincronizzazione",
+  "Your vocabulary starts here.": "Il tuo vocabolario inizia qui.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "Crea il tuo primo dizionario — un elenco di parole tra due lingue — e aggiungi parole man mano."
 });

@@ -236,5 +236,10 @@ registerDictionary("fr", {
   "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Toute l’interface est traduite dans 15 langues. Changez la langue de l’interface à tout moment depuis la barre supérieure — elle est enregistrée par appareil.",
   "Track progress": "Suivre sa progression",
   "Your data never leaves your device unless you connect cloud sync.": "Vos données ne quittent jamais votre appareil, sauf si vous connectez la synchronisation cloud.",
-  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Vos données restent dans votre navigateur par défaut. Vous pouvez éventuellement connecter votre propre Dropbox pour sauvegarder la base dans le cloud — l’app communique directement avec Dropbox, sans serveur ni compte de son propre."
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Vos données restent dans votre navigateur par défaut. Vous pouvez éventuellement connecter votre propre Dropbox pour sauvegarder la base dans le cloud — l’app communique directement avec Dropbox, sans serveur ni compte de son propre.",
+  "Settings": "Paramètres",
+  "Manage cloud backup and inspect your local storage.": "Gérez la sauvegarde cloud et inspectez votre stockage local.",
+  "Storage & sync": "Stockage et synchronisation",
+  "Your vocabulary starts here.": "Votre vocabulaire commence ici.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "Créez votre premier dictionnaire — une liste de mots entre deux langues — et ajoutez des mots au fur et à mesure."
 });

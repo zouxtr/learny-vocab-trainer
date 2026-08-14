@@ -238,5 +238,10 @@ registerDictionary("nl", {
   "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "De hele interface is vertaald naar 15 talen. Schakel op elk moment de UI-taal om via de bovenbalk — deze wordt per apparaat opgeslagen.",
   "Track progress": "Vordering bijhouden",
   "Your data never leaves your device unless you connect cloud sync.": "Je gegevens verlaten je apparaat nooit, tenzij je cloudsync inschakelt.",
-  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Je gegevens blijven standaard in je browser. Verbind optioneel je eigen Dropbox om de database naar de cloud te back-uppen — de app communiceert direct met Dropbox, zonder eigen server of account."
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Je gegevens blijven standaard in je browser. Verbind optioneel je eigen Dropbox om de database naar de cloud te back-uppen — de app communiceert direct met Dropbox, zonder eigen server of account.",
+  "Settings": "Instellingen",
+  "Manage cloud backup and inspect your local storage.": "Beheer de cloudback-up en bekijk je lokale opslag.",
+  "Storage & sync": "Opslag en synchronisatie",
+  "Your vocabulary starts here.": "Hier begint je woordenschat.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "Maak je eerste woordenboek — een woordenlijst tussen twee talen — en voeg gaandeweg woorden toe."
 });

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BookOpen, HelpCircle, LayoutGrid, Sparkles } from "lucide-react";
+import { BookMarked, CircleHelp, House, Settings, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 import { HelpDialog } from "@/components/onboarding/HelpDialog";
 
 const NAV_ITEMS = [
-  { to: "/", labelKey: "Home", icon: LayoutGrid, end: true },
-  { to: "/dictionaries", labelKey: "Dictionaries", icon: BookOpen },
+  { to: "/", labelKey: "Home", icon: House, end: true },
+  { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
   { to: "/study", labelKey: "Study", icon: Sparkles },
+  { to: "/settings", labelKey: "Settings", icon: Settings },
 ];
 
 /** Bottom navigation shown on small screens where the sidebar is hidden. */
@@ -33,7 +34,7 @@ export function MobileNav() {
             )
           }
         >
-          <item.icon className="h-5 w-5" />
+          <item.icon className="h-5 w-5" fill="currentColor" strokeWidth={1.5} />
           {t(item.labelKey)}
         </NavLink>
       ))}
@@ -42,7 +43,7 @@ export function MobileNav() {
         onClick={() => setHelpOpen(true)}
         className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors"
       >
-        <HelpCircle className="h-5 w-5" />
+        <CircleHelp className="h-5 w-5" />
         {t("Help")}
       </button>
 

@@ -251,5 +251,10 @@ registerDictionary("sv", {
   "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Hela gränssnittet är översatt till 15 språk. Byt språk i gränssnittet när som helst från översta listen — det sparas per enhet.",
   "Track progress": "Följ dina framsteg",
   "Your data never leaves your device unless you connect cloud sync.": "Din data lämnar aldrig din enhet om du inte ansluter molnsynk.",
-  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Din data ligger kvar i din webbläsare som standard. Du kan valfritt ansluta din egen Dropbox för att säkerhetskopiera databasen till molnet — appen pratar direkt med Dropbox, utan egen server eller konto."
+"Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Din data ligger kvar i din webbläsare som standard. Du kan valfritt ansluta din egen Dropbox för att säkerhetskopiera databasen till molnet — appen pratar direkt med Dropbox, utan egen server eller konto.",
+  "Settings": "Inställningar",
+  "Manage cloud backup and inspect your local storage.": "Hantera molnbackup och inspektera din lokala lagring.",
+  "Storage & sync": "Lagring och synk",
+  "Your vocabulary starts here.": "Ditt ordförråd börjar här.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "Skapa din första ordbok — en ordlista mellan två språk — och lägg till ord vartefter."
 });

@@ -235,4 +235,9 @@ registerDictionary("zh", {
   "Track progress": "追踪进度",
   "Your data never leaves your device unless you connect cloud sync.": "除非你连接云同步，否则你的数据绝不会离开你的设备。",
   "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "默认情况下，你的数据保存在浏览器中。你也可以选择连接自己的 Dropbox，将数据库备份到云端——应用会直接与 Dropbox 通信，本身不设服务器，也不需要账户。",
+"Settings": "设置",
+  "Manage cloud backup and inspect your local storage.": "管理云端备份并检查本地存储。",
+  "Storage & sync": "存储与同步",
+  "Your vocabulary starts here.": "你的词汇从这里开始。",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "创建你的第一本词典——两个语言之间的单词列表——并随着学习不断添加单词。"
 });

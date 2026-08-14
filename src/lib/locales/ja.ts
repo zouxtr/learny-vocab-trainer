@@ -235,4 +235,9 @@ registerDictionary("ja", {
   "Track progress": "進捗を追跡",
   "Your data never leaves your device unless you connect cloud sync.": "クラウド同期を接続しない限り、データが端末の外に出ることはありません。",
   "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "データはデフォルトでブラウザに保存されます。必要に応じて自分の Dropbox を接続してデータベースをクラウドにバックアップできます — アプリは Dropbox と直接通信し、独自のサーバーやアカウントはありません。",
+  "Settings": "設定",
+  "Manage cloud backup and inspect your local storage.": "クラウドバックアップを管理し、ローカルの保存状況を確認します。",
+  "Storage & sync": "ストレージと同期",
+  "Your vocabulary starts here.": "あなたの語彙はここから始まります。",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "最初の辞書を作成しましょう — 2つの言語間の単語リスト — あとから単語を追加できます。"
 });

@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BookOpen, HelpCircle, LayoutGrid, Languages, Sparkles } from "lucide-react";
+import { BookMarked, CircleHelp, House, Settings, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUiStore } from "@/stores/uiStore";
 import { useT } from "@/lib/i18n";
-import { SyncSection } from "@/components/system/SyncSection";
 import { HelpDialog } from "@/components/onboarding/HelpDialog";
 
 interface NavItem {
   to: string;
   labelKey: string;
-  icon: typeof BookOpen;
+  icon: typeof House;
   hintKey?: string;
   end?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { to: "/", labelKey: "Home", icon: LayoutGrid, end: true },
-  { to: "/dictionaries", labelKey: "Dictionaries", icon: BookOpen },
+  { to: "/", labelKey: "Home", icon: House, end: true },
+  { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
   { to: "/study", labelKey: "Study", icon: Sparkles, hintKey: "Cmd + S" },
+  { to: "/settings", labelKey: "Settings", icon: Settings },
 ];
 
 export function Sidebar() {
@@ -37,10 +37,10 @@ export function Sidebar() {
     >
       <div className={cn("flex items-center gap-2 px-2 py-2", collapsed && "justify-center")}>
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <Languages className="h-4 w-4" />
+          <BookMarked className="h-4 w-4" />
         </span>
         {!collapsed && (
-          <span className="truncate text-base font-semibold tracking-tight">
+          <span className="truncate font-heading text-lg font-semibold tracking-tight">
             Learn<span className="text-primary">Y!</span>
           </span>
         )}
@@ -60,7 +60,7 @@ export function Sidebar() {
               )
             }
           >
-            <item.icon className="h-4 w-4 shrink-0" />
+            <item.icon className="h-4 w-4 shrink-0" fill="currentColor" strokeWidth={1.5} />
             {!collapsed && (
               <>
                 <span className="truncate">{t(item.labelKey)}</span>
@@ -80,16 +80,10 @@ export function Sidebar() {
             collapsed && "justify-center px-0",
           )}
         >
-          <HelpCircle className="h-4 w-4 shrink-0" />
+          <CircleHelp className="h-4 w-4 shrink-0" />
           {!collapsed && <span className="truncate">{t("How it works")}</span>}
         </button>
       </nav>
-
-      {!collapsed && (
-        <div className="border-t pt-3">
-          <SyncSection />
-        </div>
-      )}
 
       <button
         type="button"

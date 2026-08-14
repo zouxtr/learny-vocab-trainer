@@ -234,5 +234,10 @@ registerDictionary("ar", {
   "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "الواجهة بأكملها مترجمة إلى 15 لغة. بدّل لغة الواجهة في أي وقت من الشريط العلوي — وتُحفظ اللغة لكل جهاز على حدة.",
   "Track progress": "تتبّع التقدم",
   "Your data never leaves your device unless you connect cloud sync.": "لا تخرج بياناتك من جهازك أبدًا إلا إذا فعّلت المزامنة السحابية.",
-  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "تبقى بياناتك في متصفحك افتراضيًا. يمكنك اختياريًا ربط حساب Dropbox الخاص بك لنسخ قاعدة البيانات احتياطيًا إلى السحابة — يتواصل التطبيق مع Dropbox مباشرة، دون أي خادم أو حساب خاص به."
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "تبقى بياناتك في متصفحك افتراضيًا. يمكنك اختياريًا ربط حساب Dropbox الخاص بك لنسخ قاعدة البيانات احتياطيًا إلى السحابة — يتواصل التطبيق مع Dropbox مباشرة، دون أي خادم أو حساب خاص به.",
+  "Settings": "الإعدادات",
+  "Manage cloud backup and inspect your local storage.": "إدارة النسخ الاحتياطي السحابي وفحص التخزين المحلي.",
+  "Storage & sync": "التخزين والمزامنة",
+  "Your vocabulary starts here.": "مفرداتك تبدأ هنا.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "أنشئ أول قاموس لك — قائمة كلمات بين لغتين — وأضف الكلمات مع تقدمك."
 });

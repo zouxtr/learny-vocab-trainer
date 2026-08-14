@@ -237,5 +237,10 @@ registerDictionary("tr", {
   "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Arayüzün tamamı 15 dile çevrilmiştir. Üst çubuktan istediğiniz zaman arayüz dilini değiştirin — cihaz başına kaydedilir.",
   "Track progress": "İlerlemeyi takip et",
   "Your data never leaves your device unless you connect cloud sync.": "Bulut senkronizasyonunu bağlamadığınız sürece verileriniz cihazınızdan asla çıkmaz.",
-  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Verileriniz varsayılan olarak tarayıcınızda kalır. İsterseniz veritabanını buluta yedeklemek için kendi Dropbox hesabınızı bağlayın — uygulama doğrudan Dropbox ile konuşur; kendine ait bir sunucu veya hesap yoktur."
+"Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Verileriniz varsayılan olarak tarayıcınızda kalır. İsterseniz veritabanını buluta yedeklemek için kendi Dropbox hesabınızı bağlayın — uygulama doğrudan Dropbox ile konuşur; kendine ait bir sunucu veya hesap yoktur.",
+  "Settings": "Ayarlar",
+  "Manage cloud backup and inspect your local storage.": "Bulut yedeklemesini yönetin ve yerel depolamanızı inceleyin.",
+  "Storage & sync": "Depolama ve senkronizasyon",
+  "Your vocabulary starts here.": "Kelime dağarcığınız burada başlıyor.",
+  "Create your first dictionary — a word list between two languages — and add words as you go.": "İlk sözlüğünüzü oluşturun — iki dil arasında bir kelime listesi — ve ilerledikçe kelimeler ekleyin."
 });

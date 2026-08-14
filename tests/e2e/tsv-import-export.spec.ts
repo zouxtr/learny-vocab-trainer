@@ -8,7 +8,7 @@ test("import from a generic TSV link, refresh it, and export as CSV", async ({ p
   page.on("pageerror", (err) => errors.push(String(err)));
 
   await page.goto("/");
-  await page.waitForSelector("text=SQLite ready", { timeout: 15000 });
+  await page.waitForSelector("text=My dictionaries", { timeout: 15000 });
 
   // Create a dictionary (onboarding is shown on first run).
   await page.locator("button", { hasText: "Create your first dictionary" }).first().click();

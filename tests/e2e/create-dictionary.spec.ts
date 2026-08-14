@@ -8,7 +8,7 @@ test("creating a dictionary and adding a word persists them", async ({ page }) =
   page.on("pageerror", (err) => errors.push(String(err)));
 
   await page.goto("/");
-  await page.waitForSelector("text=SQLite ready", { timeout: 15000 });
+  await page.waitForSelector("text=My dictionaries", { timeout: 15000 });
 
   // Onboarding is shown on first run (no dictionaries yet).
   await page.locator("button", { hasText: "Create your first dictionary" }).click();
