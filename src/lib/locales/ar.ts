@@ -239,5 +239,6 @@ registerDictionary("ar", {
   "Manage cloud backup and inspect your local storage.": "إدارة النسخ الاحتياطي السحابي وفحص التخزين المحلي.",
   "Storage & sync": "التخزين والمزامنة",
   "Your vocabulary starts here.": "مفرداتك تبدأ هنا.",
+  "your vocabulary": "مفرداتك",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "أنشئ أول قاموس لك — قائمة كلمات بين لغتين — وأضف الكلمات مع تقدمك."
 });

@@ -239,5 +239,6 @@ registerDictionary("ja", {
   "Manage cloud backup and inspect your local storage.": "クラウドバックアップを管理し、ローカルの保存状況を確認します。",
   "Storage & sync": "ストレージと同期",
   "Your vocabulary starts here.": "あなたの語彙はここから始まります。",
+  "your vocabulary": "あなたの語彙",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "最初の辞書を作成しましょう — 2つの言語間の単語リスト — あとから単語を追加できます。"
 });

@@ -239,5 +239,6 @@ registerDictionary("zh", {
   "Manage cloud backup and inspect your local storage.": "管理云端备份并检查本地存储。",
   "Storage & sync": "存储与同步",
   "Your vocabulary starts here.": "你的词汇从这里开始。",
+  "your vocabulary": "你的词汇",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "创建你的第一本词典——两个语言之间的单词列表——并随着学习不断添加单词。"
 });

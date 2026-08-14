@@ -243,5 +243,6 @@ registerDictionary("nl", {
   "Manage cloud backup and inspect your local storage.": "Beheer de cloudback-up en bekijk je lokale opslag.",
   "Storage & sync": "Opslag en synchronisatie",
   "Your vocabulary starts here.": "Hier begint je woordenschat.",
+  "your vocabulary": "jouw woordenschat",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "Maak je eerste woordenboek — een woordenlijst tussen twee talen — en voeg gaandeweg woorden toe."
 });

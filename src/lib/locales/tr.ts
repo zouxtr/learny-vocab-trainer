@@ -242,5 +242,6 @@ registerDictionary("tr", {
   "Manage cloud backup and inspect your local storage.": "Bulut yedeklemesini yönetin ve yerel depolamanızı inceleyin.",
   "Storage & sync": "Depolama ve senkronizasyon",
   "Your vocabulary starts here.": "Kelime dağarcığınız burada başlıyor.",
+  "your vocabulary": "kelime dağarcığınız",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "İlk sözlüğünüzü oluşturun — iki dil arasında bir kelime listesi — ve ilerledikçe kelimeler ekleyin."
 });

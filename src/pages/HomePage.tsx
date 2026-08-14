@@ -92,7 +92,7 @@ function EmptyState({ onCreate, onHelp }: { onCreate: () => void; onHelp: () => 
   return (
     <section className="mx-auto flex w-full max-w-md flex-col items-center rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
       <div className="w-full rounded-xl border border-border/70 bg-muted/40 p-5 text-left">
-        <p className="font-heading text-3xl font-semibold tracking-tight">your vocabulary</p>
+        <p className="font-heading text-3xl font-semibold tracking-tight">{t("your vocabulary")}</p>
         <div className="mt-3 flex items-baseline gap-2 text-sm">
           <span className="font-heading font-medium text-primary">example ·</span>
           <span className="text-muted-foreground">Beispiel</span>

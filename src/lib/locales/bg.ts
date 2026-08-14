@@ -244,5 +244,6 @@ registerDictionary("bg", {
   "Manage cloud backup and inspect your local storage.": "Управлявайте облачното архивиране и прегледайте локалното си хранилище.",
   "Storage & sync": "Хранилище и синхронизация",
   "Your vocabulary starts here.": "Вашият речник започва тук.",
+  "your vocabulary": "вашият речник",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "Създайте първия си речник — списък с думи между два езика — и добавяйте думи, докато напредвате."
 });

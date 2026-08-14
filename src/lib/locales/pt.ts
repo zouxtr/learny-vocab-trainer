@@ -243,5 +243,6 @@ registerDictionary("pt", {
   "Manage cloud backup and inspect your local storage.": "Gerencie o backup na nuvem e inspecione seu armazenamento local.",
   "Storage & sync": "Armazenamento e sincronização",
   "Your vocabulary starts here.": "Seu vocabulário começa aqui.",
+  "your vocabulary": "seu vocabulário",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "Crie seu primeiro dicionário — uma lista de palavras entre dois idiomas — e adicione palavras conforme avança."
 });

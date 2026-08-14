@@ -256,5 +256,6 @@ registerDictionary("sv", {
   "Manage cloud backup and inspect your local storage.": "Hantera molnbackup och inspektera din lokala lagring.",
   "Storage & sync": "Lagring och synk",
   "Your vocabulary starts here.": "Ditt ordförråd börjar här.",
+  "your vocabulary": "ditt ordförråd",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "Skapa din första ordbok — en ordlista mellan två språk — och lägg till ord vartefter."
 });

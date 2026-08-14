@@ -242,5 +242,6 @@ registerDictionary("ru", {
   "Manage cloud backup and inspect your local storage.": "Управляйте облачным резервным копированием и проверяйте локальное хранилище.",
   "Storage & sync": "Хранилище и синхронизация",
   "Your vocabulary starts here.": "Ваш словарь начинается здесь.",
+  "your vocabulary": "ваш словарь",
   "Create your first dictionary — a word list between two languages — and add words as you go.": "Создайте свой первый словарь — список слов между двумя языками — и добавляйте слова по мере продвижения."
 });
