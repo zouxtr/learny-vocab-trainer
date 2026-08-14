@@ -216,5 +216,16 @@ registerDictionary("tr", {
   "{n} of {m} selected": "{m} içinden {n} seçildi",
   "{n} tables · {size}": "{n} tablo · {size}",
   "{n} words reviewed this session.": "Bu oturumda {n} kelime gözden geçirildi.",
-  "{n} word{s} in the dictionary but not in the sheet were kept": "Sözlükte bulunup sayfada olmayan {n} kelime{s} tutuldu"
+  "{n} word{s} in the dictionary but not in the sheet were kept": "Sözlükte bulunup sayfada olmayan {n} kelime{s} tutuldu",
+"15 languages": "15 dil",
+  "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser — offline, no account needed.": "Kelime listelerini interaktif çalışma oturumlarına dönüştüren bir kelime antrenörü. Her şey tarayıcınızda yerel olarak çalışır — çevrimdışı, hesap gerekmez.",
+  "A word has a source term and a translation, plus optional grammar, example, group, and notes. Add words one by one or import them in bulk from a file, Google Sheet, or TSV link. Export to CSV anytime.": "Bir kelimenin kaynak terimi ve çevirisi, ayrıca isteğe bağlı gramer, örnek, grup ve notları vardır. Kelimeleri tek tek ekleyin veya bir dosyadan, Google E-Tablosu'ndan ya da TSV bağlantısından toplu olarak içe aktarın. İstediğiniz zaman CSV olarak dışa aktarın.",
+  "Add words": "Kelime ekle",
+  "Each dictionary is a vocabulary list with a language pair — a word language and a translation language, e.g. English → Spanish or Bulgarian → German. Keep one dictionary per topic and favorite or archive them.": "Her sözlük, bir dil çifti — bir kelime dili ve bir çeviri dili — içeren bir kelime listesidir; örn. İngilizce → İspanyolca veya Bulgarca → Almanca. Konu başına bir sözlük tutun ve beğenin ya da arşivleyin.",
+  "Pick a dictionary and practice its words — flashcards, multiple choice, grammar, or typing — in either direction. Each word gets a spaced-repetition schedule, so the app shows you the words you need to review.": "Bir sözlük seçin ve kelimelerini — bilgi kartları, çoktan seçmeli, gramer veya yazma — iki yönde de çalışın. Her kelimeye aralıklı tekrar programı atanır, böylece uygulama gözden geçirmeniz gereken kelimeleri size gösterir.",
+  "Sessions record your answers. The summary shows how many words you reviewed and your accuracy, and words you keep missing get scheduled again sooner.": "Oturumlar cevaplarınızı kaydeder. Özet, kaç kelime gözden geçirdiğinizi ve isabet oranınızı gösterir; sürekli kaçırdığınız kelimeler daha erken tekrarlanacak şekilde programlanır.",
+  "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Arayüzün tamamı 15 dile çevrilmiştir. Üst çubuktan istediğiniz zaman arayüz dilini değiştirin — cihaz başına kaydedilir.",
+  "Track progress": "İlerlemeyi takip et",
+  "Your data never leaves your device unless you connect cloud sync.": "Bulut senkronizasyonunu bağlamadığınız sürece verileriniz cihazınızdan asla çıkmaz.",
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Verileriniz varsayılan olarak tarayıcınızda kalır. İsterseniz veritabanını buluta yedeklemek için kendi Dropbox hesabınızı bağlayın — uygulama doğrudan Dropbox ile konuşur; kendine ait bir sunucu veya hesap yoktur."
 });

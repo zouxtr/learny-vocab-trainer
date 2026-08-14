@@ -218,5 +218,16 @@ registerDictionary("bg", {
   "{n} of {m} selected": "{n} от {m} избрани",
   "{n} tables · {size}": "{n} таблици · {size}",
   "{n} words reviewed this session.": "{n} дума/думи са прегледани в тази сесия.",
-  "{n} word{s} in the dictionary but not in the sheet were kept": "{n} дума{s} в речника, които не са в таблицата, бяха запазени."
+  "{n} word{s} in the dictionary but not in the sheet were kept": "{n} дума{s} в речника, които не са в таблицата, бяха запазени",
+"15 languages": "15 езика",
+  "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser — offline, no account needed.": "Треньор за речников запас, който превръща вашите списъци с думи в интерактивни учебни сесии. Всичко работи локално в браузъра ви — офлайн, без нужда от акаунт.",
+  "A word has a source term and a translation, plus optional grammar, example, group, and notes. Add words one by one or import them in bulk from a file, Google Sheet, or TSV link. Export to CSV anytime.": "Думата има изходен термин и превод, плюс незадължителни граматика, пример, група и бележки. Добавяйте думи една по една или ги импортирайте групово от файл, Google Sheet или TSV връзка. Експортирайте в CSV по всяко време.",
+  "Add words": "Добавяне на думи",
+  "Each dictionary is a vocabulary list with a language pair — a word language and a translation language, e.g. English → Spanish or Bulgarian → German. Keep one dictionary per topic and favorite or archive them.": "Всеки речник е списък с думи от езикова двойка — език на думите и език на превода, напр. английски → испански или български → немски. Съхранявайте по един речник за тема, а любимите архивирайте.",
+  "Pick a dictionary and practice its words — flashcards, multiple choice, grammar, or typing — in either direction. Each word gets a spaced-repetition schedule, so the app shows you the words you need to review.": "Изберете речник и практикувайте думите му — карти, множествен избор, граматика или писане — в двете посоки. Всяка дума получава график за разпределено повторение, така че приложението ви показва думите, които трябва да преговорите.",
+  "Sessions record your answers. The summary shows how many words you reviewed and your accuracy, and words you keep missing get scheduled again sooner.": "Сесиите записват вашите отговори. Обобщението показва колко думи сте преговорили и точността ви, а думите, които продължавате да допускате грешки, се планират отново по-рано.",
+  "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Целият интерфейс е преведен на 15 езика. Сменяйте езика на интерфейса по всяко време от горната лента — записва се за всяко устройство.",
+  "Track progress": "Проследяване на напредъка",
+  "Your data never leaves your device unless you connect cloud sync.": "Вашите данни никога не напускат устройството ви, освен ако не свържете облачна синхронизация.",
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "По подразбиране данните ви остават в браузъра. По желание можете да свържете собствения си Dropbox, за да архивирате базата данни в облака — приложението комуникира директно с Dropbox, без собствен сървър или акаунт."
 });

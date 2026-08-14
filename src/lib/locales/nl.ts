@@ -217,5 +217,16 @@ registerDictionary("nl", {
   "{n} of {m} selected": "{n} van {m} geselecteerd",
   "{n} tables · {size}": "{n} tabellen · {size}",
   "{n} words reviewed this session.": "{n} woorden in deze sessie herhaald.",
-  "{n} word{s} in the dictionary but not in the sheet were kept": "{n} woord{s} in het woordenboek maar niet in het werkblad werden bewaard"
+  "{n} word{s} in the dictionary but not in the sheet were kept": "{n} woord{s} in het woordenboek maar niet in het werkblad werden bewaard",
+"15 languages": "15 talen",
+  "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser — offline, no account needed.": "Een woordentrainer die van je woordenlijsten interactieve studiesessies maakt. Alles draait lokaal in je browser — offline, zonder account nodig.",
+  "A word has a source term and a translation, plus optional grammar, example, group, and notes. Add words one by one or import them in bulk from a file, Google Sheet, or TSV link. Export to CSV anytime.": "Een woord heeft een brontaalterm en een vertaling, plus optioneel grammatica, voorbeeld, groep en notities. Voeg woorden één voor één toe of importeer ze in bulk vanuit een bestand, Google Sheet of TSV-link. Exporteer op elk moment naar CSV.",
+  "Add words": "Woorden toevoegen",
+  "Each dictionary is a vocabulary list with a language pair — a word language and a translation language, e.g. English → Spanish or Bulgarian → German. Keep one dictionary per topic and favorite or archive them.": "Elke woordenlijst is een vocabulairelijst met een taalpaar — een woordtaal en een vertaaltaal, b.v. Engels → Spaans of Bulgaars → Duits. Houd één woordenlijst per onderwerp aan en markeer ze als favoriet of archiveer ze.",
+  "Pick a dictionary and practice its words — flashcards, multiple choice, grammar, or typing — in either direction. Each word gets a spaced-repetition schedule, so the app shows you the words you need to review.": "Kies een woordenlijst en oefen de woorden — flashcards, meerkeuze, grammatica of typen — in beide richtingen. Elk woord krijgt een herhalingsschema met gespreide herhaling, zodat de app je de woorden toont die je moet herhalen.",
+  "Sessions record your answers. The summary shows how many words you reviewed and your accuracy, and words you keep missing get scheduled again sooner.": "Sessies registreren je antwoorden. De samenvatting toont hoeveel woorden je hebt herhaald en je nauwkeurigheid, en woorden die je blijft missen worden eerder opnieuw ingepland.",
+  "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "De hele interface is vertaald naar 15 talen. Schakel op elk moment de UI-taal om via de bovenbalk — deze wordt per apparaat opgeslagen.",
+  "Track progress": "Vordering bijhouden",
+  "Your data never leaves your device unless you connect cloud sync.": "Je gegevens verlaten je apparaat nooit, tenzij je cloudsync inschakelt.",
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Je gegevens blijven standaard in je browser. Verbind optioneel je eigen Dropbox om de database naar de cloud te back-uppen — de app communiceert direct met Dropbox, zonder eigen server of account."
 });

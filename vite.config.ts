@@ -11,7 +11,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["vite.svg", "sql-wasm.wasm"],
+      includeAssets: ["learny.svg", "sql-wasm.wasm"],
       manifest: {
         name: "LearnY!",
         short_name: "LearnY",
@@ -22,7 +22,7 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "vite.svg",
+            src: "learny.svg",
             sizes: "any",
             type: "image/svg+xml",
             purpose: "any",

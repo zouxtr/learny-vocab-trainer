@@ -230,5 +230,16 @@ registerDictionary("sv", {
   "{n} of {m} selected": "{n} av {m} valda",
   "{n} tables · {size}": "{n} tabeller · {size}",
   "{n} words reviewed this session.": "{n} ord repeterade i den här sessionen.",
-  "{n} word{s} in the dictionary but not in the sheet were kept": "{n} ord{s} i ordlistan men inte i kalkylarket behölls"
+  "{n} word{s} in the dictionary but not in the sheet were kept": "{n} ord{s} i ordlistan men inte i kalkylarket behölls",
+"15 languages": "15 språk",
+  "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser — offline, no account needed.": "En glostränare som gör dina ordlistor till interaktiva övningspass. Allt körs lokalt i din webbläsare — offline, inget konto behövs.",
+  "A word has a source term and a translation, plus optional grammar, example, group, and notes. Add words one by one or import them in bulk from a file, Google Sheet, or TSV link. Export to CSV anytime.": "Ett ord har en källterm och en översättning, plus valfri grammatik, exempel, grupp och anteckningar. Lägg till ord ett i taget eller importera dem i bulk från en fil, Google Sheet eller TSV-länk. Exportera till CSV när som helst.",
+  "Add words": "Lägg till ord",
+  "Each dictionary is a vocabulary list with a language pair — a word language and a translation language, e.g. English → Spanish or Bulgarian → German. Keep one dictionary per topic and favorite or archive them.": "Varje ordbok är en ordlista med ett språkpar — ett ordspråk och ett översättningsspråk, t.ex. engelska → spanska eller bulgariska → tyska. Ha en ordbok per ämne och favoritmarkera eller arkivera dem.",
+  "Pick a dictionary and practice its words — flashcards, multiple choice, grammar, or typing — in either direction. Each word gets a spaced-repetition schedule, so the app shows you the words you need to review.": "Välj en ordbok och öva på dess ord — kort, flervalsfrågor, grammatik eller skrivning — i antingen riktning. Varje ord får ett repetitionsschema, så appen visar de ord du behöver repetera.",
+  "Sessions record your answers. The summary shows how many words you reviewed and your accuracy, and words you keep missing get scheduled again sooner.": "Övningspassen registrerar dina svar. Sammanfattningen visar hur många ord du repeterat och din träffsäkerhet, och ord du fortsätter missa schemaläggs igen tidigare.",
+  "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "Hela gränssnittet är översatt till 15 språk. Byt språk i gränssnittet när som helst från översta listen — det sparas per enhet.",
+  "Track progress": "Följ dina framsteg",
+  "Your data never leaves your device unless you connect cloud sync.": "Din data lämnar aldrig din enhet om du inte ansluter molnsynk.",
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "Din data ligger kvar i din webbläsare som standard. Du kan valfritt ansluta din egen Dropbox för att säkerhetskopiera databasen till molnet — appen pratar direkt med Dropbox, utan egen server eller konto."
 });

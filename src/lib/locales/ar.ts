@@ -214,4 +214,15 @@ registerDictionary("ar", {
   "{n} tables · {size}": "{n} جداول · {size}",
   "{n} words reviewed this session.": "{n} كلمة تمت مراجعتها في هذه الجلسة.",
   "{n} word{s} in the dictionary but not in the sheet were kept": "تم الإبقاء على {n} كلمة{s} موجودة في القاموس وليست في الورقة",
+"15 languages": "15 لغة",
+  "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser — offline, no account needed.": "مدرب مفردات يحوّل قوائم كلماتك إلى جلسات دراسية تفاعلية. كل شيء يعمل محليًا في متصفحك — دون اتصال ولا حاجة لحساب.",
+  "A word has a source term and a translation, plus optional grammar, example, group, and notes. Add words one by one or import them in bulk from a file, Google Sheet, or TSV link. Export to CSV anytime.": "تتكوّن الكلمة من مصطلح أصلي وترجمة، إضافة إلى قواعد وحد ومثال ومجموعة وملاحظات اختيارية. أضف الكلمات واحدة تلو الأخرى أو استوردها بكميات كبيرة من ملف أو جدول Google أو رابط TSV. صدّرها إلى CSV في أي وقت.",
+  "Add words": "إضافة الكلمات",
+  "Each dictionary is a vocabulary list with a language pair — a word language and a translation language, e.g. English → Spanish or Bulgarian → German. Keep one dictionary per topic and favorite or archive them.": "كل قاموس هو قائمة مفردات بزوج من اللغات — لغة الكلمات ولغة الترجمة، مثلًا الإنجليزية → الإسبانية أو البلغارية → الألمانية. خصّص قاموسًا واحدًا لكل موضوع، وأضِف القواميس إلى المفضلة أو أرشِفها.",
+  "Pick a dictionary and practice its words — flashcards, multiple choice, grammar, or typing — in either direction. Each word gets a spaced-repetition schedule, so the app shows you the words you need to review.": "اختر قاموسًا وتدرّب على كلماته — بطاقات تعليمية أو اختيار من متعدد أو قواعد أو كتابة — في أي من الاتجاهين. تحصل كل كلمة على جدول تكرار متباعد، فيعرض لك التطبيق الكلمات التي تحتاج مراجعتها.",
+  "Sessions record your answers. The summary shows how many words you reviewed and your accuracy, and words you keep missing get scheduled again sooner.": "تسجّل الجلسات إجاباتك. يعرض الملخص عدد الكلمات التي راجعتها ودقة إجاباتك، ويُجدول جدول التكرار الكلمات التي ما زلت تخطئ فيها مرة أخرى في وقت أقرب.",
+  "The entire interface is translated into 15 languages. Switch the UI language anytime from the top bar — it’s saved per device.": "الواجهة بأكملها مترجمة إلى 15 لغة. بدّل لغة الواجهة في أي وقت من الشريط العلوي — وتُحفظ اللغة لكل جهاز على حدة.",
+  "Track progress": "تتبّع التقدم",
+  "Your data never leaves your device unless you connect cloud sync.": "لا تخرج بياناتك من جهازك أبدًا إلا إذا فعّلت المزامنة السحابية.",
+  "Your data stays in your browser by default. Optionally connect your own Dropbox to back the database up to the cloud — the app talks to Dropbox directly, with no server or account of its own.": "تبقى بياناتك في متصفحك افتراضيًا. يمكنك اختياريًا ربط حساب Dropbox الخاص بك لنسخ قاعدة البيانات احتياطيًا إلى السحابة — يتواصل التطبيق مع Dropbox مباشرة، دون أي خادم أو حساب خاص به."
 });
