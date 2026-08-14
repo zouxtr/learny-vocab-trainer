@@ -3,9 +3,8 @@ import { NavLink } from "react-router-dom";
 import { BookOpen, HelpCircle, LayoutGrid, Languages, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUiStore } from "@/stores/uiStore";
-import { useSyncStore } from "@/stores/syncStore";
 import { useT } from "@/lib/i18n";
-import { SyncPanel } from "@/components/system/SyncPanel";
+import { SyncSection } from "@/components/system/SyncSection";
 import { HelpDialog } from "@/components/onboarding/HelpDialog";
 
 interface NavItem {
@@ -25,17 +24,9 @@ const NAV_ITEMS: NavItem[] = [
 export function Sidebar() {
   const collapsed = useUiStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUiStore((s) => s.toggleSidebar);
-  const connected = useSyncStore((s) => s.connected);
-  const syncing = useSyncStore((s) => s.syncing);
-  const lastResult = useSyncStore((s) => s.lastResult);
-  const connect = useSyncStore((s) => s.connect);
-  const disconnect = useSyncStore((s) => s.disconnect);
-  const syncNow = useSyncStore((s) => s.syncNow);
   const t = useT();
 
   const [helpOpen, setHelpOpen] = useState(false);
-
-  const sync = { connected, syncing, lastResult };
 
   return (
     <aside
@@ -96,12 +87,7 @@ export function Sidebar() {
 
       {!collapsed && (
         <div className="border-t pt-3">
-          <SyncPanel
-            status={sync}
-            onConnect={(id) => void connect(id)}
-            onDisconnect={(id) => void disconnect(id)}
-            onSyncNow={(id) => void syncNow(id)}
-          />
+          <SyncSection />
         </div>
       )}
 

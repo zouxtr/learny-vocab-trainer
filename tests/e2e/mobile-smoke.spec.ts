@@ -30,6 +30,15 @@ test("mobile layout: bottom nav shows, sidebar hidden, content usable", async ({
   await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Study" }).click();
   await expect(page.locator("h2", { hasText: "Study" })).toBeVisible();
 
+  // Cloud sync is reachable from the top bar on mobile.
+  await page.getByRole("button", { name: "Cloud sync" }).first().click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Cloud sync" })).toBeVisible();
+  await expect(dialog.getByText("Offline — no cloud backup.")).toBeVisible();
+  await dialog.getByRole("button", { name: "Close" }).click();
+  await expect(dialog).not.toBeVisible();
+
   const fatalErrors = errors.filter(
     (e) => e.includes("wasm") || e.includes("magic number") || e.includes("unsupported MIME"),
   );
