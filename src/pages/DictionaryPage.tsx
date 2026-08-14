@@ -398,6 +398,13 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
     overscan: 12,
   });
 
+  const virtualItems = rowVirtualizer.getVirtualItems();
+  const topSpacer = virtualItems.length > 0 ? virtualItems[0].start : 0;
+  const bottomSpacer =
+    virtualItems.length > 0
+      ? rowVirtualizer.getTotalSize() - virtualItems[virtualItems.length - 1].end
+      : 0;
+
   if (filtered.length === 0) {
     return (
       <section className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
@@ -409,7 +416,7 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
   }
 
   return (
-    <div ref={parentRef} className="max-h-[60vh] overflow-auto rounded-xl border border-border">
+    <div ref={parentRef} className="max-h-[60vh] overflow-y-auto rounded-xl border border-border">
       <table className="w-full border-separate border-spacing-0 text-sm">
         <thead className="sticky top-0 z-10 bg-muted/50 text-left text-xs text-muted-foreground">
           <tr>
@@ -419,19 +426,25 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
             <th className="border-b border-border px-4 py-2" />
           </tr>
         </thead>
-        <tbody style={{ height: rowVirtualizer.getTotalSize(), position: "relative" }}>
-          {rowVirtualizer.getVirtualItems().map((vi) => (
-            <WordRow
-              key={filtered[vi.index].id}
-              word={filtered[vi.index]}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              style={{
-                height: vi.size,
-                transform: `translateY(${vi.start}px)`,
-              }}
-            />
-          ))}
+        <tbody>
+          {topSpacer > 0 && (
+            <tr aria-hidden style={{ height: topSpacer }} />
+          )}
+          {virtualItems.map((vi) => {
+            const row = filtered[vi.index];
+            return (
+              <WordRow
+                key={row.id}
+                word={row}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                style={{ height: vi.size }}
+              />
+            );
+          })}
+          {bottomSpacer > 0 && (
+            <tr aria-hidden style={{ height: bottomSpacer }} />
+          )}
         </tbody>
       </table>
     </div>
@@ -458,10 +471,7 @@ function WordRow({ word, onEdit, onDelete, style }: WordRowProps) {
   };
 
   return (
-    <tr
-      style={{ position: "absolute", top: 0, left: 0, width: "100%", ...style }}
-      className="group transition-colors hover:bg-muted/40"
-    >
+    <tr style={style} className="group transition-colors hover:bg-muted/40">
       <td className="px-4 py-3 font-medium break-words">{word.source}</td>
       <td className={cn("px-4 py-3 break-words", !word.target && "text-muted-foreground")}>{word.target}</td>
       <td className="hidden px-4 py-3 text-muted-foreground sm:table-cell">

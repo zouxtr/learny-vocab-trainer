@@ -1,4 +1,4 @@
-import { authorizeWithPopup, randomString } from "@/services/sync/oauth";
+import { authorizeWithPopup, openOAuthPopup, randomString } from "@/services/sync/oauth";
 
 const AUTH_URL = "https://www.dropbox.com/oauth2/authorize";
 const TOKEN_URL = "https://api.dropboxapi.com/oauth2/token";
@@ -134,10 +134,16 @@ export class DropboxClient {
 /** Drive the PKCE authorize + token exchange. Returns tokens to persist. */
 export async function connectDropboxAccount(): Promise<DropboxTokens> {
   if (!CLIENT_KEY) throw new Error("Dropbox client key not configured (VITE_DROPBOX_CLIENT_KEY)");
+
+  // Open the popup synchronously, before any `await` below. iOS Safari blocks
+  // popups opened after any async work — this call must stay in the click
+  // handler's synchronous execution stack.
+  const popup = openOAuthPopup();
   const verifier = await randomString(64);
   const redirectUri = `${window.location.origin}`;
 
   const code = await authorizeWithPopup(
+    popup,
     (challenge) => {
       const params = new URLSearchParams({
         response_type: "code",

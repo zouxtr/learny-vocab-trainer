@@ -36,34 +36,54 @@ export async function createCodeChallenge(verifier: string): Promise<string> {
   return base64UrlEncode(await sha256(verifier));
 }
 
-/** Open an OAuth authorize window and wait for the redirect with the code. */
+/**
+ * Open the OAuth popup synchronously at the very start of the user gesture.
+ *
+ * This MUST be called inside the click handler before any `await` — iOS
+ * Safari only treats a popup as user-initiated if `window.open()` runs in the
+ * same synchronous call stack as the tap. If we generated the PKCE verifier or
+ * challenge first (async), Safari blocks the popup ("Pop-up blocked").
+ *
+ * To stay synchronous we open a blank window now and point its `.location` at
+ * the real authorize URL from `authorizeWithPopup` once the PKCE params exist.
+ */
+export function openOAuthPopup(): Window {
+  const width = 600;
+  const height = 640;
+  const left = window.screenX + (window.outerWidth - width) / 2;
+  const top = window.screenY + (window.outerHeight - height) / 2.5;
+
+  const popup = window.open(
+    "about:blank",
+    "learny-oauth",
+    `width=${width},height=${height},left=${left},top=${top}`,
+  );
+
+  if (!popup) {
+    throw new Error("Pop-up blocked — allow pop-ups to connect your account.");
+  }
+  return popup;
+}
+
+/**
+ * Point an already-open popup at the OAuth authorize URL (built from the PKCE
+ * challenge) and wait for the redirect back with the authorization code.
+ *
+ * Same-origin popups permit cross-window reads, so once Dropbox redirects back
+ * to this app we can read the `code` query param without a server round-trip.
+ */
 export async function authorizeWithPopup(
+  popup: Window,
   authorizeUrl: (challenge: string) => string,
   verifier: string,
 ): Promise<string> {
   const challenge = await createCodeChallenge(verifier);
   const url = authorizeUrl(challenge);
 
-  // Popup-based flow: the OAuth server redirects back to the SAME origin the
-  // popup was opened from, so we can reach into it and read the `code` query
-  // param without a server round-trip.
+  // Navigate the pre-opened blank popup (synced) to the real authorize URL.
+  popup.location.replace(url);
+
   return new Promise((resolve, reject) => {
-    const width = 600;
-    const height = 640;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2.5;
-
-    const popup = window.open(
-      url,
-      "learny-oauth",
-      `width=${width},height=${height},left=${left},top=${top}`,
-    );
-
-    if (!popup) {
-      reject(new Error("Pop-up blocked — allow pop-ups to connect your account."));
-      return;
-    }
-
     const poll = window.setInterval(async () => {
       try {
         if (!popup || popup.closed) {
@@ -71,7 +91,6 @@ export async function authorizeWithPopup(
           reject(new Error("Authorization was cancelled."));
           return;
         }
-        // Same-origin popups permit cross-window reads.
         const href = popup.location.href;
         if (href) {
           const urlObj = new URL(href);

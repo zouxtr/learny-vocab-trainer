@@ -38,7 +38,7 @@ export function TopBar() {
   };
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border px-4">
+    <header className="flex min-h-14 shrink-0 items-center justify-between border-b border-border px-4 pt-[env(safe-area-inset-top)]">
       <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
       <div className="flex items-center gap-2">
         <Button

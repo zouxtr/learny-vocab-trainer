@@ -125,3 +125,23 @@
     border-radius: 9999px;
   }
 }
+
+/*
+ * iOS Safari auto-zooms the page when a form field smaller than 16px gains
+ * focus. Bumping text fields to 16px on touch devices prevents that zoom and
+ * keeps the page scale steady mid-input.
+ */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Fast taps: no 300ms delay / no double-tap zoom on interactive elements. */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
