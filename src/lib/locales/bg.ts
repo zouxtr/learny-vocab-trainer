@@ -81,6 +81,12 @@ registerDictionary("bg", {
   Import: "Импорт",
   "No words yet. Add your first word to start building this dictionary.":
     "Все още няма думи. Добавете първата си дума, за да започнете да изграждате този речник.",
+  "Have a paper dictionary?": "Имате ли хартиен речник?",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "Снимайте страниците му и оставете ИИ да ги превърне в таблица във формата на приложението. След това я поставете в CSV импорта.",
+  "AI prompt": "Подкана за ИИ",
+  "Copy": "Копиране",
+  "Copied": "Копирано",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "Работите с много страници? Използвайте инструмента image-to-table, за да конвертирате сканиранията си, а след това импортирайте CSV.",
   "Add your first word": "Добавете първата си дума",
   "No words match your search.": "Няма думи, отговарящи на вашето търсене.",
   Translation: "Превод",

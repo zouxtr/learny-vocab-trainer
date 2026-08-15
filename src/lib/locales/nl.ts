@@ -81,6 +81,12 @@ registerDictionary("nl", {
   Import: "Importeren",
   "No words yet. Add your first word to start building this dictionary.":
     "Nog geen woorden. Voeg je eerste woord toe om dit woordenboek op te bouwen.",
+  "Have a paper dictionary?": "Heb je een papieren woordenboek?",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "Fotografeer de pagina's en laat een AI ze omzetten naar een tabel in het formaat van deze app. Plak die daarna in de CSV-import.",
+  "AI prompt": "AI-prompt",
+  "Copy": "Kopiëren",
+  "Copied": "Gekopieerd",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "Veel pagina's? Gebruik de image-to-table-tool om je scans om te zetten en importeer daarna de CSV.",
   "Add your first word": "Voeg je eerste woord toe",
   "No words match your search.": "Geen woorden gevonden voor je zoekopdracht.",
   Translation: "Vertaling",

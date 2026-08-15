@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Download, Loader2, Pencil, Plus, RefreshCw, Search, Trash2, Upload, X } from "lucide-react";
+import { ArrowLeft, Check, Copy, Download, ExternalLink, Loader2, Pencil, Plus, RefreshCw, Search, Trash2, Upload, X } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
@@ -316,14 +316,7 @@ export function DictionaryPage() {
       </div>
 
       {words.length === 0 ? (
-        <section className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
-          <p className="text-sm text-muted-foreground">
-            {t("No words yet. Add your first word to start building this dictionary.")}
-          </p>
-          <Button onClick={() => setCreatingWord(true)}>
-            <Plus className="h-4 w-4" /> {t("Add your first word")}
-          </Button>
-        </section>
+        <EmptyWords sourceName={sourceName} targetName={targetName} onCreate={() => setCreatingWord(true)} />
       ) : (
         <WordList
           words={words}
@@ -500,5 +493,94 @@ function WordRow({ word, onEdit, onDelete, style }: WordRowProps) {
         </div>
       </td>
     </tr>
+  );
+}
+
+interface EmptyWordsProps {
+  sourceName: string;
+  targetName: string;
+  onCreate: () => void;
+}
+
+/** Empty-state guidance: convert a paper dictionary into app-ready tables with
+ * an AI, or hand the images to the image-to-table tool for large scans. */
+function EmptyWords({ sourceName, targetName, onCreate }: EmptyWordsProps) {
+  const t = useT();
+  const [copied, setCopied] = useState(false);
+
+  const prompt = `Convert the words in the attached photo(s) of a paper dictionary into a table.
+
+Use exactly these columns, in this order:
+${sourceName},${targetName},Grammar,Example,Group
+
+Rules:
+- One row per entry.
+- Fill ${sourceName} with the headword and ${targetName} with its translation.
+- Leave Grammar, Example, and Group empty unless the entry provides them.
+- Do not invent entries. Transcribe only what is visible.
+- Output a plain table with the exact column names above as the header row.`;
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          {t("No words yet. Add your first word to start building this dictionary.")}
+        </p>
+        <Button onClick={onCreate}>
+          <Plus className="h-4 w-4" /> {t("Add your first word")}
+        </Button>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card p-5">
+        <h4 className="font-heading text-base font-semibold tracking-tight">
+          {t("Have a paper dictionary?")}
+        </h4>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t("Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.")}
+        </p>
+
+        <div className="mt-4 rounded-lg border border-border bg-muted/40 p-3">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-medium text-foreground">{t("AI prompt")}</p>
+            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={handleCopy}>
+              {copied ? (
+                <>
+                  <Check className="h-3.5 w-3.5" /> {t("Copied")}
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3.5 w-3.5" /> {t("Copy")}
+                </>
+              )}
+            </Button>
+          </div>
+          <pre className="scrollbar-thin mt-2 max-h-48 overflow-y-auto whitespace-pre-wrap font-mono text-xs leading-relaxed text-muted-foreground">
+            {prompt}
+          </pre>
+        </div>
+
+        <p className="mt-4 text-sm text-muted-foreground">
+          {t("Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.")}
+        </p>
+        <a
+          href="https://github.com/zouxtr/image-to-table"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        >
+          <ExternalLink className="h-3.5 w-3.5" /> image-to-table
+        </a>
+      </div>
+    </section>
   );
 }

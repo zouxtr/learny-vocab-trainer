@@ -81,6 +81,12 @@ registerDictionary("ru", {
   Import: "Импорт",
   "No words yet. Add your first word to start building this dictionary.":
     "Слов пока нет. Добавьте первое слово, чтобы начать наполнять этот словарь.",
+  "Have a paper dictionary?": "У вас есть бумажный словарь?",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "Сфотографируйте его страницы и позвольте ИИ превратить их в таблицу в формате этого приложения. Затем вставьте её в импорт CSV.",
+  "AI prompt": "Запрос для ИИ",
+  "Copy": "Копировать",
+  "Copied": "Скопировано",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "Работаете со многими страницами? Используйте инструмент image-to-table для конвертации сканов, а затем импортируйте CSV.",
   "Add your first word": "Добавьте первое слово",
   "No words match your search.": "Нет слов, соответствующих вашему запросу.",
   Translation: "Перевод",

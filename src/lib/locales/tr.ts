@@ -81,6 +81,12 @@ registerDictionary("tr", {
   Import: "İçe aktar",
   "No words yet. Add your first word to start building this dictionary.":
     "Henüz kelime yok. Bu sözlüğü oluşturmaya başlamak için ilk kelimeni ekle.",
+  "Have a paper dictionary?": "Kağıt bir sözlüğünüz var mı?",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "Sayfalarının fotoğrafını çekin ve bir yapay zekanın bunları bu uygulamanın biçiminde bir tabloya dönüştürmesini sağlayın. Ardından CSV içe aktarmasına yapıştırın.",
+  "AI prompt": "Yapay zeka istemi",
+  "Copy": "Kopyala",
+  "Copied": "Kopyalandı",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "Çok sayfalı mı çalışıyorsunuz? Taramalarınızı dönüştürmek için image-to-table aracını kullanın, ardından CSV'yi içe aktarın.",
   "Add your first word": "İlk kelimeni ekle",
   "No words match your search.": "Aramanla eşleşen kelime yok.",
   Translation: "Çeviri",

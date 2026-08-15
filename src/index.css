@@ -136,10 +136,12 @@
 
 /*
  * iOS Safari auto-zooms the page when a form field smaller than 16px gains
- * focus. Bumping text fields to 16px on touch devices prevents that zoom and
- * keeps the page scale steady mid-input.
+ * focus. Bumping text fields to 16px prevents that zoom and keeps the page
+ * scale steady mid-input. `pointer: coarse` covers touch devices; the
+ * max-width clause catches iOS Safari instances that report a fine pointer
+ * (e.g. when a Bluetooth keyboard is connected).
  */
-@media (pointer: coarse) {
+@media (pointer: coarse), (max-width: 767px) {
   input,
   textarea,
   select {

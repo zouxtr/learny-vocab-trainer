@@ -81,6 +81,12 @@ registerDictionary("it", {
   Import: "Importa",
   "No words yet. Add your first word to start building this dictionary.":
     "Nessuna parola per ora. Aggiungi la tua prima parola per iniziare a costruire questo dizionario.",
+  "Have a paper dictionary?": "Hai un dizionario cartaceo?",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "Fotografa le sue pagine e lascia che un'IA le trasformi in una tabella nel formato di questa app. Poi incollala nell'importazione CSV.",
+  "AI prompt": "Prompt per l'IA",
+  "Copy": "Copia",
+  "Copied": "Copiato",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "Lavori con molte pagine? Usa lo strumento image-to-table per convertire le tue scansioni, poi importa il CSV.",
   "Add your first word": "Aggiungi la tua prima parola",
   "No words match your search.": "Nessuna parola corrisponde alla tua ricerca.",
   Translation: "Traduzione",

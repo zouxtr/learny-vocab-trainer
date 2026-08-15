@@ -80,6 +80,12 @@ registerDictionary("ar", {
   Import: "استيراد",
   "No words yet. Add your first word to start building this dictionary.":
     "لا كلمات بعد. أضف كلمتك الأولى لبدء بناء هذا القاموس.",
+  "Have a paper dictionary?": "هل لديك قاموس ورقي؟",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "صوّر صفحاته ودع الذكاء الاصطناعي يحوّلها إلى جدول بصيغة هذا التطبيق. ثم الصقها في استيراد CSV.",
+  "AI prompt": "موجه الذكاء الاصطناعي",
+  "Copy": "نسخ",
+  "Copied": "تم النسخ",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "تعمل مع صفحات كثيرة؟ استخدم أداة image-to-table لتحويل المسوحات الضوئية ثم استورد ملف CSV.",
   "Add your first word": "أضف كلمتك الأولى",
   "No words match your search.": "لا كلمات تطابق بحثك.",
   Translation: "الترجمة",

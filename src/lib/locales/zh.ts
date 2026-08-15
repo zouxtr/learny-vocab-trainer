@@ -80,6 +80,12 @@ registerDictionary("zh", {
   Import: "导入",
   "No words yet. Add your first word to start building this dictionary.":
     "还没有单词。添加您的第一个单词，开始构建这本词典。",
+  "Have a paper dictionary?": "有纸质词典吗？",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "拍摄它的页面，让 AI 将其转换为本应用格式的表格。然后将表格粘贴到 CSV 导入中。",
+  "AI prompt": "AI 提示词",
+  "Copy": "复制",
+  "Copied": "已复制",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "页面很多？使用 image-to-table 工具转换您的扫描件，然后导入 CSV。",
   "Add your first word": "添加您的第一个单词",
   "No words match your search.": "没有与搜索匹配的单词。",
   Translation: "翻译",

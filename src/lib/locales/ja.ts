@@ -80,6 +80,12 @@ registerDictionary("ja", {
   Import: "インポート",
   "No words yet. Add your first word to start building this dictionary.":
     "まだ単語がありません。この辞書を作り始めるには最初の単語を追加してください。",
+  "Have a paper dictionary?": "紙の辞書をお持ちですか？",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "ページを撮影し、AI にこのアプリの形式の表に変換してもらいましょう。変換結果を CSV インポートに貼り付けます。",
+  "AI prompt": "AI 用プロンプト",
+  "Copy": "コピー",
+  "Copied": "コピーしました",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "ページが多い場合は、image-to-table ツールでスキャンを変換してから CSV をインポートしてください。",
   "Add your first word": "最初の単語を追加",
   "No words match your search.": "検索に一致する単語がありません。",
   Translation: "翻訳",

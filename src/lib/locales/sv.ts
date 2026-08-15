@@ -88,6 +88,12 @@ registerDictionary("sv", {
   Import: "Importera",
   "No words yet. Add your first word to start building this dictionary.":
     "Inga ord ännu. Lägg till ditt första ord för att börja bygga upp den här ordboken.",
+  "Have a paper dictionary?": "Har du ett papperslexikon?",
+  "Snap photos of its pages and let an AI turn them into a table in this app’s format. Then paste it into the CSV import.": "Fotografera sidorna och låt en AI omvandla dem till en tabell i den här appens format. Klistra sedan in den i CSV-importen.",
+  "AI prompt": "AI-prompt",
+  "Copy": "Kopiera",
+  "Copied": "Kopierad",
+  "Working with many pages? Use the image-to-table tool to convert your scans, then import the CSV.": "Jobbar du med många sidor? Använd image-to-table-verktyget för att konvertera dina skanningar och importera sedan CSV:n.",
   "Add your first word": "Lägg till ditt första ord",
   "No words match your search.": "Inga ord matchar din sökning.",
   Translation: "Översättning",
