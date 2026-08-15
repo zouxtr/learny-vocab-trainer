@@ -176,11 +176,11 @@ registerDictionary("bg", {
   "(optional)": "(по избор)",
   "Select…": "Изберете…",
   "Select language": "Изберете език",
-  "Welcome to LearnY!": "Добре дошли в LearnY!",
+  "Welcome to Lexi!": "Добре дошли в Lexi!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "Изградете своите речници с думи и ги превърнете в учебни сесии. Ето как работи.",
   "I’ll explore first": "Първо ще разгледам",
-  "What is LearnY!?": "Какво е LearnY!?",
+  "What is Lexi!?": "Какво е Lexi!?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "Треньор за речников запас, който превръща списъците ви с думи в интерактивни учебни сесии. Всичко работи локално в браузъра ви.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

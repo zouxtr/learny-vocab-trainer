@@ -41,7 +41,7 @@ export function Sidebar() {
         </span>
         {!collapsed && (
           <span className="truncate font-heading text-lg font-semibold tracking-tight">
-            Learn<span className="text-primary">Y!</span>
+            Lex<span className="text-primary">i!</span>
           </span>
         )}
       </div>

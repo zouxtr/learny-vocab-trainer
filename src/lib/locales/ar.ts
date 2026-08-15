@@ -172,11 +172,11 @@ registerDictionary("ar", {
   "(optional)": "(اختياري)",
   "Select…": "اختر…",
   "Select language": "اختر اللغة",
-  "Welcome to LearnY!": "مرحبًا بك في LearnY!",
+  "Welcome to Lexi!": "مرحبًا بك في Lexi!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "أنشئ قواميس المفردات وحولها إلى جلسات دراسة. إليك طريقة العمل.",
   "I’ll explore first": "سأستكشف أولًا",
-  "What is LearnY!?": "ما هو LearnY!؟",
+  "What is Lexi!?": "ما هو Lexi!؟",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "مدرب مفردات يحوّل قوائم كلماتك إلى جلسات دراسة تفاعلية. كل شيء يعمل محليًا في متصفحك.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

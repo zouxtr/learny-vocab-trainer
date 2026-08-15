@@ -1,5 +1,5 @@
 /**
- * Spaced-repetition scheduling (SM-2–style) for LearnY.
+ * Spaced-repetition scheduling (SM-2–style) for Lexi.
  *
  * Pure functions with no DB access so the scheduler is easy to unit test.
  * Grades in [1,5]; a grade of 3 or higher counts as a correct review.

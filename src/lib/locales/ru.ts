@@ -175,11 +175,11 @@ registerDictionary("ru", {
   "(optional)": "(необязательно)",
   "Select…": "Выбрать…",
   "Select language": "Выберите язык",
-  "Welcome to LearnY!": "Добро пожаловать в LearnY!",
+  "Welcome to Lexi!": "Добро пожаловать в Lexi!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "Создавайте свои словари и превращайте их в учебные сессии. Вот как это работает.",
   "I’ll explore first": "Сначала осмотрюсь",
-  "What is LearnY!?": "Что такое LearnY!?",
+  "What is Lexi!?": "Что такое Lexi!?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "Тренажёр лексики, который превращает ваши списки слов в интерактивные учебные сессии. Всё работает локально в вашем браузере.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

@@ -175,11 +175,11 @@ registerDictionary("tr", {
   "(optional)": "(isteğe bağlı)",
   "Select…": "Seç…",
   "Select language": "Dil seç",
-  "Welcome to LearnY!": "LearnY!'e hoş geldin!",
+  "Welcome to Lexi!": "Lexi!'e hoş geldin!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "Kelime sözlüklerini oluştur ve bunları çalışma oturumlarına dönüştür. İşte nasıl çalıştığı.",
   "I’ll explore first": "Önce keşfedeyim",
-  "What is LearnY!?": "LearnY! nedir?",
+  "What is Lexi!?": "Lexi! nedir?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "Kelime listelerini etkileşimli çalışma oturumlarına dönüştüren bir kelime eğitmeni. Her şey tarayıcında yerel olarak çalışır.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

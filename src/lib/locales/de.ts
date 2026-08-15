@@ -205,11 +205,11 @@ registerDictionary("de", {
   "Select language": "Sprache auswählen",
 
   // Onboarding & help
-  "Welcome to LearnY!": "Willkommen bei LearnY!",
+  "Welcome to Lexi!": "Willkommen bei Lexi!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "Erstelle deine Vokabel-Wörterbücher und verwandle sie in Lern-Sitzungen. So funktioniert's.",
   "I’ll explore first": "Ich schaue mir zuerst um",
-  "What is LearnY!?": "Was ist LearnY!?",
+  "What is Lexi!?": "Was ist Lexi!?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "Ein Vokabeltrainer, der deine Wortlisten in interaktive Lern-Sitzungen verwandelt. Alles läuft lokal in deinem Browser.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

@@ -172,11 +172,11 @@ registerDictionary("zh", {
   "(optional)": "（可选）",
   "Select…": "选择…",
   "Select language": "选择语言",
-  "Welcome to LearnY!": "欢迎使用 LearnY！",
+  "Welcome to Lexi!": "欢迎使用 Lexi！",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "构建您的词汇词典，并将其变成学习课程。使用方法如下。",
   "I’ll explore first": "我先探索一下",
-  "What is LearnY!?": "什么是 LearnY！？",
+  "What is Lexi!?": "什么是 Lexi！？",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "一个词汇训练工具，将您的单词列表变成交互式学习课程。一切都在您的浏览器中本地运行。",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

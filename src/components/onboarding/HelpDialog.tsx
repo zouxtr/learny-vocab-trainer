@@ -50,7 +50,7 @@ export function HelpContent() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h3 className="text-sm font-semibold">{t("What is LearnY!?")}</h3>
+        <h3 className="text-sm font-semibold">{t("What is Lexi!?")}</h3>
         <p className="mt-1 text-sm text-muted-foreground">
           {t("A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser — offline, no account needed.")}
         </p>

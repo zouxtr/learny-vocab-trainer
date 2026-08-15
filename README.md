@@ -1,4 +1,4 @@
-# LearnY!
+# Lexi!
 
 A modern, offline-first **PWA** for turning vocabulary lists into interactive
 study sessions. Build dictionaries as language pairs, practice with

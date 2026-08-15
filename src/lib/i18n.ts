@@ -1,5 +1,5 @@
 /**
- * Lightweight UI localization for LearnY!.
+ * Lightweight UI localization for Lexi!.
  *
  * English is the source language; translations are looked up by their English
  * key. Unknown keys and unlisted locales fall back to English so the app

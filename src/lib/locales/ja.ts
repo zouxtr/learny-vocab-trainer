@@ -172,11 +172,11 @@ registerDictionary("ja", {
   "(optional)": "(任意)",
   "Select…": "選択…",
   "Select language": "言語を選択",
-  "Welcome to LearnY!": "LearnY! へようこそ",
+  "Welcome to Lexi!": "Lexi! へようこそ",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "語彙辞書を作成し、それらを学習セッションに変えましょう。使い方は次のとおりです。",
   "I’ll explore first": "まず探索してみる",
-  "What is LearnY!?": "LearnY! とは?",
+  "What is Lexi!?": "Lexi! とは?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "単語リストをインタラクティブな学習セッションに変える語彙トレーナーです。すべてブラウザ上でローカルに動作します。",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

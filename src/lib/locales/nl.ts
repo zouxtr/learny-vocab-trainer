@@ -176,11 +176,11 @@ registerDictionary("nl", {
   "(optional)": "(optioneel)",
   "Select…": "Selecteren…",
   "Select language": "Taal selecteren",
-  "Welcome to LearnY!": "Welkom bij LearnY!",
+  "Welcome to Lexi!": "Welkom bij Lexi!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "Bouw je woordenschatwoordenboeken en verander ze in studiesessies. Zo werkt het.",
   "I’ll explore first": "Ik ga eerst even rondkijken",
-  "What is LearnY!?": "Wat is LearnY!?",
+  "What is Lexi!?": "Wat is Lexi!?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "Een woordenschattrainer die je woordenlijsten omzet in interactieve studiesessies. Alles draait lokaal in je browser.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

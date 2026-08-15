@@ -1,5 +1,5 @@
 /**
- * Spreadsheet import glue for LearnY.
+ * Spreadsheet import glue for Lexi.
  *
  * CSV is parsed with papaparse and XLSX with exceljs; both libraries are
  * dynamically imported only when a file is actually picked, so the base

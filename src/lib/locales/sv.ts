@@ -187,11 +187,11 @@ registerDictionary("sv", {
   "Select…": "Välj…",
   "Select language": "Välj språk",
 
-  "Welcome to LearnY!": "Välkommen till LearnY!",
+  "Welcome to Lexi!": "Välkommen till Lexi!",
   "Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.":
     "Bygg dina gloslistor och förvandla dem till studiesessioner. Så här fungerar det.",
   "I’ll explore first": "Jag utforskar först",
-  "What is LearnY!?": "Vad är LearnY!?",
+  "What is Lexi!?": "Vad är Lexi!?",
   "A vocabulary trainer that turns your word lists into interactive study sessions. Everything runs locally in your browser.":
     "En glostränare som förvandlar dina ordlistor till interaktiva studiesessioner. Allt körs lokalt i din webbläsare.",
   "Each dictionary is a vocabulary list with a language pair — the word language and the translation language. Examples: English → Spanish, Bulgarian → German.":

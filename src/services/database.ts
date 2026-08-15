@@ -11,7 +11,7 @@ import sheetMigrationSql from "@/db/migrations/0001_sheet_url.sql?raw";
 import sqlWasmUrl from "sql.js/dist/sql-wasm.wasm?url";
 
 /**
- * Browser data layer for LearnY!.
+ * Browser data layer for Lexi!.
  *
  * SQLite runs in the browser via sql.js (WebAssembly) and is persisted to the
  * Origin Private File System (OPFS) as a single `.sqlite` file. The schema and

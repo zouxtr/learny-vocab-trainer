@@ -14,7 +14,7 @@ export function OnboardingPanel({ onStart }: OnboardingPanelProps) {
 
   return (
     <section className="mx-auto w-full max-w-2xl rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
-      <h2 className="text-lg font-semibold tracking-tight">{t("Welcome to LearnY!")}</h2>
+      <h2 className="text-lg font-semibold tracking-tight">{t("Welcome to Lexi!")}</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         {t("Build your vocabulary dictionaries and turn them into study sessions. Here’s how it works.")}
       </p>

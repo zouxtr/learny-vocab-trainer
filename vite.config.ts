@@ -13,11 +13,11 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["learny.svg", "sql-wasm.wasm"],
       manifest: {
-        name: "LearnY!",
-        short_name: "LearnY",
+        name: "Lexi!",
+        short_name: "Lexi",
         description: "Turn vocabulary lists into interactive study sessions.",
-        theme_color: "#1e1e2e",
-        background_color: "#1e1e2e",
+        theme_color: "#161c2d",
+        background_color: "#f7f0e0",
         display: "standalone",
         start_url: "/",
         icons: [

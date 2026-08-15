@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/sqlite-core";
 
 /**
- * Data model for LearnY!.
+ * Data model for Lexi!.
  *
  * This is the single source of truth for the database shape. Migrations are
  * generated from this schema (drizzle-kit) and applied by the Tauri backend at
