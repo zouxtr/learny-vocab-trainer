@@ -30,12 +30,11 @@ test("mobile layout: bottom nav shows, sidebar hidden, content usable", async ({
   await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Study" }).click();
   await expect(page.locator("h2", { hasText: "Study" })).toBeVisible();
 
-  // Cloud sync and system status live on the Settings page, not the dashboard.
+  // Cloud sync lives on the Settings page, not the dashboard.
   await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Settings" }).click();
   await expect(page.locator("h2", { hasText: "Settings" })).toBeVisible();
   await expect(page.getByText("Cloud sync")).toBeVisible();
   await expect(page.getByText("Offline — no cloud backup.")).toBeVisible();
-  await expect(page.getByText("System status")).toBeVisible();
 
   const fatalErrors = errors.filter(
     (e) => e.includes("wasm") || e.includes("magic number") || e.includes("unsupported MIME"),

@@ -1,9 +1,8 @@
-import { DatabaseHealth } from "@/components/system/DatabaseHealth";
 import { SyncSection } from "@/components/system/SyncSection";
 import { useT } from "@/lib/i18n";
 
-/** App settings: cloud sync and local storage status. Kept off the main
- * dashboard so Home stays focused on the user's dictionaries. */
+/** App settings: cloud sync. Kept off the main dashboard so Home stays
+ * focused on the user's dictionaries. */
 export function SettingsPage() {
   const t = useT();
 
@@ -18,9 +17,8 @@ export function SettingsPage() {
 
       <section className="flex flex-col gap-3">
         <h3 className="text-sm font-medium text-muted-foreground">{t("Storage & sync")}</h3>
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="max-w-xl">
           <SyncSection />
-          <DatabaseHealth />
         </div>
       </section>
     </main>

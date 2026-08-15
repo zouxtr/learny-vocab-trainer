@@ -219,10 +219,6 @@ registerDictionary("sv", {
   "Disconnect {provider}": "Koppla bort {provider}",
   "Connect {provider}": "Anslut {provider}",
 
-  "System status": "Systemstatus",
-  "Checking database connection…": "Kontrollerar databasanslutning…",
-  "Failed to check database: {error}": "Det gick inte att kontrollera databasen: {error}",
-  "SQLite ready (v{version}).": "SQLite redo (v{version}).",
 "Card {n} / {total}": "Kort {n} / {total}",
   "Connect {name}": "Anslut {name}",
   "Connected to {name}.": "Ansluten till {name}.",
@@ -244,7 +240,6 @@ registerDictionary("sv", {
   "is the column for its translation.": "är kolumnen för dess översättning.",
   "is the column for the word you want to learn.": "är kolumnen för det ord du vill lära dig.",
   "{n} of {m} selected": "{n} av {m} valda",
-  "{n} tables · {size}": "{n} tabeller · {size}",
   "{n} words reviewed this session.": "{n} ord repeterade i den här sessionen.",
   "{n} word{s} in the dictionary but not in the sheet were kept": "{n} ord{s} i ordlistan men inte i kalkylarket behölls",
 "15 languages": "15 språk",

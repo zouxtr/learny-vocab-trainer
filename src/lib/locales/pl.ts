@@ -219,10 +219,6 @@ registerDictionary("pl", {
   "Disconnect {provider}": "Rozłącz {provider}",
   "Connect {provider}": "Połącz {provider}",
 
-  "System status": "Stan systemu",
-  "Checking database connection…": "Sprawdzanie połączenia z bazą danych…",
-  "Failed to check database: {error}": "Nie udało się sprawdzić bazy danych: {error}",
-  "SQLite ready (v{version}).": "SQLite gotowy (v{version}).",
 "Card {n} / {total}": "Karta {n} / {total}",
   "Connect {name}": "Połącz {name}",
   "Connected to {name}.": "Połączono z {name}.",
@@ -244,7 +240,6 @@ registerDictionary("pl", {
   "is the column for its translation.": "to kolumna jego tłumaczenia.",
   "is the column for the word you want to learn.": "to kolumna słowa, którego chcesz się nauczyć.",
   "{n} of {m} selected": "Wybrano {n} z {m}",
-  "{n} tables · {size}": "{n} tabel · {size}",
   "{n} words reviewed this session.": "W tej sesji powtórzono {n} słów.",
   "{n} word{s} in the dictionary but not in the sheet were kept": "Zachowano {n} słów, które były w słowniku, a nie w arkuszu {s}",
 "15 languages": "15 języków",

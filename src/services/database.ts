@@ -29,13 +29,6 @@ let persistTimer: ReturnType<typeof setTimeout> | null = null;
 // exercising the browser-only init path (wasm fetch + OPFS).
 let testDb: SQLJsDatabase<typeof schema> | null = null;
 
-export interface DbHealth {
-  ok: boolean;
-  database_version: string;
-  size_bytes: number;
-  tables: string[];
-}
-
 async function loadSqlJs(): Promise<SqlJsStatic> {
   if (!SQL) {
     // Fetch the wasm bytes explicitly so we control the request (no reliance on
@@ -184,26 +177,4 @@ export async function loadDatabase(bytes: Uint8Array): Promise<void> {
   rawDb = raw;
   db = drizzle(raw, { schema });
   await persistDatabase();
-}
-
-/** Connection health, mirroring the old Rust `db_health` command. */
-export async function checkDbHealth(): Promise<DbHealth> {
-  await initDatabase();
-  const raw = rawDb!;
-
-  const version =
-    raw.exec("SELECT sqlite_version()")[0]?.values[0]?.[0]?.toString() ?? "unknown";
-  const tables = (raw.exec(
-    "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name",
-  )[0]?.values ?? []).map((r) => String(r[0]));
-
-  let size_bytes = 0;
-  try {
-    const file = await (await getDbFileHandle()).getFile();
-    size_bytes = file.size;
-  } catch {
-    size_bytes = 0;
-  }
-
-  return { ok: true, database_version: version, size_bytes, tables };
 }

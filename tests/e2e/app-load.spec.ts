@@ -10,12 +10,9 @@ test("app loads without js errors and database initializes", async ({ page }) =>
   await page.goto("/");
   await page.waitForSelector("text=My dictionaries", { timeout: 15000 });
 
-  // Database health and cloud sync live on the Settings page.
+  // Cloud sync lives on the Settings page.
   await page.getByRole("link", { name: "Settings" }).first().click();
-  await page.waitForSelector("text=SQLite ready", { timeout: 15000 });
-
-  const detail = await page.locator("text=tables").textContent();
-  expect(detail).toContain("tables");
+  await expect(page.locator("h2", { hasText: "Settings" })).toBeVisible();
 
   // The wasm compile failure used to throw here; assert it's gone.
   const fatalErrors = errors.filter(
