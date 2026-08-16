@@ -41,6 +41,9 @@ describe("buildMessages", () => {
     expect(japanese).toBeGreaterThanOrEqual(2);
     // The reminder must forbid putting the source language in the target column.
     expect(user).toMatch(/Writing English into the target column/i);
+    // Example sentences must be written in the target language.
+    expect(user).toContain("short sentence in Japanese");
+    expect(user).not.toContain("short sentence in English");
   });
 });
 

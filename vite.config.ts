@@ -27,7 +27,7 @@ function aiDevMock(): Plugin {
               source: `${sourceName} word ${i + 1}`,
               target: `${targetName} translation ${i + 1}`,
               grammar: "noun",
-              example: `Sample ${sourceName} sentence for word ${i + 1}.`,
+              example: `Sample ${targetName} sentence for word ${i + 1}.`,
             }));
             res.end(JSON.stringify({ words, remaining: 2, limit: 3 }));
           } catch {
