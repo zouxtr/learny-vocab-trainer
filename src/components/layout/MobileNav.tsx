@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { to: "/", labelKey: "Home", icon: House, end: true },
   { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
   { to: "/study", labelKey: "Study", icon: Sparkles },
-  { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp },
+  { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp, outlineIcon: true },
   { to: "/settings", labelKey: "Settings", icon: Settings },
 ];
 
@@ -32,7 +32,11 @@ export function MobileNav() {
             )
           }
         >
-          <item.icon className="h-5 w-5" fill="currentColor" strokeWidth={1.5} />
+          <item.icon
+            className="h-5 w-5"
+            fill={item.outlineIcon ? "none" : "currentColor"}
+            strokeWidth={1.5}
+          />
           {t(item.labelKey)}
         </NavLink>
       ))}

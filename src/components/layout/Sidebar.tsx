@@ -10,14 +10,15 @@ interface NavItem {
   icon: typeof House;
   hintKey?: string;
   end?: boolean;
+  outlineIcon?: boolean;
 }
 
 const NAV_ITEMS: NavItem[] = [
   { to: "/", labelKey: "Home", icon: House, end: true },
   { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
   { to: "/study", labelKey: "Study", icon: Sparkles, hintKey: "Cmd + S" },
-  { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp },
   { to: "/settings", labelKey: "Settings", icon: Settings },
+  { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp, outlineIcon: true },
 ];
 
 export function Sidebar() {
@@ -57,7 +58,11 @@ export function Sidebar() {
               )
             }
           >
-            <item.icon className="h-4 w-4 shrink-0" fill="currentColor" strokeWidth={1.5} />
+            <item.icon
+              className="h-4 w-4 shrink-0"
+              fill={item.outlineIcon ? "none" : "currentColor"}
+              strokeWidth={1.5}
+            />
             {!collapsed && (
               <>
                 <span className="truncate">{t(item.labelKey)}</span>
