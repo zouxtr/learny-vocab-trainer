@@ -29,6 +29,7 @@ export interface StudyDictionary {
   name: string;
   sourceLanguage: string;
   targetLanguage: string;
+  color?: string | null;
 }
 
 interface QueueItem {

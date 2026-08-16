@@ -87,6 +87,7 @@ function DictionaryStudyCard({ dictionary }: { dictionary: DictionaryWithCount }
           name: dictionary.name,
           sourceLanguage: dictionary.sourceLanguage,
           targetLanguage: dictionary.targetLanguage,
+          color: dictionary.color,
         })
       }
       disabled={dictionary.wordCount === 0}
@@ -96,7 +97,12 @@ function DictionaryStudyCard({ dictionary }: { dictionary: DictionaryWithCount }
       )}
     >
       <div className="flex items-center gap-2">
-        <BookOpen className="h-4 w-4 text-muted-foreground" />
+        <span
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white"
+          style={{ backgroundColor: dictionary.color ?? "hsl(262 80% 60%)" }}
+        >
+          <BookOpen className="h-4 w-4" />
+        </span>
         <span className="truncate text-sm font-semibold">{dictionary.name}</span>
       </div>
       <p className="text-xs text-muted-foreground">
@@ -167,7 +173,15 @@ function SetupScreen() {
     <main className="scrollbar-thin flex flex-1 overflow-y-auto p-4 sm:p-6">
       <section className="mx-auto flex w-full max-w-lg flex-col gap-6 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight">{dictionary.name}</h2>
+          <h2 className="flex items-center gap-2 text-xl font-semibold tracking-tight">
+            <span
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-white"
+              style={{ backgroundColor: dictionary.color ?? "hsl(262 80% 60%)" }}
+            >
+              <BookOpen className="h-3.5 w-3.5" />
+            </span>
+            <span className="truncate">{dictionary.name}</span>
+          </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {formatLanguagePair(dictionary.sourceLanguage, dictionary.targetLanguage)}
           </p>
