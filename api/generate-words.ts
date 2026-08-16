@@ -50,7 +50,7 @@ function limitKey(deviceId: string | undefined, req: Request): string {
   return `lexi:gen:${day}:${id}`;
 }
 
-export default async function handler(req: Request): Promise<Response> {
+async function handler(req: Request): Promise<Response> {
   if (req.method !== "POST") {
     return error({ error: "method", message: "Method not allowed." }, 405);
   }
@@ -114,3 +114,10 @@ export default async function handler(req: Request): Promise<Response> {
   };
   return json(response);
 }
+
+// Vercel's Node.js runtime only recognizes the Web fetch-style convention when
+// the entrypoint is exported as `export default { fetch }` (or as named HTTP
+// method exports). A bare `export default function handler(req)` is invoked
+// with the legacy `(req, res) => void` signature instead, which discards the
+// returned Response and hangs the request. Keep this object export shape.
+export default { fetch: handler };

@@ -234,8 +234,9 @@ describe("limiter", () => {
 });
 
 describe("handler", () => {
-  it("smoke: handler module loads and exposes a default export", async () => {
+  it("smoke: handler module loads and exposes the fetch Web-standard export", async () => {
     const mod = await import("../api/generate-words");
-    expect(typeof mod.default).toBe("function");
+    expect(typeof mod.default).toBe("object");
+    expect(typeof mod.default.fetch).toBe("function");
   });
 });
