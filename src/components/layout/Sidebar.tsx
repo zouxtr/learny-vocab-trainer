@@ -8,7 +8,6 @@ interface NavItem {
   to: string;
   labelKey: string;
   icon: typeof House;
-  hintKey?: string;
   end?: boolean;
   outlineIcon?: boolean;
 }
@@ -16,7 +15,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: "/", labelKey: "Home", icon: House, end: true },
   { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
-  { to: "/study", labelKey: "Study", icon: Sparkles, hintKey: "Cmd + S" },
+  { to: "/study", labelKey: "Study", icon: Sparkles },
   { to: "/settings", labelKey: "Settings", icon: Settings },
   { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp, outlineIcon: true },
 ];
@@ -66,9 +65,6 @@ export function Sidebar() {
             {!collapsed && (
               <>
                 <span className="truncate">{t(item.labelKey)}</span>
-                {item.hintKey && (
-                  <span className="ml-auto text-[10px] text-muted-foreground/60">{t(item.hintKey)}</span>
-                )}
               </>
             )}
           </NavLink>

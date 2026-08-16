@@ -6,7 +6,6 @@ registerDictionary("ja", {
   Study: "学習",
   Help: "ヘルプ",
   Primary: "基本",
-  "Cmd + S": "Ctrl + S",
   "How it works": "使い方",
   "See how it works": "使い方を見る",
   "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! は言語学習者のための学習アプリです。学んでいる単語の辞書を作り、フラッシュカードで身につくまで繰り返し復習しましょう。",

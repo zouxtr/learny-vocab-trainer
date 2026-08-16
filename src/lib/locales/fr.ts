@@ -6,7 +6,6 @@ registerDictionary("fr", {
   Study: "Étudier",
   Help: "Aide",
   Primary: "Principal",
-  "Cmd + S": "Cmd + S",
   "How it works": "Comment ça marche",
   "See how it works": "Voir comment ça marche",
   "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! est un compagnon d'étude pour les étudiants en langues : créez des dictionnaires des mots que vous apprenez et révisez-les avec des cartes mémoire jusqu'à les retenir.",

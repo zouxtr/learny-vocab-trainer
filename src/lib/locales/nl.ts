@@ -6,7 +6,6 @@ registerDictionary("nl", {
   Study: "Studeren",
   Help: "Help",
   Primary: "Primair",
-  "Cmd + S": "Cmd + S",
   "How it works": "Hoe het werkt",
   "See how it works": "Bekijk hoe het werkt",
   "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! is een studiehulp voor taalstudenten — maak woordenboeken van de woorden die je leert en herhaal ze met flashcards tot ze blijven hangen.",

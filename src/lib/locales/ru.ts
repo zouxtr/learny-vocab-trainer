@@ -6,7 +6,6 @@ registerDictionary("ru", {
   Study: "Учить",
   Help: "Помощь",
   Primary: "Основной",
-  "Cmd + S": "Ctrl + S",
   "How it works": "Как это работает",
   "See how it works": "Посмотреть, как это работает",
   "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! — помощник для изучающих языки: создавайте словари из слов, которые учите, и повторяйте их с карточками, пока не запомните.",
