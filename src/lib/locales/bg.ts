@@ -8,6 +8,8 @@ registerDictionary("bg", {
   Primary: "Основен",
   "Cmd + S": "Ctrl + S",
   "How it works": "Как работи",
+  "See how it works": "Вижте как работи",
+  "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! е спътник за изучаващите езици — създавайте речници с думите, които учите, и ги повтаряйте с флашкарти, докато ги затвърдите.",
   Expand: "Разгъване",
   Collapse: "Свиване",
   Dictionary: "Речник",

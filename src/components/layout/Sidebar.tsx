@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { BookMarked, CircleHelp, House, Settings, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUiStore } from "@/stores/uiStore";
 import { useT } from "@/lib/i18n";
-import { HelpDialog } from "@/components/onboarding/HelpDialog";
 
 interface NavItem {
   to: string;
@@ -18,6 +16,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: "/", labelKey: "Home", icon: House, end: true },
   { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
   { to: "/study", labelKey: "Study", icon: Sparkles, hintKey: "Cmd + S" },
+  { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp },
   { to: "/settings", labelKey: "Settings", icon: Settings },
 ];
 
@@ -25,8 +24,6 @@ export function Sidebar() {
   const collapsed = useUiStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUiStore((s) => s.toggleSidebar);
   const t = useT();
-
-  const [helpOpen, setHelpOpen] = useState(false);
 
   return (
     <aside
@@ -71,18 +68,6 @@ export function Sidebar() {
             )}
           </NavLink>
         ))}
-
-        <button
-          type="button"
-          onClick={() => setHelpOpen(true)}
-          className={cn(
-            "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
-            collapsed && "justify-center px-0",
-          )}
-        >
-          <CircleHelp className="h-4 w-4 shrink-0" />
-          {!collapsed && <span className="truncate">{t("How it works")}</span>}
-        </button>
       </nav>
 
       <button
@@ -92,8 +77,6 @@ export function Sidebar() {
       >
         {collapsed ? t("Expand") : t("Collapse")}
       </button>
-
-      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </aside>
   );
 }

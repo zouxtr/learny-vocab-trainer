@@ -8,6 +8,8 @@ registerDictionary("zh", {
   Primary: "主色",
   "Cmd + S": "Ctrl + S",
   "How it works": "使用方法",
+  "See how it works": "查看使用方法",
+  "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! 是语言学习者的学习伴侣——为你正在学习的单词建立词典，用闪卡反复复习，直到牢牢记住。",
   Expand: "展开",
   Collapse: "收起",
   Dictionary: "词典",

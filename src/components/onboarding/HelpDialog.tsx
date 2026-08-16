@@ -1,4 +1,3 @@
-import * as Dialog from "@radix-ui/react-dialog";
 import {
   BookOpen,
   CloudUpload,
@@ -7,9 +6,7 @@ import {
   Languages,
   Plus,
   Sparkles,
-  X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
 
 const STEPS = [
@@ -73,42 +70,5 @@ export function HelpContent() {
         {t("Your data never leaves your device unless you connect cloud sync.")}
       </p>
     </div>
-  );
-}
-
-interface HelpDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-export function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
-  const t = useT();
-  return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl border border-border bg-card p-4 shadow-xl sm:p-6">
-          <div className="flex items-start justify-between">
-            <Dialog.Title className="flex items-center gap-2 text-lg font-semibold tracking-tight">
-              <HelpCircle className="h-5 w-5 text-primary" />
-              {t("How it works")}
-            </Dialog.Title>
-            <Dialog.Close asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <X className="h-4 w-4" />
-              </Button>
-            </Dialog.Close>
-          </div>
-          <div className="scrollbar-thin mt-4 max-h-[65vh] overflow-y-auto pr-1">
-            <HelpContent />
-          </div>
-          <div className="mt-6 flex justify-end">
-            <Dialog.Close asChild>
-              <Button>{t("Got it")}</Button>
-            </Dialog.Close>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
   );
 }

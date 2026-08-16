@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { BookOpen, Plus } from "lucide-react";
 import { DictionaryCard } from "@/components/dictionary/DictionaryCard";
 import { DictionaryFormDialog } from "@/components/dictionary/DictionaryFormDialog";
 import { OnboardingPanel } from "@/components/onboarding/OnboardingPanel";
-import { HelpDialog } from "@/components/onboarding/HelpDialog";
 import { Button } from "@/components/ui/button";
 import { useUiStore } from "@/stores/uiStore";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
@@ -19,7 +18,6 @@ export function HomePage() {
   const t = useT();
 
   const [creating, setCreating] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,10 +47,23 @@ export function HomePage() {
         </Button>
       </header>
 
+      <section className="max-w-2xl rounded-xl border border-border bg-card p-5 shadow-sm">
+        <p className="flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">
+          <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <span>
+            {t("Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.")}
+            {" "}
+            <Link to="/how-it-works" className="font-medium text-primary hover:underline">
+              {t("See how it works")}
+            </Link>
+          </span>
+        </p>
+      </section>
+
       {showOnboarding && <OnboardingPanel onStart={() => setCreating(true)} />}
 
       {loaded && recent.length === 0 && !showOnboarding && (
-        <EmptyState onCreate={() => setCreating(true)} onHelp={() => setHelpOpen(true)} />
+        <EmptyState onCreate={() => setCreating(true)} />
       )}
 
       {favorites.length > 0 && (
@@ -78,15 +89,13 @@ export function HomePage() {
       )}
 
       <DictionaryFormDialog open={creating} onOpenChange={setCreating} onCreated={handleCreated} />
-
-      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </main>
   );
 }
 
 /** First-dictionary call to action. Rendered as a faux dictionary entry so the
  * empty Home still feels like a language product, not a generic dashboard. */
-function EmptyState({ onCreate, onHelp }: { onCreate: () => void; onHelp: () => void }) {
+function EmptyState({ onCreate }: { onCreate: () => void }) {
   const t = useT();
 
   return (
@@ -116,9 +125,12 @@ function EmptyState({ onCreate, onHelp }: { onCreate: () => void; onHelp: () => 
         <Button onClick={onCreate}>
           <Plus className="h-4 w-4" /> {t("Create your first dictionary")}
         </Button>
-        <Button variant="ghost" onClick={onHelp}>
+        <Link
+          to="/how-it-works"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
           {t("How it works")}
-        </Button>
+        </Link>
       </div>
     </section>
   );

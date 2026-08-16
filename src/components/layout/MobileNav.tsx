@@ -1,20 +1,18 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { BookMarked, CircleHelp, House, Settings, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
-import { HelpDialog } from "@/components/onboarding/HelpDialog";
 
 const NAV_ITEMS = [
   { to: "/", labelKey: "Home", icon: House, end: true },
   { to: "/dictionaries", labelKey: "Dictionaries", icon: BookMarked },
   { to: "/study", labelKey: "Study", icon: Sparkles },
+  { to: "/how-it-works", labelKey: "How it works", icon: CircleHelp },
   { to: "/settings", labelKey: "Settings", icon: Settings },
 ];
 
 /** Bottom navigation shown on small screens where the sidebar is hidden. */
 export function MobileNav() {
-  const [helpOpen, setHelpOpen] = useState(false);
   const t = useT();
 
   return (
@@ -38,16 +36,6 @@ export function MobileNav() {
           {t(item.labelKey)}
         </NavLink>
       ))}
-      <button
-        type="button"
-        onClick={() => setHelpOpen(true)}
-        className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors"
-      >
-        <CircleHelp className="h-5 w-5" />
-        {t("Help")}
-      </button>
-
-      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </nav>
   );
 }

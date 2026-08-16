@@ -8,6 +8,8 @@ registerDictionary("sv", {
   Primary: "Primär",
   "Cmd + S": "Ctrl + S",
   "How it works": "Så här fungerar det",
+  "See how it works": "Se hur det fungerar",
+  "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! är en studiekamrat för språkstudenter — bygg ordböcker med orden du lär dig och repetera dem med flashcards tills de sitter.",
   Expand: "Expandera",
   Collapse: "Kollapsa",
   Dictionary: "Ordbok",

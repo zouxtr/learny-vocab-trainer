@@ -8,6 +8,7 @@ import { DictionaryListPage } from "@/pages/DictionaryListPage";
 import { DictionaryPage } from "@/pages/DictionaryPage";
 import { StudyPage } from "@/pages/StudyPage";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { HowItWorksPage } from "@/pages/HowItWorksPage";
 import { applyTheme, useUiStore } from "@/stores/uiStore";
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/dictionary/:id" element={<DictionaryPage />} />
               <Route path="/study" element={<StudyPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/how-it-works" element={<HowItWorksPage />} />
             </Routes>
           </main>
           <MobileNav />

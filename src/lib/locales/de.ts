@@ -15,6 +15,8 @@ registerDictionary("de", {
   Primary: "Primär",
   "Cmd + S": "Strg + S",
   "How it works": "So funktioniert's",
+  "See how it works": "So funktioniert's ansehen",
+  "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi! ist ein Lernbegleiter für Sprachschüler — baue Wörterbücher mit den Wörtern, die du lernst, und wiederhole sie mit Karteikarten, bis sie sitzen.",
   Expand: "Erweitern",
   Collapse: "Einklappen",
   Dictionary: "Wörterbuch",

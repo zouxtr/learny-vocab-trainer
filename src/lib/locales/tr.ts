@@ -8,6 +8,8 @@ registerDictionary("tr", {
   Primary: "Birincil",
   "Cmd + S": "Cmd + S",
   "How it works": "Nasıl çalışır",
+  "See how it works": "Nasıl çalıştığını gör",
+  "Lexi! is a study companion for language students — build dictionaries of the words you’re learning and revise them with flashcards until they stick.": "Lexi!, dil öğrenen öğrenciler için bir çalışma arkadaşıdır — öğrendiğiniz kelimelerden sözlükler oluşturun ve kartlarla ezberleyene kadar tekrar edin.",
   Expand: "Genişlet",
   Collapse: "Daralt",
   Dictionary: "Sözlük",

@@ -56,5 +56,6 @@ function routeTitle(pathname: string, t: (en: string) => string): string {
   if (pathname === "/dictionaries") return t("Dictionaries");
   if (pathname === "/study") return t("Study");
   if (pathname === "/settings") return t("Settings");
+  if (pathname === "/how-it-works") return t("How it works");
   return t("Home");
 }

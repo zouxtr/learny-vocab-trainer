@@ -14,7 +14,7 @@ test("mobile layout: bottom nav shows, sidebar hidden, content usable", async ({
   // Bottom nav is present on mobile and sidebar is hidden.
   await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Dictionaries" })).toBeVisible();
-  await expect(page.getByText("Help")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "How it works" })).toBeVisible();
 
   await page.getByRole("button", { name: "Create your first dictionary" }).first().click();
   await page.getByLabel("Name").fill("Mobile list");
