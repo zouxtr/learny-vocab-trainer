@@ -1,6 +1,19 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { languageName } from "../api/lib/languages";
 import { buildMessages, parseWordJson, generateViaOpenRouter, ProviderError } from "../api/lib/openRouter";
 import { checkLimit, resolveTier, LIMIT_TTL_SECONDS } from "../api/lib/limiter";
+
+describe("languageName", () => {
+  it("maps ISO codes to full names", () => {
+    expect(languageName("ja")).toBe("Japanese");
+    expect(languageName("en")).toBe("English");
+    expect(languageName("de")).toBe("German");
+  });
+
+  it("falls back to the raw code for unknown languages", () => {
+    expect(languageName("xx")).toBe("xx");
+  });
+});
 
 describe("buildMessages", () => {
   it("names both languages (start and end), the codes, topic and count", () => {

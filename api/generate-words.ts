@@ -15,9 +15,9 @@
  */
 
 import { z } from "zod";
-import { getLanguage } from "../src/lib/languages";
-import { buildMessages, generateViaOpenRouter } from "./lib/openRouter";
-import { checkLimit, resolveTier } from "./lib/limiter";
+import { languageName } from "./lib/languages.js";
+import { buildMessages, generateViaOpenRouter } from "./lib/openRouter.js";
+import { checkLimit, resolveTier } from "./lib/limiter.js";
 import type { GenerateWordsError, GenerateWordsResponse } from "../src/types/aiGeneration";
 
 const BODY_SCHEMA = z.object({
@@ -68,8 +68,8 @@ export default async function handler(req: Request): Promise<Response> {
   }
   const { sourceLanguage, targetLanguage, description, count, deviceId } = parsed.data;
 
-  const sourceName = getLanguage(sourceLanguage)?.name ?? sourceLanguage;
-  const targetName = getLanguage(targetLanguage)?.name ?? targetLanguage;
+  const sourceName = languageName(sourceLanguage);
+  const targetName = languageName(targetLanguage);
 
   const tier = resolveTier(req);
   const limit = await checkLimit(limitKey(deviceId, req), tier);
