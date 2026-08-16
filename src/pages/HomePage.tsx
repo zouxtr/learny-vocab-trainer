@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useUiStore } from "@/stores/uiStore";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { useT } from "@/lib/i18n";
+import { FEATURES } from "@/lib/features";
 
 export function HomePage() {
   const dictionaries = useDictionaryStore((s) => s.dictionaries);
@@ -58,6 +59,31 @@ export function HomePage() {
             </Link>
           </span>
         </p>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-sm font-medium text-muted-foreground">{t("All features")}</h3>
+          <Link to="/how-it-works" className="text-sm font-medium text-primary hover:underline">
+            {t("How to use them")}
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((feature) => (
+            <div
+              key={feature.title}
+              className="rounded-xl border border-border bg-card p-4 shadow-sm"
+            >
+              <div className="flex items-center gap-2">
+                <feature.icon className="h-4 w-4 shrink-0 text-primary" />
+                <p className="text-sm font-medium">{t(feature.title)}</p>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                {t(feature.description)}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {showOnboarding && <OnboardingPanel onStart={() => setCreating(true)} />}
