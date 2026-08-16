@@ -1,6 +1,15 @@
 import { useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Download, FileSpreadsheet, Link2, Loader2, RefreshCw, Upload, X } from "lucide-react";
+import {
+  Download,
+  FileSpreadsheet,
+  Link2,
+  Loader2,
+  RefreshCw,
+  Sparkles,
+  Upload,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import {
@@ -15,6 +24,7 @@ import {
 } from "@/services/importer";
 import { parseSheetsLink, fetchSheetRows, fetchTsvUrl } from "@/services/googleSheets";
 import { importWords } from "@/services/dictionaryRepository";
+import { generateWords, getDeviceId, AiGenerationError } from "@/services/aiGenerator";
 import { getLanguage } from "@/lib/languages";
 import { useT } from "@/lib/i18n";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
@@ -34,10 +44,17 @@ interface ImportResult {
   skipped: number;
 }
 
-type ImportSource = "file" | "sheet" | "tsv";
+type ImportSource = "file" | "sheet" | "tsv" | "ai";
+
+const MAX_AI_COUNT = 25;
 
 function colName(i: number): string {
   return String.fromCharCode(65 + (i % 26)) + (i >= 26 ? String.fromCharCode(65 + Math.floor(i / 26) - 1) : "");
+}
+
+function clampCount(n: number): number {
+  if (!Number.isFinite(n)) return 10;
+  return Math.min(MAX_AI_COUNT, Math.max(1, Math.floor(n)));
 }
 
 export function ImportDialog({
@@ -62,6 +79,12 @@ export function ImportDialog({
   const [hasHeader, setHasHeader] = useState(true);
   const [mapping, setMapping] = useState<FieldTarget[]>([]);
   const [result, setResult] = useState<ImportResult | null>(null);
+  const [aiDescription, setAiDescription] = useState("");
+  const [aiCount, setAiCount] = useState(10);
+  /** Per-row cell overrides keyed by data-row index (inline editing). */
+  const [editedRows, setEditedRows] = useState<Record<number, string[]>>({});
+  /** Data-row indices excluded before commit. */
+  const [deselected, setDeselected] = useState<Set<number>>(new Set());
 
   const sourceName = getLanguage(sourceLanguage)?.name ?? "Word";
   const targetName = getLanguage(targetLanguage)?.name ?? "Translation";
@@ -72,8 +95,9 @@ export function ImportDialog({
   }, [rows]);
 
   const dataRows = useMemo<SheetRow[]>(() => (hasHeader ? rows.slice(1) : rows), [rows, hasHeader]);
-  const previewRows = dataRows.slice(0, 5);
+  const previewLimit = source === "ai" ? dataRows.length : 5;
   const assignedCount = mapping.filter((m) => m !== "skip").length;
+  const selectedCount = dataRows.length - deselected.size;
 
   const reset = () => {
     setSource("file");
@@ -84,6 +108,10 @@ export function ImportDialog({
     setResult(null);
     setHasHeader(true);
     setMapping([]);
+    setAiDescription("");
+    setAiCount(10);
+    setEditedRows({});
+    setDeselected(new Set());
   };
 
   const handleOpenChange = (next: boolean) => {
@@ -150,6 +178,46 @@ export function ImportDialog({
     }
   };
 
+  const aiErrorText = (e: unknown): string => {
+    if (e instanceof AiGenerationError) {
+      if (e.code === "limit") return t("You've reached today's free generation limit. Try again tomorrow.");
+      if (e.code === "generation") return t("The AI couldn't produce a valid list. Please try again.");
+      if (e.code === "provider") return t("AI generation is not configured on the server.");
+      return t("AI generation failed. Please try again.");
+    }
+    return e instanceof Error ? e.message : t("AI generation failed. Please try again.");
+  };
+
+  const handleAiGenerate = async () => {
+    setError(null);
+    setResult(null);
+    if (!aiDescription.trim()) {
+      setError(t("Describe the words you want first."));
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await generateWords({
+        sourceLanguage,
+        targetLanguage,
+        description: aiDescription.trim(),
+        count: clampCount(aiCount),
+        deviceId: getDeviceId(),
+      });
+      const header: SheetRow = [sourceName, targetName, t("Grammar"), t("Example"), t("Group")];
+      const body: SheetRow[] = res.words.map((w) => [w.source, w.target, w.grammar ?? "", w.example ?? ""]);
+      setRows([header, ...body]);
+      setMapping(["source", "target", "grammar", "example", "skip"]);
+      setHasHeader(true);
+      setEditedRows({});
+      setDeselected(new Set());
+    } catch (e) {
+      setError(aiErrorText(e));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleHasHeaderChange = (next: boolean) => {
     setHasHeader(next);
     if (rows.length > 0) {
@@ -158,8 +226,16 @@ export function ImportDialog({
     }
   };
 
+  const commitRows = useMemo<SheetRow[]>(
+    () =>
+      dataRows
+        .map((row, ri) => (editedRows[ri] ? [...editedRows[ri]] : row))
+        .filter((_row, ri) => !deselected.has(ri)),
+    [dataRows, editedRows, deselected],
+  );
+
   const doImport = () => {
-    const normalized = normalizeRows(dataRows, mapping);
+    const normalized = normalizeRows(commitRows, mapping);
     const res = importWords(dictionaryId, normalized);
     setResult(res);
     void refresh();
@@ -167,7 +243,7 @@ export function ImportDialog({
   };
 
   const doSheetImport = () => {
-    const normalized = normalizeRows(dataRows, mapping);
+    const normalized = normalizeRows(commitRows, mapping);
     const res = importWords(dictionaryId, normalized);
     setResult(res);
     // Remember the source link + column mapping so the page can offer Refresh.
@@ -179,10 +255,29 @@ export function ImportDialog({
     loadWords(dictionaryId);
   };
 
-  const doImportFinal = source === "file" ? doImport : doSheetImport;
+  const doImportFinal = source === "file" || source === "ai" ? doImport : doSheetImport;
 
   const templateContent = () => buildTemplateCsv(sourceName, targetName);
   const templateName = `${dictionaryName.toLowerCase().replace(/\s+/g, "-")}-template.csv`;
+
+  const updateCell = (row: number, col: number, value: string) => {
+    setEditedRows((prev) => {
+      const base = dataRows[row] ?? [];
+      const cur = [...(prev[row] ? [...prev[row]] : base)];
+      while (cur.length <= col) cur.push("");
+      cur[col] = value;
+      return { ...prev, [row]: cur };
+    });
+  };
+
+  const toggleDeselected = (row: number) => {
+    setDeselected((prev) => {
+      const next = new Set(prev);
+      if (next.has(row)) next.delete(row);
+      else next.add(row);
+      return next;
+    });
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -225,28 +320,81 @@ export function ImportDialog({
               icon={<Link2 className="h-3.5 w-3.5" />}
               label={t("TSV link")}
             />
+            <SourceTab
+              active={source === "ai"}
+              onClick={() => setSource("ai")}
+              icon={<Sparkles className="h-3.5 w-3.5" />}
+              label={t("Generate with AI")}
+            />
           </div>
 
           <div className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
-            {/* Format explanation, language-aware */}
-            <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-              <p className="font-medium text-foreground">{t("How to format your data")}</p>
-              <ul className="mt-2 list-disc space-y-1 pl-4">
-                <li>
-                  <span className="font-medium">{sourceName}</span> {t("is the column for the word you want to learn.")}
-                </li>
-                <li>
-                  <span className="font-medium">{targetName}</span> {t("is the column for its translation.")}
-                </li>
-                <li>{t("Optional columns: Grammar, Example, Group.")}</li>
-                <li>{t("Rows missing a word or translation are skipped automatically.")}</li>
-              </ul>
-              <Button variant="ghost" size="sm" className="mt-2 h-7 px-2 text-xs" onClick={() => downloadCsv(templateName, templateContent())}>
-                <Download className="h-3.5 w-3.5" /> {t("Download template")}
-              </Button>
-            </div>
+            {source !== "ai" && (
+              <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+                <p className="font-medium text-foreground">{t("How to format your data")}</p>
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  <li>
+                    <span className="font-medium">{sourceName}</span> {t("is the column for the word you want to learn.")}
+                  </li>
+                  <li>
+                    <span className="font-medium">{targetName}</span> {t("is the column for its translation.")}
+                  </li>
+                  <li>{t("Optional columns: Grammar, Example, Group.")}</li>
+                  <li>{t("Rows missing a word or translation are skipped automatically.")}</li>
+                </ul>
+                <Button variant="ghost" size="sm" className="mt-2 h-7 px-2 text-xs" onClick={() => downloadCsv(templateName, templateContent())}>
+                  <Download className="h-3.5 w-3.5" /> {t("Download template")}
+                </Button>
+              </div>
+            )}
 
-            {source !== "file" && (
+            {source === "ai" && (
+              <div className="flex flex-col gap-3">
+                <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+                  {t("Describe the words you want and we'll generate a draft list with the AI. You review, edit and deselect rows before importing — nothing is saved until you click Import words.")}
+                </div>
+                <Field
+                  label={t("What should the words be about?")}
+                  htmlFor="ai-description"
+                  hint={t("For example: restaurant phrases, household items, verbs of movement…")}
+                >
+                  <Input
+                    id="ai-description"
+                    value={aiDescription}
+                    onChange={(e) => setAiDescription(e.target.value)}
+                    placeholder={t("Describe the topic…")}
+                    disabled={loading}
+                  />
+                </Field>
+                <Field label={t("Number of words")} htmlFor="ai-count" hint={t("Between 1 and {max}", { max: MAX_AI_COUNT })}>
+                  <Input
+                    id="ai-count"
+                    type="number"
+                    min={1}
+                    max={MAX_AI_COUNT}
+                    value={aiCount}
+                    onChange={(e) => setAiCount(clampCount(Number(e.target.value)))}
+                    className="w-32"
+                    disabled={loading}
+                  />
+                </Field>
+                <div className="flex items-center gap-2">
+                  <Button onClick={() => void handleAiGenerate()} disabled={loading || !aiDescription.trim()}>
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                    {loading ? t("Generating…") : t("Generate")}
+                  </Button>
+                </div>
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                {rows.length > 0 && !result && (
+                  <p className="text-xs text-muted-foreground">
+                    {dataRows.length} {dataRows.length === 1 ? t("word generated.") : t("words generated.")}{" "}
+                    {t("Review them below before importing.")}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {source !== "file" && source !== "ai" && (
               <div className="flex flex-col gap-2">
                 <Field
                   label={source === "sheet" ? t("Public Google Sheets link") : t("Public TSV file link")}
@@ -339,10 +487,27 @@ export function ImportDialog({
                   </p>
                 )}
 
+                {deselected.size > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    {t("{n} of {m} rows selected", { n: selectedCount, m: dataRows.length })}
+                  </p>
+                )}
+
                 <div className="overflow-x-auto rounded-lg border border-border">
                   <table className="w-full text-sm">
                     <thead className="bg-muted/50 text-left text-xs text-muted-foreground">
                       <tr>
+                        <th className="w-10 px-2 py-2 font-medium" aria-label={t("Include")}>
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4"
+                            checked={deselected.size === 0 && dataRows.length > 0}
+                            onChange={(e) =>
+                              setDeselected(e.target.checked ? new Set() : new Set(dataRows.map((_r, i) => i)))
+                            }
+                            aria-label={t("Select all rows")}
+                          />
+                        </th>
                         {headers.map((h, i) => (
                           <th key={i} className="px-2 py-2 font-medium">
                             {h}
@@ -351,18 +516,36 @@ export function ImportDialog({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {previewRows.map((r, ri) => (
-                        <tr key={ri}>
-                          {headers.map((_h, i) => (
-                            <td key={i} className="px-2 py-1.5 text-muted-foreground">
-                              <CellPreview value={r[i]} />
+                      {dataRows.slice(0, previewLimit).map((r, dataIndex) => {
+                        const values = editedRows[dataIndex] ?? r;
+                        const excluded = deselected.has(dataIndex);
+                        return (
+                          <tr key={dataIndex} className={cn(excluded && "opacity-40")}>
+                            <td className="px-2 py-1.5">
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4"
+                                checked={!excluded}
+                                onChange={() => toggleDeselected(dataIndex)}
+                                aria-label={t("Include row {n}", { n: dataIndex + 1 })}
+                              />
                             </td>
-                          ))}
-                        </tr>
-                      ))}
+                            {headers.map((_h, i) => (
+                              <td key={i} className="px-2 py-1.5">
+                                <input
+                                  value={values[i] ?? ""}
+                                  onChange={(e) => updateCell(dataIndex, i, e.target.value)}
+                                  disabled={excluded}
+                                  className="h-7 w-full min-w-24 rounded-md border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                />
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                      })}
                       {dataRows.length === 0 && (
                         <tr>
-                          <td colSpan={headers.length} className="px-2 py-3 text-center text-xs text-muted-foreground">
+                          <td colSpan={headers.length + 1} className="px-2 py-3 text-center text-xs text-muted-foreground">
                             {t("No data rows.")}
                           </td>
                         </tr>
@@ -436,8 +619,9 @@ export function ImportDialog({
               <Button variant="outline">{t("Close")}</Button>
             </Dialog.Close>
             {rows.length > 0 && !result && (
-              <Button onClick={doImportFinal} disabled={assignedCount === 0 || dataRows.length === 0}>
+              <Button onClick={doImportFinal} disabled={assignedCount === 0 || selectedCount === 0}>
                 {t("Import words")}
+                {selectedCount > 0 && dataRows.length > 1 ? ` (${selectedCount})` : ""}
               </Button>
             )}
           </div>
@@ -471,10 +655,6 @@ function SourceTab({
       {label}
     </button>
   );
-}
-
-function CellPreview({ value }: { value?: string }) {
-  return <span className={cn(!value && "text-muted-foreground/40")}>{value ?? "—"}</span>;
 }
 
 function formatPair(source: string, target: string): string {
