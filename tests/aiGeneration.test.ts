@@ -134,6 +134,36 @@ describe("generateViaOpenRouter", () => {
     ).rejects.toBeInstanceOf(ProviderError);
     expect(globalThis.fetch).toHaveBeenCalledTimes(3);
   });
+
+  it("aborts a stalled request via the fetch timeout and falls through to the next model", async () => {
+    const abortError = new DOMException("The operation was aborted", "AbortError");
+    globalThis.fetch = vi
+      .fn()
+      .mockRejectedValueOnce(abortError)
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ choices: [{ message: { content: '{"words":[{"source":"mesa","target":"table"}]}' } }] }),
+          { status: 200 },
+        ),
+      );
+    const words = await generateViaOpenRouter(buildMessages({ sourceCode: "en", sourceName: "English", targetCode: "bg", targetName: "Bulgarian", description: "x", count: 1 }));
+    expect(words).toEqual([{ source: "mesa", target: "table", grammar: undefined, example: undefined }]);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not send response_format in the request body", async () => {
+    let sentBody: string = "";
+    globalThis.fetch = vi.fn(async (_url: unknown, init?: RequestInit) => {
+      sentBody = String(init?.body ?? "");
+      return new Response(
+        JSON.stringify({ choices: [{ message: { content: '{"words":[{"source":"a","target":"b"}]}' } }] }),
+        { status: 200 },
+      );
+    });
+    await generateViaOpenRouter(buildMessages({ sourceCode: "en", sourceName: "English", targetCode: "bg", targetName: "Bulgarian", description: "x", count: 1 }));
+    expect(sentBody).not.toContain("response_format");
+    expect(sentBody).toContain("max_tokens");
+  });
 });
 
 describe("limiter", () => {

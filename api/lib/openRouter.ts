@@ -19,28 +19,6 @@ const MODEL_CHAIN = (
   .map((m) => m.trim())
   .filter(Boolean);
 
-const SCHEMA = {
-  type: "object",
-  properties: {
-    words: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          source: { type: "string" },
-          target: { type: "string" },
-          grammar: { type: "string" },
-          example: { type: "string" },
-        },
-        required: ["source", "target"],
-        additionalProperties: false,
-      },
-    },
-  },
-  required: ["words"],
-  additionalProperties: false,
-} as const;
-
 interface Message {
   role: "system" | "user";
   content: string;
@@ -163,15 +141,12 @@ export async function generateViaOpenRouter(messages: Message[]): Promise<AiWord
           "HTTP-Referer": process.env.APP_URL ?? "https://lexi.app",
           "X-Title": "Lexi!",
         },
+        signal: AbortSignal.timeout(45_000),
         body: JSON.stringify({
           model,
           messages,
           temperature: 0.2,
           max_tokens: 4096,
-          response_format: {
-            type: "json_schema",
-            json_schema: { name: "word_list", strict: true, schema: SCHEMA },
-          },
         }),
       });
 
