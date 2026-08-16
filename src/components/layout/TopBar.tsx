@@ -35,8 +35,8 @@ export function TopBar() {
   return (
     <header className="flex min-h-14 shrink-0 items-center justify-between border-b border-border px-4 pt-[env(safe-area-inset-top)]">
       <div className="flex items-center gap-2 md:hidden">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-          <BookMarked className="h-4 w-4" fill="currentColor" strokeWidth={1.5} />
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <BookMarked className="h-4 w-4" />
         </span>
         <span className="font-heading text-lg font-semibold tracking-tight">
           Lex<span className="text-primary">i!</span>
