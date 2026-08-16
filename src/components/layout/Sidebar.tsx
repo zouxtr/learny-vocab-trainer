@@ -39,6 +39,9 @@ export function Sidebar() {
         {!collapsed && (
           <span className="truncate font-heading text-lg font-semibold tracking-tight">
             Lex<span className="text-primary">i!</span>
+            <span className="ml-1 align-middle font-heading text-[0.62em] font-light tracking-wide text-muted-foreground">
+              beta
+            </span>
           </span>
         )}
       </div>
