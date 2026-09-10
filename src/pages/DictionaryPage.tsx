@@ -19,7 +19,7 @@ import { useT } from "@/lib/i18n";
 import type { Word } from "@/db/schema";
 import { cn } from "@/lib/utils";
 
-type WordSort = "position" | "dateAdded" | "sourceAlpha" | "targetAlpha" | "mostMissed";
+type WordSort = "position" | "dateAdded" | "sourceAlpha" | "targetAlpha" | "mostMissed" | "leastPractised" | "leastSeen";
 
 const WORD_SORTS: { value: WordSort; labelKey: string; hint?: string }[] = [
   { value: "position", labelKey: "In order" },
@@ -27,6 +27,8 @@ const WORD_SORTS: { value: WordSort; labelKey: string; hint?: string }[] = [
   { value: "sourceAlpha", labelKey: "Word (A–Z)" },
   { value: "targetAlpha", labelKey: "Translation (A–Z)" },
   { value: "mostMissed", labelKey: "Most missed" },
+  { value: "leastPractised", labelKey: "Least practised" },
+  { value: "leastSeen", labelKey: "Least seen (flashcards)" },
 ];
 
 /** Stable ordering of the words shown in the dictionary list. */
@@ -47,6 +49,18 @@ function sortWords(words: WordWithStats[], sort: WordSort): WordWithStats[] {
     }
     if (sort === "mostMissed") {
       if (a.lapses !== b.lapses) return b.lapses - a.lapses;
+      return a.position - b.position;
+    }
+    if (sort === "leastPractised") {
+      const at = a.tested ?? 0;
+      const bt = b.tested ?? 0;
+      if (at !== bt) return at - bt;
+      return a.position - b.position;
+    }
+    if (sort === "leastSeen") {
+      const as = a.seen ?? 0;
+      const bs = b.seen ?? 0;
+      if (as !== bs) return as - bs;
       return a.position - b.position;
     }
     return a.position - b.position;
@@ -76,6 +90,7 @@ export function DictionaryPage() {
   const [refreshResult, setRefreshResult] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<WordSort>("position");
+  const [group, setGroup] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
   const exportMenuRef = useRef<HTMLDivElement>(null);
@@ -113,6 +128,19 @@ export function DictionaryPage() {
 
   const sourceName = dictionary ? getLanguage(dictionary.sourceLanguage)?.name ?? "Word" : "Word";
   const targetName = dictionary ? getLanguage(dictionary.targetLanguage)?.name ?? "Translation" : "Translation";
+
+  const groups = useMemo(() => {
+    const set = new Set<string>();
+    for (const w of words) {
+      const g = (w.group ?? "").trim();
+      if (g) set.add(g);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [words]);
+
+  useEffect(() => {
+    if (group && !groups.includes(group)) setGroup(null);
+  }, [group, groups]);
 
   const handleExportCsv = () => {
     if (!dictionary) return;
@@ -313,6 +341,19 @@ export function DictionaryPage() {
             placeholder={t("Sort by")}
           />
         </div>
+        {groups.length > 0 && (
+          <div className="sm:w-52">
+            <MenuSelect<string>
+              value={group ?? ""}
+              onChange={(v) => setGroup(v === "" ? null : v)}
+              options={[
+                { value: "", label: t("All groups") },
+                ...groups.map((g) => ({ value: g, label: g })),
+              ]}
+              placeholder={t("Group")}
+            />
+          </div>
+        )}
       </div>
 
       {words.length === 0 ? (
@@ -322,6 +363,7 @@ export function DictionaryPage() {
           words={words}
           query={query}
           sort={sort}
+          group={group}
           onEdit={(word) => setEditingWord(word)}
           onDelete={(word) => removeWord(word.id)}
         />
@@ -363,26 +405,28 @@ interface WordListProps {
   words: WordWithStats[];
   query: string;
   sort: WordSort;
+  group: string | null;
   onEdit: (word: Word) => void;
   onDelete: (word: Word) => void;
 }
 
-function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
+function WordList({ words, query, sort, group, onEdit, onDelete }: WordListProps) {
   const parentRef = useRef<HTMLDivElement>(null);
   const t = useT();
 
   const filtered = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
+    const inGroup = group ? words.filter((w) => (w.group ?? "").trim() === group) : words;
     const matches = trimmed
-      ? words.filter(
+      ? inGroup.filter(
           (w) =>
             w.source.toLowerCase().includes(trimmed) ||
             w.target.toLowerCase().includes(trimmed) ||
             (w.rektion ?? "").toLowerCase().includes(trimmed),
         )
-      : words;
+      : inGroup;
     return sortWords(matches, sort);
-  }, [words, query, sort]);
+  }, [words, query, sort, group]);
 
   const rowVirtualizer = useVirtualizer({
     count: filtered.length,
@@ -416,6 +460,9 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
             <th className="border-b border-border px-4 py-2 font-medium">{t("Word")}</th>
             <th className="border-b border-border px-4 py-2 font-medium">{t("Translation")}</th>
             <th className="hidden border-b border-border px-4 py-2 font-medium sm:table-cell">{t("Grammar")}</th>
+            <th className="hidden border-b border-border px-4 py-2 font-medium md:table-cell">{t("Group")}</th>
+            <th className="border-b border-border px-4 py-2 font-medium">{t("Tested")}</th>
+            <th className="border-b border-border px-4 py-2 font-medium">{t("Seen")}</th>
             <th className="border-b border-border px-4 py-2" />
           </tr>
         </thead>
@@ -445,7 +492,7 @@ function WordList({ words, query, sort, onEdit, onDelete }: WordListProps) {
 }
 
 interface WordRowProps {
-  word: Word;
+  word: WordWithStats;
   onEdit: (word: Word) => void;
   onDelete: (word: Word) => void;
   style?: React.CSSProperties;
@@ -469,6 +516,22 @@ function WordRow({ word, onEdit, onDelete, style }: WordRowProps) {
       <td className={cn("px-4 py-3 break-words", !word.target && "text-muted-foreground")}>{word.target}</td>
       <td className="hidden px-4 py-3 text-muted-foreground sm:table-cell">
         {word.rektion ?? <span className="text-muted-foreground/50">—</span>}
+      </td>
+      <td className="hidden px-4 py-3 text-muted-foreground md:table-cell">
+        {(word.group ?? "").trim() || <span className="text-muted-foreground/50">—</span>}
+      </td>
+      <td className="px-4 py-3 whitespace-nowrap">
+        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground" title={t("{tested} tested · {wrong} wrong", { tested: word.tested ?? 0, wrong: word.wrong ?? 0 })}>
+          <span className="font-medium text-foreground">{word.tested ?? 0}×</span>
+          <span aria-label={t("{n} wrong", { n: word.wrong ?? 0 })} className={cn((word.wrong ?? 0) > 0 && "font-medium text-destructive")}>
+            {t("{n} wrong", { n: word.wrong ?? 0 })}
+          </span>
+        </span>
+      </td>
+      <td className="px-4 py-3 whitespace-nowrap">
+        <span className="text-xs font-medium text-foreground" title={t("Shown {n} times in flashcards", { n: word.seen ?? 0 })}>
+          {word.seen ?? 0}×
+        </span>
       </td>
       <td className="w-16 px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-1">

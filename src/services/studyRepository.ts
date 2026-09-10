@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
 import { getDatabase, schedulePersist } from "@/services/database";
-import { spacedRepetition, reviews, studySessions, words } from "@/db/schema";
+import { flashcardViews, spacedRepetition, reviews, studySessions, words } from "@/db/schema";
 import { computeReview, type Grade, type SrsState, type StudyMode, type StudyWord } from "@/services/study";
 
 /** A word joined with its SRS state (null when never studied). */
@@ -85,6 +85,7 @@ export function listStudyWords(dictionaryId: string): StudyWord[] {
       position: words.position,
       createdAt: words.createdAt,
       lapses: spacedRepetition.lapses,
+      group: words.group,
     })
     .from(words)
     .leftJoin(spacedRepetition, eq(words.id, spacedRepetition.wordId))
@@ -100,6 +101,54 @@ export function listStudyWords(dictionaryId: string): StudyWord[] {
     position: r.position,
     createdAt: r.createdAt,
     lapses: r.lapses ?? 0,
+    reviewCount: 0,
+    flashSeen: 0,
+    group: r.group ?? null,
+  }));
+}
+
+/** Record one flashcard reveal (flip) for a word. */
+export function recordFlashcardView(wordId: string): void {
+  const db = getDatabase();
+  const now = new Date();
+  const existing = db.select().from(flashcardViews).where(eq(flashcardViews.wordId, wordId)).get();
+  if (existing) {
+    db.update(flashcardViews)
+      .set({ views: existing.views + 1, lastSeenAt: now })
+      .where(eq(flashcardViews.wordId, wordId))
+      .run();
+  } else {
+    db.insert(flashcardViews).values({ wordId, views: 1, lastSeenAt: now }).run();
+  }
+  schedulePersist();
+}
+
+/** Total flashcard reveals per word (empty map when the table is missing/empty). */
+function flashSeenByWord(): Map<string, number> {
+  const db = getDatabase();
+  try {
+    const rows = db.select({ wordId: flashcardViews.wordId, views: flashcardViews.views }).from(flashcardViews).all();
+    return new Map(rows.map((r) => [r.wordId, r.views]));
+  } catch {
+    return new Map();
+  }
+}
+
+/** Fill in per-word total review counts for study sorting ("least practised"). */
+export function attachReviewCounts(rows: StudyWord[]): StudyWord[] {
+  if (rows.length === 0) return rows;
+  const db = getDatabase();
+  const counts = db
+    .select({ wordId: reviews.wordId })
+    .from(reviews)
+    .all();
+  const byWord = new Map<string, number>();
+  for (const c of counts) byWord.set(c.wordId, (byWord.get(c.wordId) ?? 0) + 1);
+  const seenByWord = flashSeenByWord();
+  return rows.map((r) => ({
+    ...r,
+    reviewCount: byWord.get(r.wordId) ?? 0,
+    flashSeen: seenByWord.get(r.wordId) ?? 0,
   }));
 }
 

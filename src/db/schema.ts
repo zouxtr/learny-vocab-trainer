@@ -125,6 +125,15 @@ export const reviews = sqliteTable(
   (t) => [index("reviews_word_idx").on(t.wordId), index("reviews_session_idx").on(t.sessionId)],
 );
 
+/** How many times a word's flashcard has been flipped (revealed). */
+export const flashcardViews = sqliteTable("flashcard_views", {
+  wordId: text("word_id")
+    .primaryKey()
+    .references(() => words.id, { onDelete: "cascade" }),
+  views: integer("views").notNull().default(0),
+  lastSeenAt: integer("last_seen_at", { mode: "timestamp_ms" }),
+});
+
 /** A completed study session. */
 export const studySessions = sqliteTable(
   "study_sessions",

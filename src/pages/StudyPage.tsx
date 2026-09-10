@@ -137,6 +137,8 @@ const SORTS: { value: StudySort; key: string; hint?: string }[] = [
   { value: "position", key: "In order" },
   { value: "dateAdded", key: "Newest first" },
   { value: "mostMissed", key: "Most missed" },
+  { value: "leastPractised", key: "Least practised" },
+  { value: "leastSeen", key: "Least seen (flashcards)" },
 ];
 
 /** Second step: configure the session before it starts. */
@@ -161,11 +163,25 @@ function SetupScreen() {
   const toggleManualId = useStudyStore((s) => s.toggleManualId);
   const setAllManual = useStudyStore((s) => s.setAllManual);
   const setShuffle = useStudyStore((s) => s.setShuffle);
+  const group = useStudyStore((s) => s.group);
+  const setGroup = useStudyStore((s) => s.setGroup);
   const start = useStudyStore((s) => s.start);
   const back = useStudyStore((s) => s.back);
 
   const manualEnabled = selection === "manual";
-  const max = Math.max(1, available.length);
+  const groups = useMemo(() => {
+    const set = new Set<string>();
+    for (const w of available) {
+      const g = (w.group ?? "").trim();
+      if (g) set.add(g);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [available]);
+  const pool = useMemo(
+    () => (group ? available.filter((w) => (w.group ?? "").trim() === group) : available),
+    [available, group],
+  );
+  const max = Math.max(1, pool.length);
 
   if (!dictionary) return null;
 
@@ -203,6 +219,19 @@ function SetupScreen() {
           />
         </Field>
 
+        {groups.length > 0 && (
+          <Field label={t("Group")}>
+            <MenuSelect
+              value={group ?? ""}
+              onChange={(v) => setGroup(v === "" ? null : v)}
+              options={[
+                { value: "", label: t("All groups") },
+                ...groups.map((g) => ({ value: g, label: g })),
+              ]}
+            />
+          </Field>
+        )}
+
         <Field label={t("Words to include")}>
           <MenuSelect
             value={selection}
@@ -213,18 +242,18 @@ function SetupScreen() {
             <div className="mt-2 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">
-                  {t("{n} of {m} selected", { n: manualIds.length, m: available.length })}
+                  {t("{n} of {m} selected", { n: manualIds.length, m: pool.length })}
                 </span>
                 <button
                   type="button"
-                  onClick={() => setAllManual(manualIds.length !== available.length)}
+                  onClick={() => setAllManual(manualIds.length !== pool.length)}
                   className="text-xs font-medium text-primary hover:underline"
                 >
-                  {manualIds.length === available.length ? t("Clear all") : t("Select all")}
+                  {manualIds.length === pool.length ? t("Clear all") : t("Select all")}
                 </button>
               </div>
               <ul className="scrollbar-thin max-h-48 space-y-1 overflow-y-auto rounded-lg border border-border p-2">
-                {available.map((w, idx) => (
+                {pool.map((w, idx) => (
                   <li key={w.wordId}>
                     <label
                       className={cn(
@@ -291,7 +320,7 @@ function SetupScreen() {
         <div className="flex items-center gap-2">
           <Button
             onClick={start}
-            disabled={manualEnabled && manualIds.length === 0}
+            disabled={(manualEnabled && manualIds.length === 0) || pool.length === 0}
             className="flex-1"
           >
             <Play className="h-4 w-4" />

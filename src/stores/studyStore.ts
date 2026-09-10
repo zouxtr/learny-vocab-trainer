@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { startSession, finishSession, recordReview, listStudyWords } from "@/services/studyRepository";
+import { startSession, finishSession, recordReview, recordFlashcardView, listStudyWords, attachReviewCounts } from "@/services/studyRepository";
 import {
   acceptTypedAnswer,
   answersMatch,
@@ -58,10 +58,14 @@ export interface StudyStateFields {
   count: number;
   manualIds: string[];
   shuffle: boolean;
+  /** Only include words from this group (null = all groups). */
+  group: string | null;
 
   queue: QueueItem[];
   /** Cards already presented (graded or skipped) — used by Previous. */
   history: QueueItem[];
+  /** Word already counted as seen for the currently shown card (flip-once-per-turn). */
+  viewedWordId: string | null;
   planned: number;
   sessionId: string | null;
   startedAt: number;
@@ -82,6 +86,7 @@ export interface StudyStateFields {
   toggleManualId: (id: string) => void;
   setAllManual: (on: boolean) => void;
   setShuffle: (shuffle: boolean) => void;
+  setGroup: (group: string | null) => void;
   start: () => void;
   flip: () => void;
   grade: (grade: Grade) => void;
@@ -160,8 +165,10 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
   count: 0,
   manualIds: [],
   shuffle: true,
+  group: null,
   queue: [],
   history: [],
+  viewedWordId: null,
   planned: 0,
   sessionId: null,
   startedAt: 0,
@@ -173,7 +180,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
   answeredUnique: 0,
 
   pick: (dictionary) => {
-    const available = listStudyWords(dictionary.id);
+    const available = attachReviewCounts(listStudyWords(dictionary.id));
     set({
       phase: "setup",
       dictionary,
@@ -185,6 +192,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       count: available.length,
       manualIds: [],
       shuffle: true,
+      group: null,
       history: [],
     });
   },
@@ -195,6 +203,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       dictionary: null,
       available: [],
       manualIds: [],
+      group: null,
       sessionId: null,
       queue: [],
       history: [],
@@ -209,16 +218,19 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       set({ selection });
       return;
     }
-    const { available, count, manualIds } = get();
+    const { available, group, count, manualIds } = get();
+    const pool = group ? available.filter((w) => (w.group ?? "").trim() === group) : available;
     if (manualIds.length === 0) {
-      set({ selection, manualIds: available.slice(0, Math.max(1, count)).map((w) => w.wordId) });
+      set({ selection, manualIds: pool.slice(0, Math.max(1, count)).map((w) => w.wordId) });
     } else {
       set({ selection });
     }
   },
   setSort: (sort) => set({ sort }),
   setCount: (count) => {
-    const max = Math.max(1, get().available.length);
+    const { available, group } = get();
+    const pool = group ? available.filter((w) => (w.group ?? "").trim() === group) : available;
+    const max = Math.max(1, pool.length);
     set({ count: Math.max(1, Math.min(count, max)) });
   },
   toggleManualId: (id) => {
@@ -228,15 +240,28 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
     });
   },
   setAllManual: (on) => {
-    set({ manualIds: on ? get().available.map((w) => w.wordId) : [] });
+    const { available, group } = get();
+    const pool = group ? available.filter((w) => (w.group ?? "").trim() === group) : available;
+    set({ manualIds: on ? pool.map((w) => w.wordId) : [] });
   },
   setShuffle: (shuffle) => set({ shuffle }),
+  setGroup: (group) => {
+    const { available, count, manualIds } = get();
+    const filtered = group ? available.filter((w) => (w.group ?? "").trim() === group) : available;
+    const ids = new Set(filtered.map((w) => w.wordId));
+    set({
+      group,
+      count: Math.max(1, Math.min(count || filtered.length, Math.max(1, filtered.length))),
+      manualIds: manualIds.filter((id) => ids.has(id)),
+    });
+  },
 
   start: () => {
     const s = get();
     if (!s.dictionary) return;
 
-    const selected = selectStudyWords(s.available, configOf(s));
+    const pool = s.group ? s.available.filter((w) => (w.group ?? "").trim() === s.group) : s.available;
+    const selected = selectStudyWords(pool, configOf(s));
     const cards = s.shuffle ? shuffle(selected) : selected;
     if (cards.length === 0) return;
 
@@ -255,10 +280,31 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       feedback: null,
       counts: emptyCounts(),
       answeredUnique: 0,
+      viewedWordId: null,
     });
   },
 
-  flip: () => set((s) => ({ flipped: !s.flipped })),
+  flip: () => {
+    const s = get();
+    // Count the first reveal of the currently shown card only — repeated flips
+    // of the same card without moving on don't count again.
+    if (
+      s.phase === "review" &&
+      s.mode === "flashcard" &&
+      !s.flipped &&
+      s.queue.length > 0 &&
+      s.viewedWordId !== s.queue[0].card.wordId
+    ) {
+      try {
+        recordFlashcardView(s.queue[0].card.wordId);
+      } catch {
+        // Views are best-effort stats; a flip must never break the session.
+      }
+      set({ flipped: true, viewedWordId: s.queue[0].card.wordId });
+      return;
+    }
+    set({ flipped: !s.flipped });
+  },
 
   grade: (grade) => {
     const s = get();
@@ -293,6 +339,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       flipped: false,
       revealed: false,
       feedback: null,
+      viewedWordId: null,
       shownAt: Date.now(),
     });
   },
@@ -307,6 +354,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       flipped: false,
       revealed: false,
       feedback: null,
+      viewedWordId: null,
       shownAt: Date.now(),
     });
   },
@@ -318,7 +366,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       set(wrapUp(s));
       return;
     }
-    set({ revealed: false, feedback: null, shownAt: Date.now() });
+    set({ revealed: false, feedback: null, viewedWordId: null, shownAt: Date.now() });
   },
 
   abort: () => {
@@ -380,6 +428,7 @@ function answerCard(
         counts,
         answeredUnique,
         flipped: false,
+        viewedWordId: null,
         shownAt: Date.now(),
       });
     }

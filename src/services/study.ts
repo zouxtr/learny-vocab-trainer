@@ -134,12 +134,15 @@ export interface StudyWord {
   position: number;
   createdAt: Date;
   lapses: number; // times previously answered "Again"/wrong
+  reviewCount?: number; // total times previously tested
+  flashSeen?: number; // times previously shown in flashcard mode
+  group?: string | null;
 }
 
 export type StudyMode = "flashcard" | "multipleChoice" | "grammar" | "typing";
 export type Direction = "sourceToTarget" | "targetToSource";
 export type SelectionMode = "all" | "random" | "manual";
-export type StudySort = "position" | "dateAdded" | "mostMissed";
+export type StudySort = "position" | "dateAdded" | "mostMissed" | "leastPractised" | "leastSeen";
 export type QuestionField = "source" | "target";
 
 /** Config a session is launched from. */
@@ -159,6 +162,18 @@ export function sortStudyWords(rows: StudyWord[], sort: StudySort): StudyWord[] 
   copy.sort((a, b) => {
     if (sort === "mostMissed") {
       if (b.lapses !== a.lapses) return b.lapses - a.lapses;
+      return a.position - b.position;
+    }
+    if (sort === "leastPractised") {
+      const ar = a.reviewCount ?? 0;
+      const br = b.reviewCount ?? 0;
+      if (ar !== br) return ar - br;
+      return a.position - b.position;
+    }
+    if (sort === "leastSeen") {
+      const as = a.flashSeen ?? 0;
+      const bs = b.flashSeen ?? 0;
+      if (as !== bs) return as - bs;
       return a.position - b.position;
     }
     if (sort === "dateAdded") {

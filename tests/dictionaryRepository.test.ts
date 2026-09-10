@@ -5,6 +5,7 @@ import path from "node:path";
 import * as schema from "../src/db/schema";
 import migrationSql from "../src/db/migrations/0000_init.sql?raw";
 import sheetMigrationSql from "../src/db/migrations/0001_sheet_url.sql?raw";
+import flashcardViewsMigrationSql from "../src/db/migrations/0002_flashcard_views.sql?raw";
 import { setDbForTesting } from "../src/services/database";
 import { createDictionary, listDictionaries, getDictionary, updateDictionary, deleteDictionary, getWord, listWords, listWordsWithStats, createWord, updateWord, deleteWord, countWords } from "../src/services/dictionaryRepository";
 
@@ -16,6 +17,7 @@ async function makeDb(): Promise<SQLJsDatabase<typeof schema>> {
   raw.run("PRAGMA foreign_keys = ON;");
   raw.exec(migrationSql.replace(/--> statement-breakpoint/g, ";"));
   raw.exec(sheetMigrationSql.replace(/--> statement-breakpoint/g, ";"));
+  raw.exec(flashcardViewsMigrationSql.replace(/--> statement-breakpoint/g, ";"));
   return drizzle(raw, { schema });
 }
 

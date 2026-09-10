@@ -1,7 +1,7 @@
 import { sql, desc, type SQL } from "drizzle-orm";
 import { eq, and } from "drizzle-orm";
 import { getDatabase, schedulePersist } from "@/services/database";
-import { dictionaries, spacedRepetition, words, type Dictionary, type Word } from "@/db/schema";
+import { dictionaries, flashcardViews, reviews, spacedRepetition, words, type Dictionary, type Word } from "@/db/schema";
 
 export interface NewDictionary {
   name: string;
@@ -142,9 +142,15 @@ export function getWord(id: string): Word | null {
 /** A word row joined with its review stats (for "most missed" sorting). */
 export interface WordWithStats extends Word {
   lapses: number;
+  /** Total times the word has been tested across all sessions. */
+  tested?: number;
+  /** Times the word was answered incorrectly. */
+  wrong?: number;
+  /** Times the word has been shown in flashcard mode. */
+  seen?: number;
 }
 
-/** List a dictionary's words with their SRS lapse counts, ordered by position. */
+/** List a dictionary's words with their SRS lapse counts and review totals, ordered by position. */
 export function listWordsWithStats(dictionaryId: string): WordWithStats[] {
   const db = getDatabase();
   const rows = db
@@ -154,7 +160,41 @@ export function listWordsWithStats(dictionaryId: string): WordWithStats[] {
     .where(eq(words.dictionaryId, dictionaryId))
     .orderBy(words.position)
     .all();
-  return rows.map((r) => ({ ...r.words, lapses: r.spaced_repetition?.lapses ?? 0 })) as WordWithStats[];
+  const reviewRows = db
+    .select({ wordId: reviews.wordId, isCorrect: reviews.isCorrect })
+    .from(reviews)
+    .innerJoin(words, eq(reviews.wordId, words.id))
+    .where(eq(words.dictionaryId, dictionaryId))
+    .all();
+  const testedByWord = new Map<string, number>();
+  const wrongByWord = new Map<string, number>();
+  for (const r of reviewRows) {
+    testedByWord.set(r.wordId, (testedByWord.get(r.wordId) ?? 0) + 1);
+    if (!r.isCorrect) wrongByWord.set(r.wordId, (wrongByWord.get(r.wordId) ?? 0) + 1);
+  }
+  // Flashcard flip counts live in their own table (missing on very old DBs).
+  let seenByWord = new Map<string, number>();
+  try {
+    const seenRows = db
+      .select({ wordId: flashcardViews.wordId, views: flashcardViews.views })
+      .from(flashcardViews)
+      .innerJoin(words, eq(flashcardViews.wordId, words.id))
+      .where(eq(words.dictionaryId, dictionaryId))
+      .all();
+    seenByWord = new Map(seenRows.map((r) => [r.wordId, r.views]));
+  } catch {
+    seenByWord = new Map();
+  }
+  return rows.map(
+    (r) =>
+      ({
+        ...r.words,
+        lapses: r.spaced_repetition?.lapses ?? 0,
+        tested: testedByWord.get(r.words.id) ?? 0,
+        wrong: wrongByWord.get(r.words.id) ?? 0,
+        seen: seenByWord.get(r.words.id) ?? 0,
+      }) as WordWithStats,
+  );
 }
 
 /** Append a word to a dictionary at the end of its list. */

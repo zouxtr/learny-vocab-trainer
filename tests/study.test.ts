@@ -7,14 +7,18 @@ import * as schema from "../src/db/schema";
 import { studySessions } from "../src/db/schema";
 import migrationSql from "../src/db/migrations/0000_init.sql?raw";
 import sheetMigrationSql from "../src/db/migrations/0001_sheet_url.sql?raw";
+import flashcardViewsMigrationSql from "../src/db/migrations/0002_flashcard_views.sql?raw";
 import { getDatabase, setDbForTesting } from "../src/services/database";
 import { createDictionary, createWord } from "../src/services/dictionaryRepository";
 import {
   startSession,
   finishSession,
   recordReview,
+  recordFlashcardView,
   listDueRows,
   listStudyRows,
+  listStudyWords,
+  attachReviewCounts,
 } from "../src/services/studyRepository";
 import {
   computeReview,
@@ -39,6 +43,7 @@ async function makeDb(): Promise<SQLJsDatabase<typeof schema>> {
   raw.run("PRAGMA foreign_keys = ON;");
   raw.exec(migrationSql.replace(/--> statement-breakpoint/g, ";"));
   raw.exec(sheetMigrationSql.replace(/--> statement-breakpoint/g, ";"));
+  raw.exec(flashcardViewsMigrationSql.replace(/--> statement-breakpoint/g, ";"));
   return drizzle(raw, { schema });
 }
 
@@ -228,8 +233,7 @@ describe("studyRepository (session + SRS persistence)", () => {
     expect(listDueRows(dict.id)).toHaveLength(0);
   });
 
-  it("stores session totals on finishSession", () => {
-    const dict = seedDict();
+  it("stores session totals on finishSession", () => {    const dict = seedDict();
     const sessionId = startSession(dict.id);
     const w1 = createWord({ dictionaryId: dict.id, source: "casa", target: "house" });
 
@@ -245,5 +249,18 @@ describe("studyRepository (session + SRS persistence)", () => {
     expect(row!.wordCount).toBe(1);
     expect(row!.correctCount).toBe(1);
     expect(row!.mode).toBe("flashcard");
+  });
+
+  it("counts flashcard flips as views without touching review totals", () => {
+    const dict = seedDict();
+    const w1 = createWord({ dictionaryId: dict.id, source: "casa", target: "house" });
+
+    recordFlashcardView(w1.id);
+    recordFlashcardView(w1.id);
+
+    const withCounts = attachReviewCounts(listStudyWords(dict.id));
+    expect(withCounts).toHaveLength(1);
+    expect(withCounts[0].flashSeen).toBe(2);
+    expect(withCounts[0].reviewCount).toBe(0);
   });
 });

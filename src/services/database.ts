@@ -3,6 +3,7 @@ import { drizzle, type SQLJsDatabase } from "drizzle-orm/sql-js";
 import * as schema from "@/db/schema";
 import migrationSql from "@/db/migrations/0000_init.sql?raw";
 import sheetMigrationSql from "@/db/migrations/0001_sheet_url.sql?raw";
+import flashcardViewsMigrationSql from "@/db/migrations/0002_flashcard_views.sql?raw";
 // Import the wasm as a Vite-managed asset so its URL, hashing and MIME type are
 // handled by the bundler (works in dev and in the built PWA). Fetching the
 // bytes ourselves and handing them to sql.js via `wasmBinary` avoids Emscripten's
@@ -89,6 +90,7 @@ export function schedulePersist(delayMs = 400): void {
 const MIGRATIONS: { version: string; sql: string }[] = [
   { version: "0001", sql: migrationSql },
   { version: "0002", sql: sheetMigrationSql },
+  { version: "0003", sql: flashcardViewsMigrationSql },
 ];
 
 function runMigrations(raw: SqlJsDatabase): void {
