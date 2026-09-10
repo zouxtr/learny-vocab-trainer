@@ -17,3 +17,8 @@
 # "German basics, A1", DE, BG, https://docs.google.com/spreadsheets/d/REPLACE_WITH_ID/edit, sheet, Jane Doe
 8 klas, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQh72pUD6yxySAUU5Qnz8SarKaz5bIeTpalpnoXG5LL6VvySb6Z8p2iMXLO-vlzucohTwKWRVaEDd2m/pub?output=tsv, tsv, K
 Rektionen, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vSwm1MgzMMngxzZAOt8knas33Fis0IkmJi0fS-ZxBQdz3DXPf43uohAMM3uO9l4i-yFC3MX5jTqrPO4/pub?output=tsv, tsv, K
+Krank oder Gesund?(B1 L1), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vSzhZzf6W92kncaxEk6qsOYdRliJUzM_EM1ij73kiN9RvRqs1VDGH4J7N2TYPa6AYl45CFmu-j_H0bq/pub?output=tsv, tsv, K
+Urlaubsspaß(B1 L2), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsj_pYB2kQS9U4pEHTVkYV3mjjgV0CVLuRfOvsTmHomi9qQJRhFNpWzq_kC5S1TWsmSWokpTDCYsf/pub?output=tsv, tsv, K
+Menschen, Menschen... (B1 L3), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQm_PtfACqb1GSWMCFCOiHZRTveeAZABMEIDrI87S97OxCDatBTsNQAj1imwanK9YnzZPLrjSYzYhMK/pub?output=tsv, tsv, K
+Beruf oder Berufung? (B1 L4), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQvbHJ6aAgqdGqXXOtQ06BZDzXdI3kus0NYG5WwzayZzzkHI_DuP7AppO_AcF0CKuGU7uhk9rxH38Ym/pub?output=tsv, tsv, K
+Lebensgeschichten (B1 L5), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vTbKqH1RQetdG8_uaNE-X4XPLbuxG3L6Fk5pMcaR8WDCdQQlSpJj2h3wu9koKN02WaEHpU3K-vJ4a89/pub?output=tsv, tsv, K
