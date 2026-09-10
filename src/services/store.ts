@@ -79,20 +79,28 @@ export function parseStoreText(text: string): StoreEntry[] {
   return entries;
 }
 
-let cache: StoreEntry[] | null = null;
+let lastFetchedAt: number | null = null;
 
-/** Fetch + parse the store file (cached for the page lifetime). */
+/**
+ * Fetch + parse the store file, always from the network. A timestamp query
+ * param plus `no-store` defeat browser/edge caches, so reopening the Store
+ * popup (no page refresh needed) shows the latest published entries.
+ */
 export async function fetchStoreEntries(): Promise<StoreEntry[]> {
-  if (cache) return cache;
-  const res = await fetch(STORE_FILE_URL);
+  const res = await fetch(`${STORE_FILE_URL}?t=${Date.now()}`, { cache: "no-store" });
   if (!res.ok) {
     throw new Error(`Could not load the dictionary store (HTTP ${res.status}). Check your connection and try again.`);
   }
-  cache = parseStoreText(await res.text());
-  return cache;
+  lastFetchedAt = Date.now();
+  return parseStoreText(await res.text());
 }
 
-/** Test hook: clear the fetch cache. */
+/** When the store list was last fetched successfully (null = never). */
+export function lastStoreFetchAt(): number | null {
+  return lastFetchedAt;
+}
+
+/** Test hook: reset the last-fetched marker. Kept for API compatibility. */
 export function clearStoreCache(): void {
-  cache = null;
+  lastFetchedAt = null;
 }

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { BookOpen, Loader2, Plus, Search, Store, X } from "lucide-react";
+import { BookOpen, Loader2, Plus, RefreshCw, Search, Store, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
 import { MenuSelect } from "@/components/ui/MenuSelect";
-import { fetchStoreEntries, type StoreEntry } from "@/services/store";
+import { fetchStoreEntries, lastStoreFetchAt, type StoreEntry } from "@/services/store";
 import { formatLanguagePair, getLanguage, LANGUAGES } from "@/lib/languages";
 import { useT } from "@/lib/i18n";
 
@@ -23,15 +23,25 @@ export function StoreDialog({ open, onOpenChange, onAdd }: StoreDialogProps) {
   const [source, setSource] = useState("");
   const [target, setTarget] = useState("");
   const [author, setAuthor] = useState("");
+  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!open) return;
+  const load = () => {
     setLoading(true);
     setError(null);
     fetchStoreEntries()
-      .then(setEntries)
+      .then((list) => {
+        setEntries(list);
+        setFetchedAt(lastStoreFetchAt());
+      })
       .catch((e) => setError(e instanceof Error ? e.message : "Failed to load the store."))
       .finally(() => setLoading(false));
+  };
+
+  // Reload from the network on every open — no page refresh needed.
+  useEffect(() => {
+    if (!open) return;
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open ]);
 
   const authors = useMemo(
@@ -108,6 +118,23 @@ export function StoreDialog({ open, onOpenChange, onAdd }: StoreDialogProps) {
             />
           </div>
 
+          <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+            <span>
+              {fetchedAt
+                ? t("Updated {time}", { time: new Date(fetchedAt).toLocaleTimeString() })
+                : t("Not loaded yet.")}
+            </span>
+            <button
+              type="button"
+              onClick={load}
+              disabled={loading}
+              className="inline-flex items-center gap-1 font-medium text-primary hover:underline disabled:opacity-50"
+            >
+              <RefreshCw className={loading ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} />
+              {t("Reload")}
+            </button>
+          </div>
+
           <div className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
             {loading && (
               <p className="flex items-center justify-center gap-2 py-10 text-sm text-muted-foreground">
@@ -117,18 +144,7 @@ export function StoreDialog({ open, onOpenChange, onAdd }: StoreDialogProps) {
             {!loading && error && (
               <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border p-10 text-center">
                 <p className="text-sm text-destructive">{error}</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setLoading(true);
-                    setError(null);
-                    fetchStoreEntries()
-                      .then(setEntries)
-                      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load the store."))
-                      .finally(() => setLoading(false));
-                  }}
-                >
+                <Button variant="outline" size="sm" onClick={load}>
                   {t("Try again")}
                 </Button>
               </div>

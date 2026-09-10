@@ -62,16 +62,28 @@ describe("parseStoreText", () => {
 });
 
 describe("fetchStoreEntries", () => {
-  it("fetches and parses the store file URL", async () => {
+  it("fetches fresh from the store file URL with cache busting", async () => {
     const stub = vi.fn().mockResolvedValue({
       ok: true,
       text: () => Promise.resolve("A, EN, DE, https://a, sheet, Ann"),
     });
     vi.stubGlobal("fetch", stub);
     const entries = await fetchStoreEntries();
-    expect(stub).toHaveBeenCalledWith(STORE_FILE_URL);
+    expect(stub).toHaveBeenCalledTimes(1);
+    const [url, init] = stub.mock.calls[0] as [string, RequestInit];
+    expect(url.startsWith(STORE_FILE_URL)).toBe(true);
+    expect(url).toMatch(/\?t=\d+$/);
+    expect(init?.cache).toBe("no-store");
     expect(entries).toHaveLength(1);
     expect(entries[0].linkType).toBe("sheet");
+  });
+
+  it("hits the network on every call (no stale cache)", async () => {
+    const stub = vi.fn().mockResolvedValue({ ok: true, text: () => Promise.resolve("") });
+    vi.stubGlobal("fetch", stub);
+    await fetchStoreEntries();
+    await fetchStoreEntries();
+    expect(stub).toHaveBeenCalledTimes(2);
   });
 
   it("throws on HTTP errors", async () => {
