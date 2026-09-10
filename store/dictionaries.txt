@@ -1,0 +1,18 @@
+# Learny! community dictionary store.
+#
+# One dictionary per line with this exact structure:
+#   "name of dictionary", language 1, language 2, link, link type, author
+#
+# - name: quoted with double quotes when it contains a comma; quotes are
+#   optional otherwise. A "" inside a quoted name means a literal ".
+# - language 1 / language 2: ISO 639-1 codes (EN, BG, DE, ...), case-insensitive.
+#   See the README "Dictionary store" section for the supported codes.
+# - link: public Google Sheets share link (type "sheet") or a direct TSV link
+#   (type "tsv"). Sheets must be shared as "Anyone with the link can view".
+# - link type: exactly "sheet" or "tsv".
+# - author: who published the list.
+# Lines starting with # and empty lines are ignored. Invalid lines are skipped.
+#
+# Example:
+# "German basics, A1", DE, BG, https://docs.google.com/spreadsheets/d/REPLACE_WITH_ID/edit, sheet, Jane Doe
+grand, DE, BG, https://docs.google.com/spreadsheets/d/1-0uRxh1izC-gMeyCMMkdruRx2djThRb-dCdubksDX4M/edit?usp=sharing, sheet, Z

@@ -1,23 +1,47 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Store } from "lucide-react";
 import { DictionaryCard } from "@/components/dictionary/DictionaryCard";
 import { DictionaryFormDialog } from "@/components/dictionary/DictionaryFormDialog";
+import { ImportDialog } from "@/components/dictionary/ImportDialog";
+import { StoreDialog } from "@/components/dictionary/StoreDialog";
 import { Input } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
+import type { StoreEntry } from "@/services/store";
 import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type Filter = "all" | "favorites";
 
+interface StoreSeed {
+  dictionaryId: string;
+  source: "sheet" | "tsv";
+  link: string;
+}
+
 export function DictionaryListPage() {
   const dictionaries = useDictionaryStore((s) => s.dictionaries);
   const refresh = useDictionaryStore((s) => s.refresh);
+  const create = useDictionaryStore((s) => s.create);
   const t = useT();
 
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const [creating, setCreating] = useState(false);
+  const [storeOpen, setStoreOpen] = useState(false);
+  const [storeSeed, setStoreSeed] = useState<StoreSeed | null>(null);
+
+  /** Add a store entry: create the dictionary, then open import prefetched. */
+  const handleStoreAdd = (entry: StoreEntry) => {
+    const created = create({
+      name: entry.name,
+      sourceLanguage: entry.sourceLanguage,
+      targetLanguage: entry.targetLanguage,
+    });
+    if (!created) return;
+    setStoreOpen(false);
+    setStoreSeed({ dictionaryId: created.id, source: entry.linkType, link: entry.link });
+  };
 
   useEffect(() => {
     void refresh();
@@ -45,9 +69,14 @@ export function DictionaryListPage() {
             {t("Search, favorite and organize your vocabulary lists.")}
           </p>
         </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4" /> {t("New dictionary")}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" onClick={() => setStoreOpen(true)}>
+            <Store className="h-4 w-4" /> {t("Store")}
+          </Button>
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="h-4 w-4" /> {t("New dictionary")}
+          </Button>
+        </div>
       </header>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -96,6 +125,20 @@ export function DictionaryListPage() {
       )}
 
       <DictionaryFormDialog open={creating} onOpenChange={setCreating} />
+      <StoreDialog open={storeOpen} onOpenChange={setStoreOpen} onAdd={handleStoreAdd} />
+      {storeSeed && (
+        <ImportDialog
+          dictionaryId={storeSeed.dictionaryId}
+          dictionaryName={dictionaries.find((d) => d.id === storeSeed.dictionaryId)?.name ?? ""}
+          sourceLanguage={dictionaries.find((d) => d.id === storeSeed.dictionaryId)?.sourceLanguage ?? "en"}
+          targetLanguage={dictionaries.find((d) => d.id === storeSeed.dictionaryId)?.targetLanguage ?? "de"}
+          open={storeSeed !== null}
+          onOpenChange={(o) => !o && setStoreSeed(null)}
+          initialSource={storeSeed.source}
+          initialSheetLink={storeSeed.link}
+          autoFetch
+        />
+      )}
     </main>
   );
 }

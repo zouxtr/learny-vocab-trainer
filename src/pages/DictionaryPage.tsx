@@ -396,6 +396,7 @@ export function DictionaryPage() {
         targetLanguage={dictionary.targetLanguage}
         open={importOpen}
         onOpenChange={setImportOpen}
+        savedSheetUrl={dictionary.sheetUrl}
       />
     </main>
   );

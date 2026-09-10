@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   Download,
@@ -37,6 +37,13 @@ interface ImportDialogProps {
   targetLanguage: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Previously used sheet/TSV import link stored on the dictionary (if any). */
+  savedSheetUrl?: string | null;
+  /** Preselect a link tab with a prefilled link (used by the dictionary store). */
+  initialSource?: ImportSource;
+  initialSheetLink?: string;
+  /** Fetch the prefilled link automatically when the dialog opens. */
+  autoFetch?: boolean;
 }
 
 interface ImportResult {
@@ -64,6 +71,10 @@ export function ImportDialog({
   targetLanguage,
   open,
   onOpenChange,
+  savedSheetUrl,
+  initialSource,
+  initialSheetLink,
+  autoFetch,
 }: ImportDialogProps) {
   const refresh = useDictionaryStore((s) => s.refresh);
   const loadWords = useDictionaryStore((s) => s.loadWords);
@@ -119,6 +130,24 @@ export function ImportDialog({
     onOpenChange(next);
   };
 
+  // Prefill the link field with the previously used import link (if any) so
+  // the user can see and reuse it. Runs on open; closing resets the form.
+  useEffect(() => {
+    if (open && savedSheetUrl) setSheetLink(savedSheetUrl);
+  }, [open, savedSheetUrl]);
+
+  // Store flow: preselect the link tab, prefill the link, and fetch it so the
+  // user lands directly on the preview/mapping screen.
+  useEffect(() => {
+    if (!open || !autoFetch || !initialSheetLink || !initialSource) return;
+    if (initialSource !== "sheet" && initialSource !== "tsv") return;
+    setSource(initialSource);
+    setSheetLink(initialSheetLink);
+    if (initialSource === "sheet") void handleSheetFetch(initialSheetLink);
+    else void handleTsvFetch(initialSheetLink);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   const handleFile = async (file: File | undefined) => {
     if (!file) return;
     setError(null);
@@ -137,10 +166,11 @@ export function ImportDialog({
     }
   };
 
-  const handleSheetFetch = async () => {
+  const handleSheetFetch = async (link?: string) => {
     setError(null);
     setResult(null);
-    const parsed = parseSheetsLink(sheetLink);
+    const raw = (link ?? sheetLink).trim();
+    const parsed = parseSheetsLink(raw);
     if (!parsed) {
       setError("That doesn’t look like a public Google Sheets link. Paste the share link from your sheet.");
       return;
@@ -158,16 +188,17 @@ export function ImportDialog({
     }
   };
 
-  const handleTsvFetch = async () => {
+  const handleTsvFetch = async (link?: string) => {
     setError(null);
     setResult(null);
-    if (!sheetLink.trim()) {
+    const raw = (link ?? sheetLink).trim();
+    if (!raw) {
       setError("Paste a link to a TSV file first.");
       return;
     }
     setLoading(true);
     try {
-      const fetched = await fetchTsvUrl(sheetLink);
+      const fetched = await fetchTsvUrl(raw);
       setRows(fetched);
       setMapping(guessColumnMap(fetched[0] ?? [], fetched.slice(1)));
     } catch (e) {
@@ -435,6 +466,19 @@ export function ImportDialog({
                     </Button>
                   </div>
                 </Field>
+                {savedSheetUrl && (
+                  <p className="text-xs text-muted-foreground">
+                    {t("Previously used link:")}{" "}
+                    <a
+                      href={savedSheetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="break-all font-medium text-primary hover:underline"
+                    >
+                      {savedSheetUrl}
+                    </a>
+                  </p>
+                )}
                 {fileName && <p className="text-xs text-muted-foreground">{fileName}</p>}
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 {rows.length > 0 && !result && (

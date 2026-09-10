@@ -54,6 +54,39 @@ sentences are generated in the **target language** of the dictionary.
 Locally, `npm run dev` stubs the endpoint with deterministic sample words so the
 UI can be developed and tested without a key.
 
+## Dictionary store
+
+The **Store** button on the Dictionaries tab lets users browse prebuilt
+dictionaries published in [`store/dictionaries.txt`](./store/dictionaries.txt).
+The app fetches that file from GitHub at runtime, so adding a line publishes a
+new entry — no app release needed.
+
+Each line has exactly six comma-separated fields:
+
+```
+"name of dictionary", language 1, language 2, link, link type, author
+```
+
+- **name** — the dictionary title. Wrap it in double quotes when it contains a
+  comma (`"German basics, A1"`); quotes are optional otherwise. Inside a quoted
+  name, `""` means a literal `"` character.
+- **language 1 / language 2** — ISO 639-1 codes, case-insensitive (`EN`, `bg`,
+  …). Supported codes: `en bg de es fr it pt ja zh ru nl pl tr sv ar`.
+  They must be valid codes and different from each other.
+- **link** — a public Google Sheets share link (type `sheet`, shared as
+  “Anyone with the link can view”) or a direct TSV file link (type `tsv`).
+- **link type** — exactly `sheet` or `tsv`.
+- **author** — who published the list.
+
+Lines starting with `#` and empty lines are ignored; lines with the wrong
+field count, unknown language codes, or an unknown link type are skipped.
+
+Example:
+
+```
+"German basics, A1", DE, BG, https://docs.google.com/spreadsheets/d/REPLACE_WITH_ID/edit, sheet, Jane Doe
+```
+
 ## Security
 
 See [SECURITY.md](./SECURITY.md). In short: no account, data stays in your
