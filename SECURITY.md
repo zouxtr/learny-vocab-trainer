@@ -14,11 +14,9 @@
 - No secrets are committed to this repository. Real values live only in
   developer-local `.env.local` files (gitignored) or in Vercel environment
   variables.
-- The only feature that calls out to a third-party API is **AI word
-  generation**, which runs through the `api/generate-words.ts` Vercel
-  serverless function. The OpenRouter API key is read server-side from Vercel
-  environment variables (`OPENROUTER_API_KEY`) and is never sent to the
-  browser.
+- The only third-party integration is **optional cloud sync** to your own
+  Dropbox (see above). Google Sheets / TSV imports are fetched directly from
+  the browser to the public source — nothing passes through our servers.
 - The Dropbox client key is a **public** PKCE client key by design (OAuth
   public clients are not secrets).
 

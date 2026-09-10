@@ -6,7 +6,6 @@ import {
   GraduationCap,
   Languages,
   Plus,
-  Sparkles,
   Upload,
   WifiOff,
 } from "lucide-react";
@@ -48,14 +47,6 @@ export const FEATURES: Feature[] = [
       "Add words in bulk from a CSV or XLSX file, a public Google Sheets link, or a TSV link — and export any list to CSV.",
     howToUse:
       'Open "Import words", pick a file, Google Sheets, or TSV link, then review the columns before importing.',
-  },
-  {
-    icon: Sparkles,
-    title: "AI word generation",
-    description:
-      "Describe the words you need and the AI drafts a list with translations and example sentences; you review, edit, and deselect rows before anything is saved.",
-    howToUse:
-      'In "Import words", open "Generate with AI", describe the topic, then review and import the rows you want.',
   },
   {
     icon: GraduationCap,
