@@ -15,5 +15,5 @@
 #
 # Example:
 # "German basics, A1", DE, BG, https://docs.google.com/spreadsheets/d/REPLACE_WITH_ID/edit, sheet, Jane Doe
-8 klas, DE, BG, https://docs.google.com/spreadsheets/d/1-0uRxh1izC-gMeyCMMkdruRx2djThRb-dCdubksDX4M/edit?usp=sharing, sheet, K
+8 klas, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQh72pUD6yxySAUU5Qnz8SarKaz5bIeTpalpnoXG5LL6VvySb6Z8p2iMXLO-vlzucohTwKWRVaEDd2m/pub?output=tsv, tsv, K
 Rektionen, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vSwm1MgzMMngxzZAOt8knas33Fis0IkmJi0fS-ZxBQdz3DXPf43uohAMM3uO9l4i-yFC3MX5jTqrPO4/pub?output=tsv, tsv, K
