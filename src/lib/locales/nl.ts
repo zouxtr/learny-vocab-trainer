@@ -281,5 +281,13 @@ registerDictionary("nl", {
   "Update now": "Nu bijwerken",
   "Later": "Later",
   "You have unsaved import progress. Update anyway?": "Je hebt niet-opgeslagen importvoortgang. Toch bijwerken?",
-  "Update anyway": "Toch bijwerken"
+  "Update anyway": "Toch bijwerken",
+  "Install Learny! as an app": "Learny! als app installeren",
+  "Add it to your home screen for fullscreen studying and offline access.": "Voeg het toe aan je startscherm voor studeren op volledig scherm en offline toegang.",
+  "Dismiss": "Sluiten",
+  "Install app": "App installeren",
+  "Android:": "Android:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Tik op het browsermenu (⋮) en dan op «Toevoegen aan startscherm» of «App installeren».",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "Tik op de Deel-knop en dan op «Zet op beginscherm»."
 });

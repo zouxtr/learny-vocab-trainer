@@ -279,5 +279,13 @@ registerDictionary("es", {
   "Update now": "Actualizar ahora",
   "Later": "Más tarde",
   "You have unsaved import progress. Update anyway?": "Tienes progreso de importación sin guardar. ¿Actualizar de todos modos?",
-  "Update anyway": "Actualizar de todos modos"
+  "Update anyway": "Actualizar de todos modos",
+  "Install Learny! as an app": "Instala Learny! como una app",
+  "Add it to your home screen for fullscreen studying and offline access.": "Añádela a tu pantalla de inicio para estudiar a pantalla completa y sin conexión.",
+  "Dismiss": "Descartar",
+  "Install app": "Instalar app",
+  "Android:": "Android:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Toca el menú del navegador (⋮) y luego «Añadir a pantalla de inicio» o «Instalar app».",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "Toca el botón Compartir y luego «Añadir a pantalla de inicio»."
 });

@@ -278,4 +278,12 @@ registerDictionary("ar", {
   "Later": "لاحقًا",
   "You have unsaved import progress. Update anyway?": "لديك تقدم استيراد غير محفوظ. هل تريد التحديث على أي حال؟",
   "Update anyway": "تحديث على أي حال",
+  "Install Learny! as an app": "ثبّت Learny! كتطبيق",
+  "Add it to your home screen for fullscreen studying and offline access.": "أضفه إلى شاشتك الرئيسية للدراسة بملء الشاشة والوصول دون اتصال.",
+  "Dismiss": "تجاهل",
+  "Install app": "تثبيت التطبيق",
+  "Android:": "أندرويد:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "انقر قائمة المتصفح (⋮)، ثم “إضافة إلى الشاشة الرئيسية” أو “تثبيت التطبيق”.",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "انقر زر المشاركة، ثم “إضافة إلى الشاشة الرئيسية”.",
 });

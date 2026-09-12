@@ -281,5 +281,13 @@ registerDictionary("bg", {
   "Update now": "Актуализирай сега",
   "Later": "По-късно",
   "You have unsaved import progress. Update anyway?": "Имате незапазен напредък при импортиране. Да се актуализира ли въпреки това?",
-  "Update anyway": "Актуализирай въпреки това"
+  "Update anyway": "Актуализирай въпреки това",
+  "Install Learny! as an app": "Инсталирайте Learny! като приложение",
+  "Add it to your home screen for fullscreen studying and offline access.": "Добавете го към началния си екран за учене на цял екран и офлайн достъп.",
+  "Dismiss": "Отхвърляне",
+  "Install app": "Инсталиране на приложение",
+  "Android:": "Android:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Докоснете менюто на браузъра (⋮), след това „Add to Home screen“ или „Install app“.",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "Докоснете бутона Споделяне, след това „Add to Home Screen“."
 });

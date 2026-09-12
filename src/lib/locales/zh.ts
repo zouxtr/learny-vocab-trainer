@@ -278,4 +278,12 @@ registerDictionary("zh", {
   "Later": "稍后",
   "You have unsaved import progress. Update anyway?": "您有未保存的导入进度。仍要更新吗？",
   "Update anyway": "仍要更新",
+  "Install Learny! as an app": "将 Learny! 安装为应用",
+  "Add it to your home screen for fullscreen studying and offline access.": "将其添加到主屏幕，即可以全屏学习并离线使用。",
+  "Dismiss": "关闭",
+  "Install app": "安装应用",
+  "Android:": "安卓：",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "点击浏览器菜单 (⋮)，然后选择“添加到主屏幕”或“安装应用”。",
+  "iPhone / iPad:": "iPhone / iPad：",
+  "Tap the Share button, then “Add to Home Screen”.": "点击“分享”按钮，然后选择“添加到主屏幕”。",
 });

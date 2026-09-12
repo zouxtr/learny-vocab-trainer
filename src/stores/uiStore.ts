@@ -8,10 +8,12 @@ interface UiState {
   locale: string;
   sidebarCollapsed: boolean;
   onboardingSeen: boolean;
+  installPromptDismissed: boolean;
   setTheme: (theme: Theme) => void;
   setLocale: (locale: string) => void;
   toggleSidebar: () => void;
   dismissOnboarding: () => void;
+  dismissInstallPrompt: () => void;
 }
 
 function resolveTheme(theme: Theme): "light" | "dark" {
@@ -58,10 +60,12 @@ export const useUiStore = create<UiState>()(
       locale: "en",
       sidebarCollapsed: false,
       onboardingSeen: false,
+      installPromptDismissed: false,
       setTheme: (theme) => set({ theme }),
       setLocale: (locale) => set({ locale }),
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
       dismissOnboarding: () => set({ onboardingSeen: true }),
+      dismissInstallPrompt: () => set({ installPromptDismissed: true }),
     }),
     { name: "learny-ui" },
   ),

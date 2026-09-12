@@ -4,6 +4,7 @@ import { BookOpen, Plus } from "lucide-react";
 import { DictionaryCard } from "@/components/dictionary/DictionaryCard";
 import { DictionaryFormDialog } from "@/components/dictionary/DictionaryFormDialog";
 import { OnboardingPanel } from "@/components/onboarding/OnboardingPanel";
+import { InstallPrompt } from "@/components/system/InstallPrompt";
 import { Button } from "@/components/ui/button";
 import { useUiStore } from "@/stores/uiStore";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
@@ -47,6 +48,8 @@ export function HomePage() {
           <Plus className="h-4 w-4" /> {t("New dictionary")}
         </Button>
       </header>
+
+      <InstallPrompt />
 
       <section className="max-w-2xl rounded-xl border border-border bg-card p-5 shadow-sm">
         <p className="flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">

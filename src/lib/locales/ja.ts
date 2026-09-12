@@ -277,5 +277,13 @@ registerDictionary("ja", {
   "Update now": "今すぐ更新",
   "Later": "後で",
   "You have unsaved import progress. Update anyway?": "保存されていないインポートの進行状況があります。それでも更新しますか？",
-  "Update anyway": "それでも更新"
+  "Update anyway": "それでも更新",
+  "Install Learny! as an app": "Learny! をアプリとしてインストール",
+  "Add it to your home screen for fullscreen studying and offline access.": "ホーム画面に追加して、全画面での学習とオフラインアクセスを利用できます。",
+  "Dismiss": "閉じる",
+  "Install app": "アプリをインストール",
+  "Android:": "Android:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "ブラウザのメニュー (⋮) をタップし、「ホーム画面に追加」または「アプリをインストール」を選びます。",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "共有ボタンをタップし、「ホーム画面に追加」を選びます."
 });

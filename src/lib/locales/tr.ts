@@ -281,4 +281,12 @@ registerDictionary("tr", {
   "Later": "Sonra",
   "You have unsaved import progress. Update anyway?": "Kaydedilmemiş içe aktarma ilerlemeniz var. Yine de güncellensin mi?",
   "Update anyway": "Yine de güncelle",
+  "Install Learny! as an app": "Learny!'i uygulama olarak yükle",
+  "Add it to your home screen for fullscreen studying and offline access.": "Tam ekran çalışmak ve çevrimdışı erişim için ana ekranına ekle.",
+  "Dismiss": "Kapat",
+  "Install app": "Uygulamayı yükle",
+  "Android:": "Android:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Tarayıcı menüsüne (⋮) dokun, ardından “Ana ekrana ekle” veya “Uygulamayı yükle”yi seç.",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "Paylaş düğmesine dokun, ardından “Ana Ekrana Ekle”yi seç.",
 });

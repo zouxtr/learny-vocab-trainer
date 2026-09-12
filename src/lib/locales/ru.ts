@@ -281,4 +281,12 @@ registerDictionary("ru", {
   "Later": "Позже",
   "You have unsaved import progress. Update anyway?": "У вас есть несохранённый прогресс импорта. Всё равно обновить?",
   "Update anyway": "Обновить всё равно",
+  "Install Learny! as an app": "Установите Learny! как приложение",
+  "Add it to your home screen for fullscreen studying and offline access.": "Добавьте его на главный экран, чтобы заниматься в полноэкранном режиме и офлайн.",
+  "Dismiss": "Скрыть",
+  "Install app": "Установить приложение",
+  "Android:": "Android:",
+  "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Нажмите меню браузера (⋮), затем «Добавить на главный экран» или «Установить приложение».",
+  "iPhone / iPad:": "iPhone / iPad:",
+  "Tap the Share button, then “Add to Home Screen”.": "Нажмите кнопку «Поделиться», затем «На экран „Домой“».",
 });
