@@ -105,7 +105,7 @@ export function UpdatePrompt() {
     <div
       role="alert"
       className={cn(
-        "fixed inset-x-0 bottom-0 z-[60] px-4 pb-4",
+        "fixed inset-x-0 bottom-0 z-[60] px-4 pb-[max(1rem,env(safe-area-inset-bottom))]",
         "sm:left-auto sm:right-6 sm:w-[26rem] sm:px-0 sm:pb-6",
       )}
     >
