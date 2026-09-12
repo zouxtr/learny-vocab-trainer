@@ -183,6 +183,34 @@ function SetupScreen() {
   );
   const max = Math.max(1, pool.length);
 
+  // Free-typing draft for the Count field: lets the user clear and retype
+  // without the store clamping it back to 1 mid-edit. Committed to the
+  // store only when the text is a valid number; otherwise reverts on blur.
+  const [countText, setCountText] = useState<string | null>(null);
+  // Drop a stale draft when the word pool changes (group switch, new pick).
+  useEffect(() => {
+    setCountText(null);
+  }, [pool.length, group]);
+
+  const handleCountChange = (raw: string) => {
+    setCountText(raw);
+    if (/^\d+$/.test(raw.trim())) {
+      const n = Number.parseInt(raw.trim(), 10);
+      if (n >= 1 && n <= max) setCount(n);
+    }
+  };
+
+  const handleCountBlur = () => {
+    const v = (countText ?? "").trim();
+    if (!/^\d+$/.test(v)) {
+      setCountText(null);
+      return;
+    }
+    const n = Number.parseInt(v, 10);
+    if (n < 1 || n > max) setCountText(null);
+    else setCount(n);
+  };
+
   if (!dictionary) return null;
 
   return (
@@ -295,8 +323,9 @@ function SetupScreen() {
                   type="number"
                   min={1}
                   max={max}
-                  value={count || ""}
-                  onChange={(e) => setCount(Number(e.target.value))}
+                  value={countText ?? String(count)}
+                  onChange={(e) => handleCountChange(e.target.value)}
+                  onBlur={handleCountBlur}
                   className="w-24"
                 />
                 <span className="text-sm text-muted-foreground">/ {max}</span>
