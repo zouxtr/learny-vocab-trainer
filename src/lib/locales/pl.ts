@@ -291,4 +291,10 @@ registerDictionary("pl", {
   "Previously used link:": "Poprzednio użyty link:",
   Add: "Dodaj",
   by: "autorstwa",
+  "New version available.": "Dostępna jest nowa wersja.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Nowa wersja Learny! jest gotowa. Zaktualizuj, aby otrzymać najnowsze poprawki.",
+  "Update now": "Zaktualizuj teraz",
+  "Later": "Później",
+  "You have unsaved import progress. Update anyway?": "Masz niezapisany postęp importu. Mimo to zaktualizować?",
+  "Update anyway": "Zaktualizuj mimo to",
 });

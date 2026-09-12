@@ -272,4 +272,10 @@ registerDictionary("ar", {
   "Previously used link:": "الرابط المستخدم سابقًا:",
   Add: "إضافة",
   by: "بواسطة",
+  "New version available.": "يتوفر إصدار جديد.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "إصدار جديد من Learny! جاهز. حدّث للحصول على أحدث الإصلاحات.",
+  "Update now": "حدّث الآن",
+  "Later": "لاحقًا",
+  "You have unsaved import progress. Update anyway?": "لديك تقدم استيراد غير محفوظ. هل تريد التحديث على أي حال؟",
+  "Update anyway": "تحديث على أي حال",
 });

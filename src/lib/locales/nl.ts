@@ -275,5 +275,11 @@ registerDictionary("nl", {
   "Reload": "Opnieuw laden",
   "Previously used link:": "Eerder gebruikte link:",
   "Add": "Toevoegen",
-  "by": "door"
+  "by": "door",
+  "New version available.": "Nieuwe versie beschikbaar.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Een nieuwe versie van Learny! is klaar. Werk bij om de nieuwste fixes te krijgen.",
+  "Update now": "Nu bijwerken",
+  "Later": "Later",
+  "You have unsaved import progress. Update anyway?": "Je hebt niet-opgeslagen importvoortgang. Toch bijwerken?",
+  "Update anyway": "Toch bijwerken"
 });

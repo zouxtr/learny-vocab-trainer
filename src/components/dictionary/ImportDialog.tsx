@@ -23,6 +23,7 @@ import {
 } from "@/services/importer";
 import { parseSheetsLink, fetchSheetRows, fetchTsvUrl } from "@/services/googleSheets";
 import { importWords } from "@/services/dictionaryRepository";
+import { setUnsavedWork } from "@/services/appUpdate";
 import { getLanguage } from "@/lib/languages";
 import { useT } from "@/lib/i18n";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
@@ -116,6 +117,16 @@ export function ImportDialog({
     if (!next) reset();
     onOpenChange(next);
   };
+
+  // Report unsaved import progress so the update banner warns instead of
+  // discarding it. Cleared on close/unmount.
+  useEffect(() => {
+    setUnsavedWork(
+      "import",
+      open && !result && (rows.length > 0 || sheetLink.trim() !== "" || fileName !== ""),
+    );
+    return () => setUnsavedWork("import", false);
+  }, [open, result, rows.length, sheetLink, fileName]);
 
   // Prefill the link field with the previously used import link (if any) so
   // the user can see and reuse it. Runs on open; closing resets the form.

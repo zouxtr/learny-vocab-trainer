@@ -272,4 +272,10 @@ registerDictionary("zh", {
   "Previously used link:": "之前使用的链接：",
   Add: "添加",
   by: "作者：",
+  "New version available.": "有新版本可用。",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Learny! 的新版本已就绪。更新以获取最新修复。",
+  "Update now": "立即更新",
+  "Later": "稍后",
+  "You have unsaved import progress. Update anyway?": "您有未保存的导入进度。仍要更新吗？",
+  "Update anyway": "仍要更新",
 });

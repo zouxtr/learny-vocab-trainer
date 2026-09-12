@@ -271,5 +271,11 @@ registerDictionary("ja", {
   "Reload": "再読み込み",
   "Previously used link:": "以前使ったリンク:",
   "Add": "追加",
-  "by": "著"
+  "by": "著",
+  "New version available.": "新しいバージョンが利用可能です。",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Learny! の新しいバージョンの準備ができました。最新の修正を取得するには更新してください。",
+  "Update now": "今すぐ更新",
+  "Later": "後で",
+  "You have unsaved import progress. Update anyway?": "保存されていないインポートの進行状況があります。それでも更新しますか？",
+  "Update anyway": "それでも更新"
 });

@@ -275,5 +275,11 @@ registerDictionary("bg", {
   "Reload": "Презареждане",
   "Previously used link:": "Преди това използвана връзка:",
   "Add": "Добавяне",
-  "by": "от"
+  "by": "от",
+  "New version available.": "Налична е нова версия.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Нова версия на Learny! е готова. Актуализирайте, за да получите най-новите поправки.",
+  "Update now": "Актуализирай сега",
+  "Later": "По-късно",
+  "You have unsaved import progress. Update anyway?": "Имате незапазен напредък при импортиране. Да се актуализира ли въпреки това?",
+  "Update anyway": "Актуализирай въпреки това"
 });

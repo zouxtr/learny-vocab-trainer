@@ -273,5 +273,11 @@ registerDictionary("it", {
   "Reload": "Ricarica",
   "Previously used link:": "Link usato in precedenza:",
   "Add": "Aggiungi",
-  "by": "di"
+  "by": "di",
+  "New version available.": "Nuova versione disponibile.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Una nuova versione di Learny! è pronta. Aggiorna per ottenere le ultime correzioni.",
+  "Update now": "Aggiorna ora",
+  "Later": "Più tardi",
+  "You have unsaved import progress. Update anyway?": "Hai un progresso di importazione non salvato. Aggiornare comunque?",
+  "Update anyway": "Aggiorna comunque"
 });

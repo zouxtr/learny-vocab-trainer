@@ -9,6 +9,7 @@ import { DictionaryPage } from "@/pages/DictionaryPage";
 import { StudyPage } from "@/pages/StudyPage";
 import { SettingsPage } from "@/pages/SettingsPage";
 import { HowItWorksPage } from "@/pages/HowItWorksPage";
+import { UpdatePrompt } from "@/components/system/UpdatePrompt";
 import { applyTheme, useUiStore } from "@/stores/uiStore";
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
           <MobileNav />
         </div>
       </div>
+      <UpdatePrompt />
     </HashRouter>
   );
 }

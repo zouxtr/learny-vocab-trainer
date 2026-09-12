@@ -289,4 +289,10 @@ registerDictionary("sv", {
   "Previously used link:": "Tidigare använd länk:",
   Add: "Lägg till",
   by: "av",
+  "New version available.": "Ny version tillgänglig.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "En ny version av Learny! är klar. Uppdatera för att få de senaste korrigeringarna.",
+  "Update now": "Uppdatera nu",
+  "Later": "Senare",
+  "You have unsaved import progress. Update anyway?": "Du har osparad importförlopp. Uppdatera ändå?",
+  "Update anyway": "Uppdatera ändå",
 });

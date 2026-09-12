@@ -275,4 +275,10 @@ registerDictionary("tr", {
   "Previously used link:": "Daha önce kullanılan bağlantı:",
   Add: "Ekle",
   by: "yazan:",
+  "New version available.": "Yeni sürüm mevcut.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Learny!'in yeni sürümü hazır. En son düzeltmeleri almak için güncelleyin.",
+  "Update now": "Şimdi güncelle",
+  "Later": "Sonra",
+  "You have unsaved import progress. Update anyway?": "Kaydedilmemiş içe aktarma ilerlemeniz var. Yine de güncellensin mi?",
+  "Update anyway": "Yine de güncelle",
 });

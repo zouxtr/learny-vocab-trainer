@@ -275,4 +275,10 @@ registerDictionary("ru", {
   "Previously used link:": "Ранее использованная ссылка:",
   Add: "Добавить",
   by: "автор:",
+  "New version available.": "Доступна новая версия.",
+  "A new version of Learny! is ready. Update to get the latest fixes.": "Новая версия Learny! готова. Обновите приложение, чтобы получить последние исправления.",
+  "Update now": "Обновить сейчас",
+  "Later": "Позже",
+  "You have unsaved import progress. Update anyway?": "У вас есть несохранённый прогресс импорта. Всё равно обновить?",
+  "Update anyway": "Обновить всё равно",
 });
