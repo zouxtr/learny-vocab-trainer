@@ -100,8 +100,12 @@ async function parseXlsx(file: File): Promise<SheetRow[]> {
  * back to the positional A/B convention when headers are not meaningful.
  * Each required field is mapped at most once; extra matches become "skip".
  */
-export function guessColumnMap(headers: string[], _data: SheetRow[]): FieldTarget[] {
-  const byHeader = headers.map((h) => matchHeader(h));
+export function guessColumnMap(
+  headers: string[],
+  _data: SheetRow[],
+  langs?: { sourceLanguage?: string; targetLanguage?: string },
+): FieldTarget[] {
+  const byHeader = headers.map((h) => matchHeader(h, langs));
   const hasSource = byHeader.includes("source");
   const hasTarget = byHeader.includes("target");
   const useHeaders = hasSource && hasTarget;
@@ -126,9 +130,20 @@ export function guessColumnMap(headers: string[], _data: SheetRow[]): FieldTarge
 }
 
 /** Map a single header cell to a field, or "skip" when it doesn't match. */
-function matchHeader(header: string): FieldTarget {
+function matchHeader(
+  header: string,
+  langs?: { sourceLanguage?: string; targetLanguage?: string },
+): FieldTarget {
   const text = header.trim().toLowerCase();
   if (!text) return "skip";
+  // Language-code headers win over name patterns: a cell like "de" or "DE"
+  // (optionally with a region, "de-DE") maps to whichever dictionary side
+  // uses that code.
+  const code = text.split(/[^a-z]+/)[0];
+  const source = langs?.sourceLanguage?.trim().toLowerCase();
+  const target = langs?.targetLanguage?.trim().toLowerCase();
+  if (code && source && code === source) return "source";
+  if (code && target && code === target) return "target";
   for (const { field, re } of HEADER_PATTERNS) {
     if (re.test(text)) return field;
   }

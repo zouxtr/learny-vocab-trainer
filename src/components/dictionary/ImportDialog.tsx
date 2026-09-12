@@ -155,7 +155,7 @@ export function ImportDialog({
     try {
       const parsed = await parseSheet(file);
       setRows(parsed);
-      setMapping(guessColumnMap(parsed[0] ?? [], parsed.slice(1)));
+      setMapping(guessColumnMap(parsed[0] ?? [], parsed.slice(1), { sourceLanguage, targetLanguage }));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to parse the file.");
       setRows([]);
@@ -177,7 +177,7 @@ export function ImportDialog({
     try {
       const fetched = await fetchSheetRows(parsed);
       setRows(fetched);
-      setMapping(guessColumnMap(fetched[0] ?? [], fetched.slice(1)));
+      setMapping(guessColumnMap(fetched[0] ?? [], fetched.slice(1), { sourceLanguage, targetLanguage }));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to fetch the sheet.");
       setRows([]);
@@ -198,7 +198,7 @@ export function ImportDialog({
     try {
       const fetched = await fetchTsvUrl(raw);
       setRows(fetched);
-      setMapping(guessColumnMap(fetched[0] ?? [], fetched.slice(1)));
+      setMapping(guessColumnMap(fetched[0] ?? [], fetched.slice(1), { sourceLanguage, targetLanguage }));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to fetch the TSV file.");
       setRows([]);
@@ -211,7 +211,7 @@ export function ImportDialog({
     setHasHeader(next);
     if (rows.length > 0) {
       const first = rows[0];
-      setMapping(guessColumnMap(first ?? [], next ? rows.slice(1) : rows));
+      setMapping(guessColumnMap(first ?? [], next ? rows.slice(1) : rows, { sourceLanguage, targetLanguage }));
     }
   };
 

@@ -201,7 +201,10 @@ export function DictionaryPage() {
       const columns = dictionary.sheetColumns ?? [];
       const map = (columns.length > 0
         ? columns
-        : guessColumnMap(rows[0] ?? [], rows.slice(1))) as FieldTarget[];
+        : guessColumnMap(rows[0] ?? [], rows.slice(1), {
+            sourceLanguage: dictionary.sourceLanguage,
+            targetLanguage: dictionary.targetLanguage,
+          })) as FieldTarget[];
       const normalized = normalizeRows(rows.slice(1), map);
       const sync = refreshFromSheet(dictionary.id, normalized);
       void refresh();

@@ -51,6 +51,18 @@ describe("import column mapping", () => {
     const map = guessColumnMap(headers, [["a", "b", "c"]]);
     expect(map).toEqual(["source", "skip", "target"]);
   });
+
+  it("matches language-code headers to the dictionary sides", () => {
+    const langs = { sourceLanguage: "de", targetLanguage: "bg" };
+    expect(guessColumnMap(["DE", "BG"], [["a", "b"]], langs)).toEqual(["source", "target"]);
+    expect(guessColumnMap(["bg", "de"], [["a", "b"]], langs)).toEqual(["target", "source"]);
+    expect(guessColumnMap(["de-DE", "bg"], [["a", "b"]], langs)).toEqual(["source", "target"]);
+  });
+
+  it("ignores codes that match neither dictionary side", () => {
+    const langs = { sourceLanguage: "de", targetLanguage: "bg" };
+    expect(guessColumnMap(["FR", "IT"], [["a", "b"]], langs)).toEqual(["source", "target"]);
+  });
 });
 
 describe("normalizeRows", () => {
