@@ -64,7 +64,7 @@ export function DictionaryListPage() {
     <main className="scrollbar-thin flex flex-1 flex-col gap-6 overflow-y-auto p-4 sm:p-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">{t("Dictionaries")} <span className="rounded bg-primary px-1.5 py-0.5 align-middle text-xs text-primary-foreground">TEST-BANNER-OK</span></h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{t("Dictionaries")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {t("Search, favorite and organize your vocabulary lists.")}
           </p>
