@@ -79,7 +79,6 @@ registerDictionary("de", {
   "The word in {name}": "Das Wort auf {name}",
   "The translation in {name}": "Die Übersetzung auf {name}",
   Grammar: "Grammatik",
-  "e.g. feminine noun": "z. B. weibliches Nomen",
   Group: "Gruppe",
   "e.g. Food": "z. B. Essen",
   Example: "Beispiel",
@@ -164,8 +163,6 @@ registerDictionary("de", {
   Flashcards: "Karteikarten",
   "Multiple choice": "Mehrfachauswahl",
   Typing: "Tippen",
-  "Source → Target": "Quelle → Ziel",
-  "Target → Source": "Ziel → Quelle",
   "All words": "Alle Wörter",
   "Every word in the dictionary": "Jedes Wort im Wörterbuch",
   Random: "Zufällig",
@@ -322,5 +319,8 @@ registerDictionary("de", {
   "Android:": "Android:",
   "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Tippe auf das Browser-Menü (⋮), dann auf „Zum Startbildschirm hinzufügen“ oder „App installieren“.",
   "iPhone / iPad:": "iPhone / iPad:",
-  "Tap the Share button, then “Add to Home Screen”.": "Tippe auf die Teilen-Schaltfläche, dann auf „Zum Home-Bildschirm hinzufügen“."
+  "Tap the Share button, then “Add to Home Screen”.": "Tippe auf die Teilen-Schaltfläche, dann auf „Zum Home-Bildschirm hinzufügen“.",
+  "Separate multiple with / — e.g. feminine noun / plural": "Mehrere mit / trennen — z. B. feminine noun / plural",
+  "Practice": "Übung",
+  "Only {n} of {m} words have grammar": "Nur {n} von {m} Wörtern haben Grammatik",
 });

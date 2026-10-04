@@ -1,13 +1,14 @@
 import { create } from "zustand";
 import { startSession, finishSession, recordReview, recordFlashcardView, listStudyWords, attachReviewCounts } from "@/services/studyRepository";
 import {
+  acceptGrammarAnswer,
   acceptTypedAnswer,
-  answersMatch,
   questionFor,
   selectStudyWords,
   shuffle,
   type Direction,
   type Grade,
+  type McFocus,
   type SelectionMode,
   type StudyConfig,
   type StudyMode,
@@ -53,6 +54,8 @@ export interface StudyStateFields {
 
   mode: StudyMode;
   direction: Direction;
+  /** What multiple-choice sessions drill (translations or grammar notes). */
+  mcFocus: McFocus;
   selection: SelectionMode;
   sort: StudySort;
   count: number;
@@ -80,6 +83,7 @@ export interface StudyStateFields {
   back: () => void;
   setMode: (mode: StudyMode) => void;
   setDirection: (direction: Direction) => void;
+  setMcFocus: (mcFocus: McFocus) => void;
   setSelection: (selection: SelectionMode) => void;
   setSort: (sort: StudySort) => void;
   setCount: (count: number) => void;
@@ -113,6 +117,7 @@ function configOf(s: StudyState): StudyConfig {
   return {
     mode: s.mode,
     direction: s.direction,
+    mcFocus: s.mcFocus,
     selection: s.selection,
     sort: s.sort,
     count: s.count,
@@ -123,8 +128,10 @@ function configOf(s: StudyState): StudyConfig {
 
 /** Answer text expected for the current card under the current mode/direction. */
 function answerTextFor(state: StudyState, card: StudyWord, showGrammar = true): string {
-  const q = questionFor(card, state.mode, state.direction);
+  const q = questionFor(card, state.mode, state.direction, state.mcFocus);
   if (state.mode === "grammar") return q.answerText;
+  // Grammar-focused multiple choice: the full cell lists every valid option.
+  if (state.mode === "multipleChoice" && state.mcFocus === "grammar") return card.grammar;
   return showGrammar ? q.displayBack : q.answerBase;
 }
 
@@ -160,6 +167,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
   available: [],
   mode: "flashcard",
   direction: "sourceToTarget",
+  mcFocus: "translation",
   selection: "all",
   sort: "position",
   count: 0,
@@ -187,6 +195,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
       available,
       mode: "flashcard",
       direction: "sourceToTarget",
+      mcFocus: "translation",
       selection: "all",
       sort: "position",
       count: available.length,
@@ -213,6 +222,7 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
 
   setMode: (mode) => set({ mode }),
   setDirection: (direction) => set({ direction }),
+  setMcFocus: (mcFocus) => set({ mcFocus }),
   setSelection: (selection) => {
     if (selection !== "manual") {
       set({ selection });
@@ -317,12 +327,16 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
     if (s.phase !== "review" || !s.sessionId || s.queue.length === 0 || s.mode === "flashcard") return;
 
     const item = s.queue[0];
-    const q = questionFor(item.card, s.mode, s.direction);
+    const q = questionFor(item.card, s.mode, s.direction, s.mcFocus);
     // Typing accepts the plain word or the combined "word, grammar" form.
+    // Grammar answers (grammar mode, or grammar-focused multiple choice)
+    // accept the full cell or any single "/" option.
     const correct =
       s.mode === "grammar"
-        ? answersMatch(answer, q.answerBase)
-        : acceptTypedAnswer(answer, q.answerBase, item.card.grammar);
+        ? acceptGrammarAnswer(answer, q.answerBase)
+        : s.mode === "multipleChoice" && s.mcFocus === "grammar"
+          ? acceptGrammarAnswer(answer, item.card.grammar)
+          : acceptTypedAnswer(answer, q.answerBase, item.card.grammar);
     answerCard(set, s, correct ? 3 : 1, correct, false);
   },
 

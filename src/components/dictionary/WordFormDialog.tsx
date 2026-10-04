@@ -119,7 +119,7 @@ export function WordFormDialog({
                 onChange={(e) => setTarget(e.target.value)}
               />
             </Field>
-            <Field label={t("Grammar")} htmlFor="word-grammar" optional hint={t("e.g. feminine noun")}>
+            <Field label={t("Grammar")} htmlFor="word-grammar" optional hint={t("Separate multiple with / — e.g. feminine noun / plural")}>
               <Input
                 id="word-grammar"
                 value={grammar}

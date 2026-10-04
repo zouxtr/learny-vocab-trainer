@@ -60,7 +60,6 @@ registerDictionary("es", {
   "The word in {name}": "La palabra en {name}",
   "The translation in {name}": "La traducción en {name}",
   Grammar: "Gramática",
-  "e.g. feminine noun": "p. ej. sustantivo femenino",
   Group: "Grupo",
   "e.g. Food": "p. ej. Comida",
   Example: "Ejemplo",
@@ -138,8 +137,6 @@ registerDictionary("es", {
   Flashcards: "Tarjetas de memoria",
   "Multiple choice": "Elección múltiple",
   Typing: "Escritura",
-  "Source → Target": "Origen → Destino",
-  "Target → Source": "Destino → Origen",
   "All words": "Todas las palabras",
   "Every word in the dictionary": "Cada palabra del diccionario",
   Random: "Aleatorio",
@@ -287,5 +284,8 @@ registerDictionary("es", {
   "Android:": "Android:",
   "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Toca el menú del navegador (⋮) y luego «Añadir a pantalla de inicio» o «Instalar app».",
   "iPhone / iPad:": "iPhone / iPad:",
-  "Tap the Share button, then “Add to Home Screen”.": "Toca el botón Compartir y luego «Añadir a pantalla de inicio»."
+  "Tap the Share button, then “Add to Home Screen”.": "Toca el botón Compartir y luego «Añadir a pantalla de inicio».",
+  "Separate multiple with / — e.g. feminine noun / plural": "Separa varios con / — p. ej. feminine noun / plural",
+  "Practice": "Práctica",
+  "Only {n} of {m} words have grammar": "Solo {n} de {m} palabras tienen gramática",
 });

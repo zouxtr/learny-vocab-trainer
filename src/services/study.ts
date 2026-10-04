@@ -141,6 +141,8 @@ export interface StudyWord {
 
 export type StudyMode = "flashcard" | "multipleChoice" | "grammar" | "typing";
 export type Direction = "sourceToTarget" | "targetToSource";
+/** What a multiple-choice session drills: translations or grammar notes. */
+export type McFocus = "translation" | "grammar";
 export type SelectionMode = "all" | "random" | "manual";
 export type StudySort = "position" | "dateAdded" | "mostMissed" | "leastPractised" | "leastSeen";
 export type QuestionField = "source" | "target";
@@ -154,6 +156,7 @@ export interface StudyConfig {
   sort: StudySort;
   manualIds: string[];
   shuffle: boolean;
+  mcFocus: McFocus;
 }
 
 /** Sort a word set into a stable presentation order. */
@@ -203,16 +206,23 @@ export function selectStudyWords(
 ): StudyWord[] {
   const sorted = sortStudyWords(rows, config.sort);
 
+  // Grammar-focused multiple choice can only quiz words that actually carry
+  // grammar notes — drop grammar-less words before selection/slicing.
+  const eligible =
+    config.mode === "multipleChoice" && config.mcFocus === "grammar"
+      ? sorted.filter((w) => w.grammar.trim().length > 0)
+      : sorted;
+
   if (config.selection === "manual") {
     const ids = new Set(config.manualIds);
-    return sorted
+    return eligible
       .filter((w) => ids.has(w.wordId))
       .slice(0, Math.max(0, config.count));
   }
   if (config.selection === "random") {
-    return shuffle(sorted, rng).slice(0, Math.max(0, config.count));
+    return shuffle(eligible, rng).slice(0, Math.max(0, config.count));
   }
-  return sorted.slice(0, Math.max(0, config.count));
+  return eligible.slice(0, Math.max(0, config.count));
 }
 
 /** Text of a normalized answer for normalization/equality checks. */
@@ -237,12 +247,45 @@ export function formatWord(word: string, grammar = ""): string {
 /** Whether a typed answer matches, optionally accepting an appended grammar. */
 export function acceptTypedAnswer(typed: string, base: string, grammar = ""): boolean {
   if (answersMatch(typed, base)) return true;
-  if (!grammar.trim()) return false;
-  return answersMatch(typed, formatWord(base, grammar));
+  const trimmed = grammar.trim();
+  if (!trimmed) return false;
+  if (answersMatch(typed, formatWord(base, trimmed))) return true;
+  // A multi-option cell ("xxx / yyy") also accepts each option on its own.
+  return splitGrammarOptions(trimmed).some((option) => answersMatch(typed, formatWord(base, option)));
+}
+
+/**
+ * Split a grammar cell into its individual options. Cells may carry several
+ * grammars separated with "/" ("xxx / yyy / zzz"); each part counts as its
+ * own grammar. Trims parts, drops empties, dedupes.
+ */
+export function splitGrammarOptions(grammar: string): string[] {
+  const seen = new Set<string>();
+  const options: string[] = [];
+  for (const part of grammar.split("/")) {
+    const option = part.trim();
+    if (!option) continue;
+    const key = normalizeAnswer(option);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    options.push(option);
+  }
+  return options;
+}
+
+/** Whether a typed grammar answer matches the full cell or any one option. */
+export function acceptGrammarAnswer(typed: string, grammarCell: string): boolean {
+  if (answersMatch(typed, grammarCell)) return true;
+  return splitGrammarOptions(grammarCell).some((option) => answersMatch(typed, option));
 }
 
 /** Build the front/back display for a word under a mode + direction. */
-export function questionFor(word: StudyWord, mode: StudyMode, direction: Direction): StudyQuestion {
+export function questionFor(
+  word: StudyWord,
+  mode: StudyMode,
+  direction: Direction,
+  mcFocus: McFocus = "translation",
+): StudyQuestion {
   const isTargetToSource = direction === "targetToSource";
   const frontField: QuestionField = isTargetToSource ? "target" : "source";
   const backField: QuestionField = isTargetToSource ? "source" : "target";
@@ -250,10 +293,13 @@ export function questionFor(word: StudyWord, mode: StudyMode, direction: Directi
   const back = isTargetToSource ? word.source : word.target;
 
   const isGrammar = mode === "grammar";
+  const isGrammarChoice = mode === "multipleChoice" && mcFocus === "grammar";
+  const grammarTested = isGrammar || isGrammarChoice;
 
-  // Show the grammar note next to whichever side is the source word, except in
-  // grammar mode where the grammar note itself is the answer being tested.
-  const displayFront = isGrammar ? front : frontField === "source" ? formatWord(word.source, word.grammar) : front;
+  // Show the grammar note next to whichever side is the source word, except
+  // when grammar itself is the answer being tested (grammar mode or
+  // grammar-focused multiple choice) — then the front stays bare.
+  const displayFront = grammarTested ? front : frontField === "source" ? formatWord(word.source, word.grammar) : front;
   const displayBack = backField === "source" ? formatWord(word.source, word.grammar) : back;
 
   // A grammar question expects the grammar note itself; otherwise the word.
@@ -325,5 +371,30 @@ export function buildDistractors(
   const candidates = rows
     .map(display)
     .filter((value, idx, arr) => value && value !== ownDisplay && arr.indexOf(value) === idx);
+  return shuffle(candidates, rng).slice(0, 3);
+}
+
+/**
+ * Distractors for grammar-focused multiple choice: the individual grammar
+ * options of the other words, excluding anything that matches one of the
+ * quizzed word's own options. Up to 3 distinct values.
+ */
+export function buildGrammarDistractors(
+  rows: StudyWord[],
+  word: StudyWord,
+  rng: () => number = Math.random,
+): string[] {
+  const own = splitGrammarOptions(word.grammar).map(normalizeAnswer);
+  const candidates: string[] = [];
+  const seen = new Set<string>();
+  for (const row of rows) {
+    if (row.wordId === word.wordId) continue;
+    for (const option of splitGrammarOptions(row.grammar)) {
+      const key = normalizeAnswer(option);
+      if (!key || own.includes(key) || seen.has(key)) continue;
+      seen.add(key);
+      candidates.push(option);
+    }
+  }
   return shuffle(candidates, rng).slice(0, 3);
 }

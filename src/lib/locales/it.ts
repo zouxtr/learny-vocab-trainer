@@ -60,7 +60,6 @@ registerDictionary("it", {
   "The word in {name}": "La parola in {name}",
   "The translation in {name}": "La traduzione in {name}",
   Grammar: "Grammatica",
-  "e.g. feminine noun": "es. sostantivo femminile",
   Group: "Gruppo",
   "e.g. Food": "es. Cibo",
   Example: "Esempio",
@@ -138,8 +137,6 @@ registerDictionary("it", {
   Flashcards: "Carte di memoria",
   "Multiple choice": "Scelta multipla",
   Typing: "Digitazione",
-  "Source → Target": "Sorgente → Destinazione",
-  "Target → Source": "Destinazione → Sorgente",
   "All words": "Tutte le parole",
   "Every word in the dictionary": "Ogni parola del dizionario",
   Random: "Casuale",
@@ -287,5 +284,8 @@ registerDictionary("it", {
   "Android:": "Android:",
   "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Tocca il menu del browser (⋮), poi «Aggiungi a schermata Home» o «Installa app».",
   "iPhone / iPad:": "iPhone / iPad:",
-  "Tap the Share button, then “Add to Home Screen”.": "Tocca il pulsante Condividi, poi «Aggiungi a schermata Home»."
+  "Tap the Share button, then “Add to Home Screen”.": "Tocca il pulsante Condividi, poi «Aggiungi a schermata Home».",
+  "Separate multiple with / — e.g. feminine noun / plural": "Separa i multipli con / — es. feminine noun / plural",
+  "Practice": "Esercizio",
+  "Only {n} of {m} words have grammar": "Solo {n} parole su {m} hanno grammatica",
 });

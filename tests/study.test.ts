@@ -29,9 +29,14 @@ import {
   questionFor,
   formatWord,
   acceptTypedAnswer,
+  acceptGrammarAnswer,
+  splitGrammarOptions,
   answersMatch,
   buildDistractors,
+  buildGrammarDistractors,
+  selectStudyWords,
   normalizeAnswer,
+  type StudyConfig,
   type StudyWord,
 } from "../src/services/study";
 
@@ -196,6 +201,105 @@ describe("study question helpers", () => {
     const t2s = questionFor(word, "flashcard", "targetToSource");
     // Target→source: the field is source; "gehen" has no grammar, so it stays plain.
     expect(buildDistractors(rows, t2s, "flashcard")).toEqual(["gehen"]);
+  });
+});
+
+describe("multi-option grammar cells", () => {
+  const multi: StudyWord = {
+    wordId: "w1",
+    source: "Haus",
+    target: "house",
+    grammar: "neuter / plural Häuser",
+    position: 0,
+    createdAt: new Date("2026-01-01T00:00:00Z"),
+    lapses: 0,
+  };
+  const other: StudyWord = {
+    wordId: "w2",
+    source: "Baum",
+    target: "tree",
+    grammar: "masculine / plural Bäume",
+    position: 1,
+    createdAt: new Date("2026-01-01T00:00:00Z"),
+    lapses: 0,
+  };
+  const dup: StudyWord = {
+    wordId: "w3",
+    source: "Auto",
+    target: "car",
+    grammar: "NEUTER",
+    position: 2,
+    createdAt: new Date("2026-01-01T00:00:00Z"),
+    lapses: 0,
+  };
+  const bare: StudyWord = {
+    wordId: "w4",
+    source: "gehen",
+    target: "to go",
+    grammar: "",
+    position: 3,
+    createdAt: new Date("2026-01-01T00:00:00Z"),
+    lapses: 0,
+  };
+
+  it("splits cells on /, trims, drops empties and dedupes", () => {
+    expect(splitGrammarOptions("xxx / yyy / zzz")).toEqual(["xxx", "yyy", "zzz"]);
+    expect(splitGrammarOptions("  neuter /plural Häuser ")).toEqual(["neuter", "plural Häuser"]);
+    expect(splitGrammarOptions("a / / b")).toEqual(["a", "b"]);
+    expect(splitGrammarOptions("neuter / NEUTER")).toEqual(["neuter"]);
+    expect(splitGrammarOptions("strong verb")).toEqual(["strong verb"]);
+    expect(splitGrammarOptions("")).toEqual([]);
+  });
+
+  it("accepts the full cell or any single option as a grammar answer", () => {
+    expect(acceptGrammarAnswer("neuter", multi.grammar)).toBe(true);
+    expect(acceptGrammarAnswer("plural Häuser", multi.grammar)).toBe(true);
+    expect(acceptGrammarAnswer("neuter / plural Häuser", multi.grammar)).toBe(true);
+    expect(acceptGrammarAnswer(" NEUTER ", multi.grammar)).toBe(true);
+    expect(acceptGrammarAnswer("feminine", multi.grammar)).toBe(false);
+    expect(acceptGrammarAnswer("", multi.grammar)).toBe(false);
+  });
+
+  it("accepts each grammar option as a typing suffix", () => {
+    expect(acceptTypedAnswer("Haus, neuter", "Haus", multi.grammar)).toBe(true);
+    expect(acceptTypedAnswer("Haus, plural Häuser", "Haus", multi.grammar)).toBe(true);
+    expect(acceptTypedAnswer("Haus, neuter / plural Häuser", "Haus", multi.grammar)).toBe(true);
+    expect(acceptTypedAnswer("Haus, feminine", "Haus", multi.grammar)).toBe(false);
+  });
+
+  it("builds grammar distractors from other words' options only", () => {
+    const distractors = buildGrammarDistractors([multi, other, dup, bare], multi, () => 0);
+    expect(distractors).toContain("masculine");
+    expect(distractors).toContain("plural Bäume");
+    expect(distractors).not.toContain("neuter");
+    expect(distractors).not.toContain("NEUTER");
+    expect(distractors).not.toContain("plural Häuser");
+    expect(distractors.length).toBeLessThanOrEqual(3);
+  });
+
+  it("hides the grammar on the front in grammar-focused multiple choice", () => {
+    const q = questionFor(multi, "multipleChoice", "sourceToTarget", "grammar");
+    expect(q.displayFront).toBe("Haus");
+    const classic = questionFor(multi, "multipleChoice", "sourceToTarget", "translation");
+    expect(classic.displayFront).toBe("Haus, neuter / plural Häuser");
+  });
+
+  it("only quizzes words with grammar in grammar-focused multiple choice", () => {
+    const base: StudyConfig = {
+      mode: "multipleChoice",
+      direction: "sourceToTarget",
+      selection: "all",
+      count: 10,
+      sort: "position",
+      manualIds: [],
+      shuffle: false,
+      mcFocus: "grammar",
+    };
+    const picked = selectStudyWords([multi, other, dup, bare], base, () => 0);
+    expect(picked.map((w) => w.wordId)).toEqual(["w1", "w2", "w3"]);
+
+    const translation = selectStudyWords([multi, other, dup, bare], { ...base, mcFocus: "translation" }, () => 0);
+    expect(translation).toHaveLength(4);
   });
 });
 

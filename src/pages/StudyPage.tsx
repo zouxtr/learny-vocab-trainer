@@ -18,10 +18,12 @@ import { useStudyStore } from "@/stores/studyStore";
 import type { DictionaryWithCount } from "@/stores/dictionaryStore";
 import {
   buildDistractors,
+  buildGrammarDistractors,
   questionFor,
   shuffle,
-  type Direction,
+  splitGrammarOptions,
   type Grade,
+  type McFocus,
   type SelectionMode,
   type StudyMode,
   type StudySort,
@@ -122,11 +124,6 @@ const MODES: { value: StudyMode; key: string; hint?: string }[] = [
   { value: "typing", key: "Typing" },
 ];
 
-const DIRECTIONS: { value: Direction; key: string; hint?: string }[] = [
-  { value: "sourceToTarget", key: "Source → Target" },
-  { value: "targetToSource", key: "Target → Source" },
-];
-
 const SELECTIONS: { value: SelectionMode; key: string; hint: string }[] = [
   { value: "all", key: "All words", hint: "Every word in the dictionary" },
   { value: "random", key: "Random", hint: "Pick a fixed-size random sample" },
@@ -149,6 +146,7 @@ function SetupScreen() {
 
   const mode = useStudyStore((s) => s.mode);
   const direction = useStudyStore((s) => s.direction);
+  const mcFocus = useStudyStore((s) => s.mcFocus);
   const selection = useStudyStore((s) => s.selection);
   const sort = useStudyStore((s) => s.sort);
   const count = useStudyStore((s) => s.count);
@@ -157,6 +155,7 @@ function SetupScreen() {
 
   const setMode = useStudyStore((s) => s.setMode);
   const setDirection = useStudyStore((s) => s.setDirection);
+  const setMcFocus = useStudyStore((s) => s.setMcFocus);
   const setSelection = useStudyStore((s) => s.setSelection);
   const setSort = useStudyStore((s) => s.setSort);
   const setCount = useStudyStore((s) => s.setCount);
@@ -182,6 +181,9 @@ function SetupScreen() {
     [available, group],
   );
   const max = Math.max(1, pool.length);
+
+  const sourceName = getLanguage(dictionary?.sourceLanguage)?.name ?? t("Word");
+  const targetName = getLanguage(dictionary?.targetLanguage)?.name ?? t("Translation");
 
   // Free-typing draft for the Count field: lets the user clear and retype
   // without the store clamping it back to 1 mid-edit. Committed to the
@@ -239,11 +241,37 @@ function SetupScreen() {
           />
         </Field>
 
+        {mode === "multipleChoice" && (
+          <Field
+            label={t("Practice")}
+            hint={
+              mcFocus === "grammar"
+                ? t("Only {n} of {m} words have grammar", {
+                    n: pool.filter((w) => w.grammar.trim().length > 0).length,
+                    m: pool.length,
+                  })
+                : undefined
+            }
+          >
+            <MenuSelect
+              value={mcFocus}
+              onChange={setMcFocus}
+              options={[
+                { value: "translation", label: t("Translation") },
+                { value: "grammar", label: t("Grammar") },
+              ]}
+            />
+          </Field>
+        )}
+
         <Field label={t("Direction")}>
           <MenuSelect
             value={direction}
             onChange={setDirection}
-            options={DIRECTIONS.map((o) => ({ value: o.value, label: t(o.key) }))}
+            options={[
+              { value: "sourceToTarget", label: `${sourceName} → ${targetName}` },
+              { value: "targetToSource", label: `${targetName} → ${sourceName}` },
+            ]}
           />
         </Field>
 
@@ -375,6 +403,7 @@ function ReviewScreen() {
   const dictionary = useStudyStore((s) => s.dictionary);
   const mode = useStudyStore((s) => s.mode);
   const direction = useStudyStore((s) => s.direction);
+  const mcFocus = useStudyStore((s) => s.mcFocus);
   const flipped = useStudyStore((s) => s.flipped);
   const flip = useStudyStore((s) => s.flip);
   const grade = useStudyStore((s) => s.grade);
@@ -398,7 +427,7 @@ function ReviewScreen() {
 
   const item = queue[0];
   const card = item.card;
-  const q = questionFor(card, mode, direction);
+  const q = questionFor(card, mode, direction, mcFocus);
   const progress = Math.min(planned, planned - queue.length + 1);
   const isQuiz = mode !== "flashcard";
   const frontLabel = q.frontField === "source"
@@ -426,7 +455,11 @@ function ReviewScreen() {
 
       {(isQuiz) && (
         <p className="text-xs uppercase tracking-wider text-muted-foreground">
-          {mode === "multipleChoice" ? t("Multiple choice") : mode === "grammar" ? t("Grammar") : t("Typing")}
+          {mode === "multipleChoice"
+            ? mcFocus === "grammar"
+              ? t("Grammar")
+              : t("Multiple choice")
+            : mode === "grammar" ? t("Grammar") : t("Typing")}
         </p>
       )}
 
@@ -509,7 +542,7 @@ function ReviewScreen() {
       {mode !== "flashcard" && (
         <div className="flex w-full max-w-md flex-col gap-3">
           {mode === "multipleChoice" && !revealed && (
-            <Options key={card.wordId} card={card} mode={mode} direction={direction} onPick={submitAnswer} />
+            <Options key={card.wordId} card={card} mode={mode} direction={direction} mcFocus={mcFocus} onPick={submitAnswer} />
           )}
           {mode !== "multipleChoice" && !revealed && (
             <form
@@ -546,23 +579,31 @@ function Options({
   card,
   mode,
   direction,
+  mcFocus,
   onPick,
 }: {
   card: StudyWord;
   mode: "multipleChoice" | "grammar" | "typing";
   direction: "sourceToTarget" | "targetToSource";
+  mcFocus: McFocus;
   onPick: (value: string) => void;
 }) {
   const available = useStudyStore((s) => s.available);
   const revealed = useStudyStore((s) => s.revealed);
 
-  const { answer, distractors } = useMemo(() => {
+  const options = useMemo(() => {
+    if (mode === "multipleChoice" && mcFocus === "grammar") {
+      // Grammar drill: one button per grammar option of the word, filled up
+      // with other words' grammar options. Every own option counts as correct.
+      const own = splitGrammarOptions(card.grammar);
+      const shown = buildGrammarDistractors(available, card).slice(0, 3);
+      const ownShown = own.slice(0, Math.max(1, 4 - shown.length));
+      return shuffle([...ownShown, ...shown]).slice(0, 4);
+    }
     const q = questionFor(card, mode, direction);
     const distractors = buildDistractors(available, q, mode);
-    return { answer: q.displayBack, distractors };
-  }, [card, mode, direction, available]);
-
-  const options = useMemo(() => shuffle([answer, ...distractors]).slice(0, 4), [answer, distractors]);
+    return shuffle([q.displayBack, ...distractors]).slice(0, 4);
+  }, [card, mode, direction, mcFocus, available]);
 
   return (
     <div className="grid grid-cols-1 gap-2">

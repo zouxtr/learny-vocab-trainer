@@ -60,7 +60,6 @@ registerDictionary("bg", {
   "The word in {name}": "Думата на {name}",
   "The translation in {name}": "Преводът на {name}",
   Grammar: "Граматика",
-  "e.g. feminine noun": "напр. съществително от женски род",
   Group: "Група",
   "e.g. Food": "напр. Храна",
   Example: "Пример",
@@ -139,8 +138,6 @@ registerDictionary("bg", {
   Flashcards: "Флашкарти",
   "Multiple choice": "Множествен избор",
   Typing: "Писане",
-  "Source → Target": "Източник → Цел",
-  "Target → Source": "Цел → Източник",
   "All words": "Всички думи",
   "Every word in the dictionary": "Всяка дума в речника",
   Random: "Случайни",
@@ -289,5 +286,8 @@ registerDictionary("bg", {
   "Android:": "Android:",
   "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Докоснете менюто на браузъра (⋮), след това „Add to Home screen“ или „Install app“.",
   "iPhone / iPad:": "iPhone / iPad:",
-  "Tap the Share button, then “Add to Home Screen”.": "Докоснете бутона Споделяне, след това „Add to Home Screen“."
+  "Tap the Share button, then “Add to Home Screen”.": "Докоснете бутона Споделяне, след това „Add to Home Screen“.",
+  "Separate multiple with / — e.g. feminine noun / plural": "Няколко се разделят с / — напр. feminine noun / plural",
+  "Practice": "Практика",
+  "Only {n} of {m} words have grammar": "Само {n} от {m} думи имат граматика",
 });

@@ -60,7 +60,6 @@ registerDictionary("nl", {
   "The word in {name}": "Het woord in {name}",
   "The translation in {name}": "De vertaling in {name}",
   Grammar: "Grammatica",
-  "e.g. feminine noun": "bijv. vrouwelijk zelfstandig naamwoord",
   Group: "Groep",
   "e.g. Food": "bijv. Eten",
   Example: "Voorbeeld",
@@ -139,8 +138,6 @@ registerDictionary("nl", {
   Flashcards: "Flashcards",
   "Multiple choice": "Meerkeuze",
   Typing: "Typen",
-  "Source → Target": "Bron → Doel",
-  "Target → Source": "Doel → Bron",
   "All words": "Alle woorden",
   "Every word in the dictionary": "Elk woord in het woordenboek",
   Random: "Willekeurig",
@@ -289,5 +286,8 @@ registerDictionary("nl", {
   "Android:": "Android:",
   "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "Tik op het browsermenu (⋮) en dan op «Toevoegen aan startscherm» of «App installeren».",
   "iPhone / iPad:": "iPhone / iPad:",
-  "Tap the Share button, then “Add to Home Screen”.": "Tik op de Deel-knop en dan op «Zet op beginscherm»."
+  "Tap the Share button, then “Add to Home Screen”.": "Tik op de Deel-knop en dan op «Zet op beginscherm».",
+  "Separate multiple with / — e.g. feminine noun / plural": "Scheid meerdere met / — bijv. feminine noun / plural",
+  "Practice": "Oefenen",
+  "Only {n} of {m} words have grammar": "Slechts {n} van de {m} woorden hebben grammatica",
 });

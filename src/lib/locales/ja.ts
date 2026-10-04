@@ -59,7 +59,6 @@ registerDictionary("ja", {
   "The word in {name}": "{name} の単語",
   "The translation in {name}": "{name} の翻訳",
   Grammar: "文法",
-  "e.g. feminine noun": "例: 女性名詞",
   Group: "グループ",
   "e.g. Food": "例: 食べ物",
   Example: "例",
@@ -136,8 +135,6 @@ registerDictionary("ja", {
   Flashcards: "フラッシュカード",
   "Multiple choice": "多肢選択",
   Typing: "タイピング",
-  "Source → Target": "ソース → ターゲット",
-  "Target → Source": "ターゲット → ソース",
   "All words": "すべての単語",
   "Every word in the dictionary": "辞書内のすべての単語",
   Random: "ランダム",
@@ -285,5 +282,8 @@ registerDictionary("ja", {
   "Android:": "Android:",
   "Tap the browser menu (⋮), then “Add to Home screen” or “Install app”.": "ブラウザのメニュー (⋮) をタップし、「ホーム画面に追加」または「アプリをインストール」を選びます。",
   "iPhone / iPad:": "iPhone / iPad:",
-  "Tap the Share button, then “Add to Home Screen”.": "共有ボタンをタップし、「ホーム画面に追加」を選びます."
+  "Tap the Share button, then “Add to Home Screen”.": "共有ボタンをタップし、「ホーム画面に追加」を選びます.",
+  "Separate multiple with / — e.g. feminine noun / plural": "複数は / で区切る — 例: feminine noun / plural",
+  "Practice": "練習",
+  "Only {n} of {m} words have grammar": "{m} 語中{n} 語に文法があります",
 });
