@@ -23,3 +23,4 @@ Menschen, Menschen... (B1 L3), DE, BG, https://docs.google.com/spreadsheets/d/e/
 Beruf oder Berufung? (B1 L4), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQvbHJ6aAgqdGqXXOtQ06BZDzXdI3kus0NYG5WwzayZzzkHI_DuP7AppO_AcF0CKuGU7uhk9rxH38Ym/pub?output=tsv, tsv, K
 Lebensgeschichten (B1 L5), DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vTbKqH1RQetdG8_uaNE-X4XPLbuxG3L6Fk5pMcaR8WDCdQQlSpJj2h3wu9koKN02WaEHpU3K-vJ4a89/pub?output=tsv, tsv, K
 Verben_3formi, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQGZgRUXhBse_tyHIB4gLfUoL71Eoyiqoj_SVhO1SYlwGQrirBAsAmhEx_ijiaYJvEfw4DotRt0qUxF/pub?output=tsv, tsv, K
+B1.1_2026/2027, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vTNNuIWvXZS6ym9QOfMS_VPWbLy6O9wxSgdQcmh2jhr70uCg-pXQACfcZoIoZ7FxcKl75OxLU27vtHr/pub?output=tsv, tsv, K
