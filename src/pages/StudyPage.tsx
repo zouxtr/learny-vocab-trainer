@@ -541,6 +541,16 @@ function ReviewScreen() {
 
       {mode !== "flashcard" && (
         <div className="flex w-full max-w-md flex-col gap-3">
+          <div className="flex w-full items-center justify-between gap-2">
+            <Button
+              variant="outline"
+              onClick={previous}
+              disabled={!canGoBack}
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            >
+              {t("Previous")}
+            </Button>
+          </div>
           {mode === "multipleChoice" && !revealed && (
             <Options key={card.wordId} card={card} mode={mode} direction={direction} mcFocus={mcFocus} onPick={submitAnswer} />
           )}
@@ -565,9 +575,19 @@ function ReviewScreen() {
             </form>
           )}
           {revealed && (
-            <Button onClick={advance} className="w-full">
-              {t("Next")}
-            </Button>
+            <div className="flex w-full gap-2">
+              <Button
+                variant="outline"
+                onClick={previous}
+                disabled={!canGoBack}
+                className="bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              >
+                {t("Previous")}
+              </Button>
+              <Button onClick={advance} className="flex-1">
+                {t("Next")}
+              </Button>
+            </div>
           )}
         </div>
       )}

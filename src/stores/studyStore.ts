@@ -363,8 +363,10 @@ export const useStudyStore = create<StudyState>()((set, get) => ({
     const s = get();
     if (s.phase !== "review" || s.queue.length === 0) return;
     if (s.queue.length === 1) return;
+    const item = s.queue[0];
     set({
       queue: s.queue.slice(1),
+      history: [...s.history, item],
       flipped: false,
       revealed: false,
       feedback: null,
@@ -450,8 +452,11 @@ function answerCard(
   }
 
   // Quiz modes expose the answer before advancing (cards already re-queued).
+  // Remember the word just shown so "Previous" can bring it back no matter
+  // what the user clicked (Correct / Wrong / Next).
   set({
     queue: nextQueue,
+    history: [...state.history, item],
     counts,
     answeredUnique,
     revealed: true,
