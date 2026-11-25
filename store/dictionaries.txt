@@ -25,3 +25,4 @@ Lebensgeschichten (B1 L5), DE, BG, https://docs.google.com/spreadsheets/d/e/2PAC
 Verben_3formi, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQGZgRUXhBse_tyHIB4gLfUoL71Eoyiqoj_SVhO1SYlwGQrirBAsAmhEx_ijiaYJvEfw4DotRt0qUxF/pub?output=tsv, tsv, K
 B1.1_2026/2027, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vTNNuIWvXZS6ym9QOfMS_VPWbLy6O9wxSgdQcmh2jhr70uCg-pXQACfcZoIoZ7FxcKl75OxLU27vtHr/pub?output=tsv, tsv, K
 B1.1_2026/2027_za_kontrolno, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vQOEACgRKcINFEXHoXoH6gF1195EVNxeZ85oWsOamMfcsg0BopO_hIp_Hx8SVmzjQ/pub?output=tsv, tsv, K
+dimi_za_izpitvane_za_26.11.2026, DE, BG, https://docs.google.com/spreadsheets/d/e/2PACX-1vRhk9sXTLDf-elGvrFnxbCSVGydJ1q6KxbXETayuku0PdBuy9ctY0ydWwBilcqxeeZ5kjPbJnbb8JOZ/pub?output=tsv, tsv, K
